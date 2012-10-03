@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/mot-adms/!svn/ver/1178/trunk/adms/scripts
+END
+blockvariables.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/blockvariables.xml
+END
+attributes.xml
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/attributes.xml
+END
+sort.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/sort.xml
+END
+vlatommlMODULE.htm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/mot-adms/!svn/ver/1156/trunk/adms/scripts/vlatommlMODULE.htm.xml
+END
+getenv.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/getenv.xml
+END
+vlatovla.xml
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/vlatovla.xml
+END
+strutils.xml
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/strutils.xml
+END
+croixvariable.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/croixvariable.xml
+END
+arobavariable.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/arobavariable.xml
+END
+getargv.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/getargv.xml
+END
+admstvariables.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mot-adms/!svn/ver/1178/trunk/adms/scripts/admstvariables.xml
+END
+getinstance.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/getinstance.xml
+END
+analogfunction.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mot-adms/!svn/ver/1103/trunk/adms/scripts/analogfunction.xml
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/mot-adms/!svn/ver/941/trunk/adms/scripts/Makefile.am
+END
+gettransform.xml
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/gettransform.xml
+END
+analogfunction.va
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/mot-adms/!svn/ver/973/trunk/adms/scripts/analogfunction.va
+END
+dependency.xml
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/mot-adms/!svn/ver/1102/trunk/adms/scripts/dependency.xml
+END

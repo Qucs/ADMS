@@ -1,0 +1,7 @@
+2010-08-01  Holger Vogt
+ * autogen.sh: update for CYGWIN and LINUX
+ * compile-mingw.sh: added to allow compilation of admsXml.exe on MINGW
+ * configure.ac: check for GD perl module removed
+ * /images/makefile.am: image generation removed (are already there).
+ * mkelements.pl; add preprocessor flag 'staticlink' to use with
+   MINGW compilation
