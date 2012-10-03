@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/mot-adms/!svn/ver/1111/trunk/adms/images
+END
+adms-list.png
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/mot-adms/!svn/ver/655/trunk/adms/images/adms-list.png
+END
+adms-uid.png
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/mot-adms/!svn/ver/891/trunk/adms/images/adms-uid.png
+END
+mkimages.pl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/mot-adms/!svn/ver/891/trunk/adms/images/mkimages.pl
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/mot-adms/!svn/ver/1111/trunk/adms/images/Makefile.am
+END
+adms-scalar.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/mot-adms/!svn/ver/655/trunk/adms/images/adms-scalar.png
+END
+adms-enumeration.png
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mot-adms/!svn/ver/655/trunk/adms/images/adms-enumeration.png
+END
+adms-alias.png
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/mot-adms/!svn/ver/891/trunk/adms/images/adms-alias.png
+END
+adms-element.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/mot-adms/!svn/ver/655/trunk/adms/images/adms-element.png
+END

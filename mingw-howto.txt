@@ -1,0 +1,23 @@
+download svn
+change according to ChangeLog
+compile with CYGWIN (autogen_cyg.sh) 'make' 'make install'
+ edit admstpathYacc.h, line 8:
+ #if defined(WIN32)  ->  #if defined(WIN32_) 
+
+originates from mkelements.pl, line 1894, which is called by CYGWIN
+ 
+start msys, cd to /d/Spice_general/adms-svn-ok
+
+compile admsXml with
+$ gcc  -DYY_NO_UNISTD_H -DHAVE_CONFIG_H -DinsideElement -DinsidePreprocessor -DinsideVeriloga -I. -IadmsXml admsXml/adms.c admsXml/preprocessorLex.c admsXml/preprocessorMain.c admsXml/preprocessorYacc.c admsXml/verilogaLex.c admsXml/verilogaYacc.c admsXml/admsXml.c admsXml/admstpathYacc.c -o admsXml.exe
+to a statically linked executable
+Test: run CYGWIN again, the the above with adding flag -Dstaticlink (instead of editing admstpathYacc.h
+
+
+copy admsXml.exe to msys/1.0/bin
+
+goto ngspice
+./autogen.sh --adms
+$ ./configure --with-windows --enable-cider --disable-debug --enable-openmp --enable-xspice --enable-adms
+$ make > make.log 2>&1
+

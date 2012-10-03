@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml
+END
+constants.vams
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/constants.vams
+END
+admsPreprocessor.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mot-adms/!svn/ver/985/trunk/adms/admsXml/admsPreprocessor.h
+END
+admsCheck.1
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/mot-adms/!svn/ver/1110/trunk/adms/admsXml/admsCheck.1
+END
+verilogaYacc.y.in
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/verilogaYacc.y.in
+END
+admsXml.c
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/admsXml.c
+END
+mkgrammar.pl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/mot-adms/!svn/ver/1036/trunk/adms/admsXml/mkgrammar.pl
+END
+mkctext.pl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/mot-adms/!svn/ver/1056/trunk/adms/admsXml/mkctext.pl
+END
+preprocessorLex.l
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/preprocessorLex.l
+END
+dummy.xml
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/mot-adms/!svn/ver/1110/trunk/adms/admsXml/dummy.xml
+END
+adms.implicit.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/adms.implicit.xml
+END
+preprocessorYacc.y
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mot-adms/!svn/ver/1154/trunk/adms/admsXml/preprocessorYacc.y
+END
+dummy.va
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/mot-adms/!svn/ver/1110/trunk/adms/admsXml/dummy.va
+END
+admsVeriloga.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/mot-adms/!svn/ver/941/trunk/adms/admsXml/admsVeriloga.h
+END
+admsCheck.c
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/mot-adms/!svn/ver/1110/trunk/adms/admsXml/admsCheck.c
+END
+admsXml.1
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/mot-adms/!svn/ver/1110/trunk/adms/admsXml/admsXml.1
+END
+basicLibrary.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/mot-adms/!svn/ver/941/trunk/adms/admsXml/basicLibrary.xml
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/mot-adms/!svn/ver/1181/trunk/adms/admsXml/Makefile.am
+END
+disciplines.vams
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/disciplines.vams
+END
+verilogaLex.l
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/verilogaLex.l
+END
+preprocessorMain.c
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mot-adms/!svn/ver/1154/trunk/adms/admsXml/preprocessorMain.c
+END
+mkelements.pl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/mot-adms/!svn/ver/1184/trunk/adms/admsXml/mkelements.pl
+END
