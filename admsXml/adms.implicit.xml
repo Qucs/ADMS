@@ -663,8 +663,28 @@
     <admst:variable name="mycontribution" path="."/>
     <admst:variable name="mysource" path="lhs"/>
     <admst:push into="$mysource/attribute" select="attribute"/>
-    <!-- case I() <+ .V(). -->
-    <admst:for-each select="rhs/probe[(nature=discipline/potential)and($mysource/nature=$mysource/discipline/flow)]">
+
+	<!-- For some reason, lhs doesn't have a discipline object, so use the first probe's... -->
+	<admst:if test="[$mysource/nature=rhs/probe[1]/discipline/potential]">
+	  <admst:value-of select="$mysource/branch/nnode/name"/>
+	  <admst:value-of select="$mysource/branch/pnode/name"/>
+	  <admst:new datatype="node" inputs="module,'%s%s_branch'">
+		<admst:variable name="branchnode" path="."/>
+		<admst:new datatype="attribute" inputs="'info'">
+		  <admst:push into="../attribute" select="."/>
+		</admst:new>
+		<admst:new datatype="attribute" inputs="'nature'">
+		  <admst:push into="../attribute" select="."/>
+		</admst:new>
+		<admst:value-to select="attribute[name='info']/value" path="name"/>
+		<admst:value-to select="attribute[name='nature']/value" path="../rhs/probe/discipline/potential"/>
+		<admst:reverse select="/module/node"/>
+		<admst:push into="/module/node" select="." onduplicate="ignore"/>
+		<admst:reverse select="/module/node"/>
+	  </admst:new>
+	</admst:if>
+
+    <admst:for-each select="rhs/probe">
       <admst:new datatype="jacobian" inputs="module,$mysource/branch/pnode,branch/pnode">
         <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
       </admst:new>
@@ -677,6 +697,72 @@
           <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
         </admst:new>
       </admst:new>
+
+	  <!-- Need a 0V voltage source in the I<+I case for sensing input current. -->
+	  <admst:if test="[$mysource/nature=discipline/flow and nature=discipline/flow]">
+		<admst:value-of select="branch/nnode/name"/>
+		<admst:value-of select="branch/pnode/name"/>
+		<admst:new datatype="node" inputs="module,'%s%s_sense'">
+		  <admst:variable name="branchnode" path="."/>
+		  <admst:new datatype="attribute" inputs="'info'">
+			<admst:push into="../attribute" select="."/>
+		  </admst:new>
+		  <admst:new datatype="attribute" inputs="'nature'">
+			<admst:push into="../attribute" select="."/>
+		  </admst:new>
+		  <admst:value-to select="attribute[name='info']/value" path="name"/>
+		  <admst:value-to select="attribute[name='nature']/value" path="discipline/potential"/>
+		  <admst:reverse select="/module/node"/>
+		  <admst:push into="/module/node" select="." onduplicate="ignore"/>
+		  <admst:reverse select="/module/node"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,branch/pnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,$branchnode,branch/pnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,branch/nnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$branchnode,branch/nnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,$branchnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+	  </admst:if>
+
+	  <!-- Create a voltage source for voltage contributions. -->
+	  <admst:if test="[$mysource/nature=discipline/potential]">
+		<admst:new datatype="jacobian" inputs="module,$mysource/branch/pnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,$branchnode,$mysource/branch/pnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$mysource/branch/nnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$branchnode,$mysource/branch/nnode">
+		  <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,branch/pnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,$branchnode,branch/pnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,branch/nnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$branchnode,branch/nnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+		<admst:new datatype="jacobian" inputs="module,$branchnode,$branchnode">
+          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		</admst:new>
+	  </admst:if>
       <admst:for-each select="/reverse(@jacobian)">
         <admst:choose>
           <admst:when test="module/jacobian[row=../../row and column=../../column]">
