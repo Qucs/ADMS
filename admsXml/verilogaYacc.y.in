@@ -869,16 +869,6 @@ R_analogcode.block
 R_analogcode.block.atevent
         | '@' '(' tk_ident '(' R_l.analysis ')' ')'
           _ adms_veriloga_message_fatal("@ control not supported\n",$3);
-        | '@' tk_ident
-          _ char* mypartitionning=adms_kclone(mylexval2);
-          _ if(strcmp(mypartitionning,"initial_model")
-          _   && strcmp(mypartitionning,"initial_instance")
-          _   && strcmp(mypartitionning,"noise")
-          _   && strcmp(mypartitionning,"initial_step")
-          _   && strcmp(mypartitionning,"final_step"))
-          _   adms_veriloga_message_fatal(" @() control not supported\n",$2);
-          _ $$=adms_yaccval_new("unknown source file");
-          _ Y($$,(p_adms)$2);
         | '@' '(' tk_ident ')'
           _ char* mypartitionning=adms_kclone(mylexval3);
           _ if(strcmp(mypartitionning,"initial_model")
