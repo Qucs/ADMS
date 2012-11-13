@@ -702,7 +702,7 @@
 	  <admst:if test="[$mysource/nature=discipline/flow and nature=discipline/flow]">
 		<admst:value-of select="branch/nnode/name"/>
 		<admst:value-of select="branch/pnode/name"/>
-		<admst:new datatype="node" inputs="module,'%s%s_sense'">
+		<admst:new datatype="node" inputs="module,'%s%s_branch'">
 		  <admst:variable name="branchnode" path="."/>
 		  <admst:new datatype="attribute" inputs="'info'">
 			<admst:push into="../attribute" select="."/>
