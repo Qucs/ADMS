@@ -912,10 +912,15 @@ R_analogcode.event.monitored
 R_analogcode.event.monitored.timer
         | tk_timer '(' R_s.expression ',' R_s.expression ')'
           _ $$=adms_yaccval_new("unknown source file");
-          _ Y($$,(p_adms)$1);
+          _ p_timerevent e = adms_timerevent_new((p_expression)YY($3));
+          _ adms_timerevent_valueto_period(e,(p_expression)YY($5));
+          _ adms_slist_push(&gModule->_timerevent,(p_adms)e);
+          _ Y($$,(p_adms)e);
         | tk_timer '(' R_s.expression ')'
           _ $$=adms_yaccval_new("unknown source file");
-          _ Y($$,(p_adms)$1);
+          _ p_timerevent e = adms_timerevent_new((p_expression)YY($3));
+          _ adms_slist_push(&gModule->_timerevent,(p_adms)e);
+          _ Y($$,(p_adms)e);
         ;
 
 R_analogcode.event.monitored.cross
