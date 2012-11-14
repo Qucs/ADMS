@@ -862,12 +862,22 @@ R_analogcode.block
         | R_d.block
           _ $$=$1;
         | R_analogcode.block.atevent R_d.block
-          _ p_event e = (p_event)YY($1);
           _ $$=$2;
-          _ adms_lexval_free(((p_block)YY($$))->_lexval);
-          _ ((p_block)YY($$))->_lexval=(p_lexval)YY($1);
-          _ adms_event_valueto_module(e,gModule);
-          _ adms_event_valueto_action(e,(p_block)YY($$));
+          _ p_slist list = (p_slist)YY($1);
+          _ if(adms_slist_length(list) == 1) {
+          _   p_event e = (p_event)adms_slist_pull(&list);
+          _   adms_lexval_free(((p_block)YY($$))->_lexval);
+          _   ((p_block)YY($$))->_lexval=(p_lexval)e;
+          _   adms_event_valueto_module(e,gModule);
+          _   adms_event_valueto_action(e,(p_block)YY($$));
+          _ } else {
+          _   while(adms_slist_length(list) > 0) {
+          _     p_event e = (p_event)adms_slist_pull(&list);
+          _     adms_event_valueto_module(e,gModule);
+          _     adms_event_valueto_action(e,(p_block)YY($$));
+          _   }
+          _ }
+          _ adms_slist_free(list);
         ;
 R_analogcode.block.atevent
         | '@' '(' R_analogcode.event.expression ')'
@@ -876,9 +886,14 @@ R_analogcode.block.atevent
 
 R_analogcode.event.expression
         | R_analogcode.event.simple tk_or R_analogcode.event.expression
-          _ $$ = $1;
-          _ adms_veriloga_message_fatal("Event ORing not currently supported\n",$2);
+          _ $$ = adms_yaccval_new("unknown source file");
+          _ p_slist list = adms_slist_new(YY($1));
+          _ adms_slist_concat(&list, (p_slist)YY($3));
+          _ Y($$,(p_adms)list);
         | R_analogcode.event.simple
+          _ $$ = adms_yaccval_new("unknown source file");
+          _ p_slist list = adms_slist_new(YY($1));
+          _ Y($$,(p_adms)list);
         ;
 
 R_analogcode.event.simple
