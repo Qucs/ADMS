@@ -1,0 +1,16 @@
+Makefile
+*.o
+*.lo
+*.la
+libltdl
+libtool
+config.*
+stamp-h1
+admsXml/admsXml
+admsXml/admsCheck
+preprocessorLex.c
+verilogaLex.c
+verilogaYacc.[chy]
+adms.[ch]
+adms.implicit.xml.c
+admstpathYacc.[cy]
