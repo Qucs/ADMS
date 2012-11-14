@@ -864,19 +864,17 @@ R_analogcode.block
         | R_analogcode.block.atevent R_d.block
           _ $$=$2;
           _ p_slist list = (p_slist)YY($1);
-          _ if(adms_slist_length(list) == 1) {
-          _   p_event e = (p_event)adms_slist_pull(&list);
+          _ if(list == NULL) { adms_veriloga_message_fatal("No events returned after parse - This should never happen!\n",$1); }
+          _
+          _ p_event e = (p_event)adms_slist_pull(&list);
+          _ if(list == NULL) { // If there was only event, name the block after it
           _   adms_lexval_free(((p_block)YY($$))->_lexval);
           _   ((p_block)YY($$))->_lexval=(p_lexval)e;
+          _ }
+          _ do {
           _   adms_event_valueto_module(e,gModule);
           _   adms_event_valueto_action(e,(p_block)YY($$));
-          _ } else {
-          _   while(adms_slist_length(list) > 0) {
-          _     p_event e = (p_event)adms_slist_pull(&list);
-          _     adms_event_valueto_module(e,gModule);
-          _     adms_event_valueto_action(e,(p_block)YY($$));
-          _   }
-          _ }
+          _ } while((e = (p_event)adms_slist_pull(&list)) != NULL);
           _ adms_slist_free(list);
         ;
 R_analogcode.block.atevent
