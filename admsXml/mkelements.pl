@@ -1819,13 +1819,13 @@ print "$top_srcdir/admsXml/adms.c: created\n";
 
 map{my$e=$_;my$ename=&xname($e);
 map{push @{$A{xname($_)}},[$e,$_] if (&xname($_) ne "datatypename");}
-&attr($_) if vla($ename)||$ename eq "return"||$ename eq "math"||$ename eq "subexpression";} @$EA;
+&attr($_) if vla($ename)||$ename eq "return"||$ename eq "math"||$ename eq "subexpression"||$ename eq "event";} @$EA;
 
 my@Location03;
 foreach(@$EA)
 {
   my$ename=&xname($_);
-  next if not $ename eq "adms"||$ename eq "math"||$ename eq "subexpression";
+  next if not $ename eq "adms"||$ename eq "math"||$ename eq "subexpression"||$ename eq "event";
   push @Location03,"  IFIDENT($ename)\n";
   foreach($_->findnodes(".//element"))
   {

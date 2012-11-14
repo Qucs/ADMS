@@ -139,6 +139,41 @@
         <evalue name="discrete" info="discrete domain"/>
       </scalar>
     </element>
+
+    <element name="event" info="actions that are triggered by various things">
+      <uid format="@()">
+      </uid>
+      <scalar datatypefamily="reference" name="module" datatypename="module" info="back to the module"/>
+      <scalar datatypefamily="reference" name="action" datatypename="block" info="actions to be taken during the event"/>
+
+      <element name="globalevent" info="one-time events">
+        <uid format="@($1)">
+          <scalar datatypefamily="basictype" name="name" datatypename="basicstring" info="name of event"/>
+        </uid>
+        <list datatypefamily="basictype" name="analysis" datatypename="basicstring" info="list of analyses this event applies to"/>
+      </element>
+
+      <element name="crossevent" info="events caused by crossing a threshold">
+        <uid format="@(cross ($1, $2))">
+          <scalar datatypefamily="reference" name="trigger" datatypename="expression" info="threshold expression"/>
+          <scalar datatypefamily="basictype" name="direction" datatypename="basicenumeration" info="direction of crossing" default="both">
+            <evalue name="positive" info="trigger when the threshold is crossed in the positive direction"/>
+            <evalue name="negative" info="trigger when the threshold is crossed in the negative direction"/>
+            <evalue name="both"     info="trigger when the threshold is crossed in both directions"/>
+          </scalar>
+        </uid>
+        <scalar datatypefamily="reference" name="timetol" datatypename="expression" info="time tolerance"/>
+        <scalar datatypefamily="reference" name="expressiontol" datatypename="expression" info="expression tolerance"/>
+      </element>
+
+      <element name="timerevent" info="events triggered at a specific time">
+        <uid format="@(timer ($1, $2))">
+          <scalar datatypefamily="reference" name="time" datatypename="expression" info="trigger time of the first event"/>
+          <scalar datatypefamily="reference" name="period" datatypename="expression" info="how often to repeat after the first"/>
+        </uid>
+      </element>
+    </element>
+
     <comment>elements used to save a module inside the internal adms data tree</comment>
     <element name="module" info="module">
       <uid format="$1">
@@ -164,6 +199,9 @@
       <list datatypefamily="reference" name="forloop" datatypename="module" info="forloop"/>
       <list datatypefamily="reference" name="whileloop" datatypename="module" info="whileloop"/>
       <list datatypefamily="reference" name="instantiator" datatypename="module" info="instantiator"/>
+      <list datatypefamily="reference" name="globalevent" datatypename="globalevent" info="list of all globalevents"/>
+      <list datatypefamily="reference" name="crossevent" datatypename="crossevent" info="list of all crossevents"/>
+      <list datatypefamily="reference" name="timerevent" datatypename="timerevent" info="list of all timerevents"/>
       <!-- under expression -->
       <list datatypefamily="reference" name="expression" datatypename="expression" info="list of all expressions"/>
       <list datatypefamily="reference" name="jacobian" datatypename="jacobian" info="list of jacobians"/>
