@@ -229,6 +229,11 @@ from {TKRETURN(yytext,yyleng); return tk_from;}
 exclude {TKRETURN(yytext,yyleng); return tk_exclude;}
 inf {TKRETURN(yytext,yyleng); return tk_inf;}
 INF {TKRETURN(yytext,yyleng); return tk_inf;}
+or {TKRETURN(yytext,yyleng); return tk_or;}
+OR {TKRETURN(yytext,yyleng); return tk_or;}
+timer {TKRETURN(yytext,yyleng); return tk_timer;}
+cross {TKRETURN(yytext,yyleng); return tk_cross;}
+
 
 {ident} {TKRETURN(yytext,yyleng); return tk_ident;}
 
