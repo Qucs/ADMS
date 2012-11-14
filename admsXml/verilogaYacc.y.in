@@ -862,9 +862,12 @@ R_analogcode.block
         | R_d.block
           _ $$=$1;
         | R_analogcode.block.atevent R_d.block
+          _ p_event e = (p_event)YY($1);
           _ $$=$2;
           _ adms_lexval_free(((p_block)YY($$))->_lexval);
           _ ((p_block)YY($$))->_lexval=(p_lexval)YY($1);
+          _ adms_event_valueto_module(e,gModule);
+          _ adms_event_valueto_action(e,(p_block)YY($$));
         ;
 R_analogcode.block.atevent
         | '@' '(' R_analogcode.event.expression ')'
@@ -890,7 +893,9 @@ R_analogcode.event.global
           _ for(event = &supported[0]; *event != NULL; ++event) {
           _   if(0 == strcmp(mylexval1,*event)) {
           _     $$=adms_yaccval_new("unknown source file");
-          _     Y($$,(p_adms)$1);
+          _     p_globalevent e = adms_globalevent_new(mylexval1);
+          _     adms_slist_push(&gModule->_globalevent,(p_adms)e);
+          _     Y($$,(p_adms)e);
           _     break;
           _   }
           _ }
@@ -905,10 +910,10 @@ R_analogcode.event.monitored
         ;
 
 R_analogcode.event.monitored.timer
-        | tk_timer '(' tk_number ',' tk_number ')'
+        | tk_timer '(' R_s.expression ',' R_s.expression ')'
           _ $$=adms_yaccval_new("unknown source file");
           _ Y($$,(p_adms)$1);
-        | tk_timer '(' tk_number ')'
+        | tk_timer '(' R_s.expression ')'
           _ $$=adms_yaccval_new("unknown source file");
           _ Y($$,(p_adms)$1);
         ;
@@ -916,49 +921,64 @@ R_analogcode.event.monitored.timer
 R_analogcode.event.monitored.cross
         | tk_cross '(' R_s.expression R_analogcode.event.cross.opt_args ')'
           _ $$=adms_yaccval_new("unknown source file");
-          _ Y($$,(p_adms)$1);
+          _ p_slist list = (p_slist)YY($4);
+          _ admse dir = (admse)adms_slist_pull(&list);
+          _ p_expression time_tol = (p_expression)adms_slist_pull(&list);
+          _ p_expression expr_tol = (p_expression)adms_slist_pull(&list);
+          _ p_crossevent e = adms_crossevent_new((p_expression)YY($3),dir);
+          _ if(time_tol) { adms_crossevent_valueto_timetol(e,time_tol); }
+          _ if(expr_tol) { adms_crossevent_valueto_expressiontol(e,expr_tol); }
+          _ adms_slist_push(&gModule->_crossevent,(p_adms)e);
+          _ adms_slist_free(list);
+          _ Y($$,(p_adms)e);
         ;
 
 R_analogcode.event.cross.opt_args
         |
-        | ',' R_analogcode.event.cross.direction R_analogcode.event.cross.time_tol
-          _ p_slist myArgs=(p_slist)YY($2);
           _ $$=adms_yaccval_new("unknown source file");
-          _ adms_slist_concat(&myArgs,YY($3));
+          _ p_slist myArgs=adms_slist_new((p_adms)admse_both);
+          _ Y($$,(p_adms)myArgs);
+        | ',' R_analogcode.event.cross.direction R_analogcode.event.cross.time_tol
+          _ $$=adms_yaccval_new("unknown source file");
+          _ p_slist myArgs=adms_slist_new((p_adms)YY($2));
+          _ if($3) { adms_slist_concat(&myArgs,(p_slist)YY($3)); }
           _ Y($$,(p_adms)myArgs);
         ;
 R_analogcode.event.cross.direction
         |
+          _ $$ = adms_yaccval_new("unknown source file");
+          _ Y($$,(p_adms)admse_both);
+        | tk_integer
+          _ $$=adms_yaccval_new("unknown source file");
+          _ if(0 == strcmp(mylexval1,"0")) { Y($$,(p_adms)admse_both); }
+          _ else { adms_veriloga_message_fatal("Invalid direction value. Expected: 0, +1 or -1\n",$1); }
         | '+' tk_integer
           _ $$=adms_yaccval_new("unknown source file");
-          _ if(0 == strcmp(mylexval2,"1")) { Y($$,(p_adms)$2); }
-          _ else { adms_veriloga_message_fatal("Invalid direction value. Expected: +1 or -1\n",$2); }
+          _ if(0 == strcmp(mylexval2,"1")) { Y($$,(p_adms)admse_positive); }
+          _ else { adms_veriloga_message_fatal("Invalid direction value. Expected: 0, +1 or -1\n",$2); }
         | '-' tk_integer
           _ $$=adms_yaccval_new("unknown source file");
-          _ if(0 == strcmp(mylexval2,"1")) {
-          _   free($2->_string);
-          _   $2->_string = calloc(3,sizeof(char));
-          _   strncpy($2->_string,"-1",3*sizeof(char));
-          _   Y($$,(p_adms)$2);
-          _ }
-          _ else { adms_veriloga_message_fatal("Invalid direction value. Expected: +1 or -1\n",$2); }
+          _ if(0 == strcmp(mylexval2,"1")) { Y($$,(p_adms)admse_negative); }
+          _ else { adms_veriloga_message_fatal("Invalid direction value. Expected: 0, +1 or -1\n",$2); }
         ;
 R_analogcode.event.cross.time_tol
         |
+          _ $$ = NULL;
         | ',' R_s.expression R_analogcode.event.cross.expression_tol
-          _ p_slist myArgs=NULL;
           _ $$=adms_yaccval_new("unknown source file");
-          _ adms_slist_push(&myArgs,YY($2));
-          _ adms_slist_concat(&myArgs,YY($3));
+          _ p_slist myArgs;
+          _ if($3) {
+          _   myArgs=adms_slist_new(YY($3));
+          _   adms_slist_push(&myArgs,YY($2));
+          _ } else {
+          _   myArgs=adms_slist_new(YY($2));
+          _ }
           _ Y($$,(p_adms)myArgs);
         ;
 R_analogcode.event.cross.expression_tol
         |
         | ',' R_s.expression
-          _ p_slist myArgs=NULL;
-          _ $$=adms_yaccval_new("unknown source file");
-          _ adms_slist_push(&myArgs,YY($2));
-          _ Y($$,(p_adms)myArgs);
+          _ $$ = $2;
         ;
 R_l.analysis
         | R_s.analysis
