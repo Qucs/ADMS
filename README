@@ -1,46 +1,23 @@
-##
-## RCS Info
-## $Id: README 1049 2008-07-31 13:53:12Z r29173 $
-## 
-## Log
-## $Log$
-## Revision 1.5  2006/08/04 17:15:32  r29173
-## rearranged code partionning into files
-##
-## Revision 1.4  2005/05/03 07:58:29  r29173
-## moved admsNS into admsFile
-##
-## Revision 1.3  2004/08/03 12:33:54  r29173
-## import adms-1.21.0 from local CVS
-##
-## Revision 1.1.1.1  2004/05/21 12:20:01  r29173
-## recreated cvs data structure (crashed after revision 1.13.0!)
-##
-## Revision 1.7  2004/05/13 07:34:51  r29173
-## continue removing GNode* structure
-##
-## Revision 1.6  2004/04/20 13:09:30  r29173
-## removed subdir admsTree
-##
-## Revision 1.5  2004/01/29 13:19:29  r29173
-## created ChangeLog when file is missing
-##
-## Revision 1.4  2004/01/15 14:59:47  r29173
-## added prerequisites
-##
-## Revision 1.3  2004/01/05 11:41:27  r29173
-## updated (simplified)
-##
-## Revision 1.2  2003/06/20 08:26:11  r29173
-## added RCS info into files
-##
-## Revision 1.3  2003/06/19 12:52:15  r29173
-## fixed dependency problem
-##
-## Revision 1.2  2003/05/21 14:20:55  r29173
-## add rcs info
-##
-##
+Forked from the source code available at: http://sourceforge.net/projects/mot-adms/files/adms-source/2.3/
+The original SVN repo is now password-protected, so here we are.
+
+You should be able to build with:
+    ./configure --enable-maintainer-mode
+    make -j1
+    make install
+
+I wasn't interested in poluting my commits with auto-generated code, so I removed (most of?) the code
+that is automatically generated and frequently changes when other files change, which is why you must
+specify the --enable-maintainer-mode flag. Also, it doesn't seem like the original author considered
+parallel builds, so if you have an alias for make to parallelize, you'll have to override that with -j1.
+
+There was an INSTALL file, but I removed it because zsh kept suggesting it as a correction when running
+`make install`. If you find that you really need it, you can replace it by running: `automake --add-missing`
+
+Maybe I'll try to clean up the build system someday...
+
+Original author's build instructions: (for posterity)
+
 
 0- Prerequisites
     0- gnu make is required (do not use other native make)
