@@ -862,18 +862,18 @@ R_analogcode.block
         | R_d.block
           _ $$=$1;
         | R_analogcode.block.atevent R_d.block
-          _ $$=$2;
+          _ $$=NULL; // We don't want to include this block in the list of blocks
           _ p_slist list = (p_slist)YY($1);
-          _ if(list == NULL) { adms_veriloga_message_fatal("No events returned after parse - This should never happen!\n",$1); }
+          _ if(list == NULL) { adms_veriloga_message_fatal("No events returned after parse - This should never happen!\n",((p_block)YY($2))->_lexval); }
           _
           _ p_event e = (p_event)adms_slist_pull(&list);
           _ if(list == NULL) { // If there was only event, name the block after it
-          _   adms_lexval_free(((p_block)YY($$))->_lexval);
-          _   ((p_block)YY($$))->_lexval=(p_lexval)e;
+          _   adms_lexval_free(((p_block)YY($2))->_lexval);
+          _   ((p_block)YY($2))->_lexval=(p_lexval)e;
           _ }
           _ do {
           _   adms_event_valueto_module(e,gModule);
-          _   adms_event_valueto_action(e,(p_block)YY($$));
+          _   adms_event_valueto_action(e,(p_block)YY($2));
           _ } while((e = (p_event)adms_slist_pull(&list)) != NULL);
           _ adms_slist_free(list);
         ;
@@ -1039,9 +1039,9 @@ R_d.block.begin
         ;
 R_l.blockitem
         | R_analogcode
-          _ adms_slist_push(&((p_block)gBlockList->data)->_item,YY($1));
+          _ if($1) adms_slist_push(&((p_block)gBlockList->data)->_item,YY($1));
         | R_l.blockitem R_analogcode
-          _ adms_slist_push(&((p_block)gBlockList->data)->_item,YY($2));
+          _ if($2) adms_slist_push(&((p_block)gBlockList->data)->_item,YY($2));
         ;
 R_d.blockvariable
         | tk_integer R_l.blockvariable ';'
