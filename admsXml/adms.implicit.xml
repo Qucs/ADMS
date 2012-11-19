@@ -457,7 +457,7 @@
       </admst:choose>
     </admst:when>
     <admst:when test="[datatypename='globalevent']">
-      <admst:reverse select="event/action/(item|variable)"/>
+      <admst:reverse select="action/(item|variable)"/>
       <admst:variable name="forcepartitionning" string="yes"/>
       <admst:choose>
         <admst:when test="[name='initial_model']">
@@ -479,20 +479,20 @@
           <admst:variable name="forcepartitionning" string="no"/>
         </admst:otherwise>
       </admst:choose>
-      <admst:apply-templates select="event/action/item" match="dependency"/>
+      <admst:apply-templates select="action/item" match="dependency"/>
       <admst:variable test="[$forcepartitionning='yes']" name="globalpartitionning"/>
       <admst:choose>
-        <admst:when test="event/action/item[dependency='nonlinear']">
-          <admst:value-to select="dependency" string="nonlinear"/>
+        <admst:when test="action/item[dependency='nonlinear']">
+          <admst:value-to select="action/dependency" string="nonlinear"/>
         </admst:when>
-        <admst:when test="event/action/item[dependency='linear']">
-          <admst:value-to select="dependency" string="linear"/>
+        <admst:when test="action/item[dependency='linear']">
+          <admst:value-to select="action/dependency" string="linear"/>
         </admst:when>
-        <admst:when test="event/action/item[dependency='noprobe']">
-          <admst:value-to select="dependency" string="noprobe"/>
+        <admst:when test="action/item[dependency='noprobe']">
+          <admst:value-to select="action/dependency" string="noprobe"/>
         </admst:when>
         <admst:otherwise>
-          <admst:value-to select="event/action/dependency" string="constant"/>
+          <admst:value-to select="action/dependency" string="constant"/>
         </admst:otherwise>
       </admst:choose>
     </admst:when>
@@ -566,6 +566,9 @@
   </admst:for-each>
   <admst:template match="modify">
     <admst:choose>
+      <admst:when test="[datatypename='globalevent']">
+        <admst:apply-templates select="action" match="modify"/>
+      </admst:when>
       <admst:when test="[datatypename='block']">
         <admst:apply-templates select="reverse(item)" match="modify"/>
         <admst:value-to test="item[#modifys=1]" select="#modifys" path="1"/>
@@ -660,8 +663,8 @@
       <admst:otherwise><admst:fatal format="%(datatypename): case not handled\n"/></admst:otherwise>
     </admst:choose>
   </admst:template>
-  <admst:apply-templates select="analog/code" match="modify"/>
-  <admst:push into="@analogitems" select="assignment|assignment/rhs|contribution|contribution/rhs|block|forloop|whileloop|case|callfunction|conditional|conditional/if"/>
+  <admst:apply-templates select="analog/code|globalevent" match="modify"/>
+  <admst:push into="@analogitems" select="globalevent/action|assignment|assignment/rhs|contribution|contribution/rhs|block|forloop|whileloop|case|callfunction|conditional|conditional/if"/>
   <admst:value-to select="@analogitems[#modifys=1 or #modifyn=1 or #modifyc=1]/static" string="yes"/>
   <admst:value-to select="@analogitems[#modifys!=1 and #modifyn!=1 and #modifyc!=1]/dynamic" string="yes"/>
 
