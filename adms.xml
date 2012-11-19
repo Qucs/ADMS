@@ -150,6 +150,7 @@
         <uid format="$1">
           <scalar datatypefamily="basictype" name="name" datatypename="basicstring" info="name of event"/>
         </uid>
+        <alias name="action" element="event" attribute="action"/>
         <list datatypefamily="basictype" name="analysis" datatypename="basicstring" info="list of analyses this event applies to"/>
       </element>
 
@@ -164,6 +165,7 @@
         </uid>
         <scalar datatypefamily="reference" name="timetol" datatypename="expression" info="time tolerance"/>
         <scalar datatypefamily="reference" name="expressiontol" datatypename="expression" info="expression tolerance"/>
+        <alias name="action" element="event" attribute="action"/>
       </element>
 
       <element name="timerevent" info="events triggered at a specific time">
@@ -171,6 +173,7 @@
           <scalar datatypefamily="reference" name="time" datatypename="expression" info="trigger time of the first event"/>
         </uid>
         <scalar datatypefamily="reference" name="period" datatypename="expression" info="how often to repeat after the first"/>
+        <alias name="action" element="event" attribute="action"/>
       </element>
     </element>
 
