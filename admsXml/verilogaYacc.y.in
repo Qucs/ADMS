@@ -920,13 +920,14 @@ R_analogcode.event.monitored
 R_analogcode.event.monitored.timer
         | tk_timer '(' R_s.expression ',' R_s.expression ')'
           _ $$=adms_yaccval_new("unknown source file");
-          _ p_timerevent e = adms_timerevent_new((p_expression)YY($3));
-          _ adms_timerevent_valueto_period(e,(p_expression)YY($5));
+          _ p_timerevent e = adms_timerevent_new((p_expression)YY($3), (p_expression)YY($5));
           _ adms_slist_push(&gModule->_timerevent,(p_adms)e);
           _ Y($$,(p_adms)e);
         | tk_timer '(' R_s.expression ')'
           _ $$=adms_yaccval_new("unknown source file");
-          _ p_timerevent e = adms_timerevent_new((p_expression)YY($3));
+          _ p_number default_zero = adms_number_new(adms_lexval_new("0","created value",0,0));
+          _ p_expression default_expr = adms_expression_new(gModule,(p_adms)default_zero);
+          _ p_timerevent e = adms_timerevent_new((p_expression)YY($3),default_expr);
           _ adms_slist_push(&gModule->_timerevent,(p_adms)e);
           _ Y($$,(p_adms)e);
         ;
@@ -938,7 +939,11 @@ R_analogcode.event.monitored.cross
           _ admse dir = (admse)adms_slist_pull(&list);
           _ p_expression time_tol = (p_expression)adms_slist_pull(&list);
           _ p_expression expr_tol = (p_expression)adms_slist_pull(&list);
-          _ p_crossevent e = adms_crossevent_new((p_expression)YY($3),dir);
+          _ p_number default_zero = adms_number_new(adms_lexval_new("0","created value",0,0));
+          _ p_expression default_expr = adms_expression_new(gModule,(p_adms)default_zero);
+          _ if(time_tol == NULL) { time_tol = default_expr; }
+          _ if(expr_tol == NULL) { expr_tol = default_expr; }
+          _ p_crossevent e = adms_crossevent_new((p_expression)YY($3),dir,time_tol,expr_tol);
           _ if(time_tol) { adms_crossevent_valueto_timetol(e,time_tol); }
           _ if(expr_tol) { adms_crossevent_valueto_expressiontol(e,expr_tol); }
           _ adms_slist_push(&gModule->_crossevent,(p_adms)e);

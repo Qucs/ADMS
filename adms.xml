@@ -162,17 +162,17 @@
             <evalue name="negative" info="trigger when the threshold is crossed in the negative direction"/>
             <evalue name="both"     info="trigger when the threshold is crossed in both directions"/>
           </scalar>
+          <scalar datatypefamily="reference" name="timetol" datatypename="expression" info="time tolerance"/>
+          <scalar datatypefamily="reference" name="expressiontol" datatypename="expression" info="expression tolerance"/>
         </uid>
-        <scalar datatypefamily="reference" name="timetol" datatypename="expression" info="time tolerance"/>
-        <scalar datatypefamily="reference" name="expressiontol" datatypename="expression" info="expression tolerance"/>
         <alias name="action" element="event" attribute="action"/>
       </element>
 
       <element name="timerevent" info="events triggered at a specific time">
         <uid format="timer">
           <scalar datatypefamily="reference" name="time" datatypename="expression" info="trigger time of the first event"/>
+          <scalar datatypefamily="reference" name="period" datatypename="expression" info="how often to repeat after the first"/>
         </uid>
-        <scalar datatypefamily="reference" name="period" datatypename="expression" info="how often to repeat after the first"/>
         <alias name="action" element="event" attribute="action"/>
       </element>
     </element>
