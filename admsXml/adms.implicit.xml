@@ -195,6 +195,9 @@
           <admst:push into="$globalexpression/function" select="."/>
           <admst:value-to select="class" string="builtin"/>
         </admst:when>
+        <admst:when test="[name='transition']">
+          <admst:push into="$globalexpression/function" select="."/>
+        </admst:when>
         <admst:otherwise>
           <admst:assert test="[exists(definition)]" format="%(lexval/(f|':'|l|':'|c)): analog function '%(name)' is undefined\n"/>
         </admst:otherwise>
