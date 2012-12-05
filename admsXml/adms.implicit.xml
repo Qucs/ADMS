@@ -159,8 +159,10 @@
       <admst:value-to test="[name='flicker_noise']" select="$globalcontribution/#fixmeflickernoise" path="1"/>
       <admst:value-to test="[name='\$temperature']" select="$globalassignment/lhs/TemperatureDependent" string="yes"/>
       <admst:choose>
-        <admst:when test="[name='\$realtime' or name='\$temperature' or name='\$vt' or name='idt' or name='ddt' or
-                           name='\$param_given' or name='\$given' or name='ddx' or name='flicker_noise' or name='white_noise']"/>
+        <admst:when test="[name='\$realtime' or name='\$temperature' or name='\$vt' or name='idt' or name='ddt' or name='transition' or
+                           name='\$param_given' or name='\$given' or name='ddx' or name='flicker_noise' or name='white_noise']">
+          <admst:push into="$globalexpression/function" select="."/>
+        </admst:when>
         <admst:when
           test="[name='analysis' or name='\$analysis' or name='\$simparam' or name='simparam' or
           name='\$shrinka' or name='\$shrinkl' or name='\$limexp' or
@@ -169,9 +171,6 @@
           name='sin' or name='sinh' or name='sqrt' or name='tan' or name='tanh' or name='atanh' or name='floor' or name='ceil']">
           <admst:push into="$globalexpression/function" select="."/>
           <admst:value-to select="class" string="builtin"/>
-        </admst:when>
-        <admst:when test="[name='transition']">
-          <admst:push into="$globalexpression/function" select="."/>
         </admst:when>
         <admst:otherwise>
           <admst:assert test="[exists(definition)]" format="%(lexval/(f|':'|l|':'|c)): analog function '%(name)' is undefined\n"/>
