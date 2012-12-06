@@ -3359,12 +3359,11 @@ static void addptraverse (p_ptraverse p,p_path mypath,p_admst dot)
     }
     else if((mytype0==admse_basicreal)&&(mytype1==admse_basicreal))
     {
-      ".&LLNN("bi","myadmst0->_item.r+myadmst1->_item.r")."
+      ".&LLNN("br","myadmst0->_item.r+myadmst1->_item.r")."
     }
     else
-    {
-      ".&LLNN("bi","adms_NAN")."
-      adms_message_warning((\"%s: '+' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)+strtod(aprintf(mypath->_transform,myadmst1),NULL)")."
     }
   }
   for(o0=o1?o1:o0;o0;o0=o0->next)
@@ -3380,9 +3379,8 @@ static void addptraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","myadmst0->_item.r")."
     }
     else
-    {
-      ".&LLNN("bi","adms_NAN")."
-      adms_message_warning((\"%s: '+' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)")."
     }
   }
 }
@@ -3406,12 +3404,11 @@ static void addmtraverse (p_ptraverse p,p_path mypath,p_admst dot)
     }
     else if((mytype0==admse_basicreal)&&(mytype1==admse_basicreal))
     {
-      ".&LLNN("bi","myadmst0->_item.r-myadmst1->_item.r")."
+      ".&LLNN("br","myadmst0->_item.r-myadmst1->_item.r")."
     }
     else
-    {
-      ".&LLNN("bi","adms_NAN")."
-      adms_message_warning((\"%s: '-' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)-strtod(aprintf(mypath->_transform,myadmst1),NULL)")."
     }
   }
   for(;o0;o0=o0->next)
@@ -3427,9 +3424,8 @@ static void addmtraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","myadmst0->_item.r")."
     }
     else
-    {
-      ".&LLNN("bi","adms_NAN")."
-      adms_message_warning((\"%s: '-' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)")."
     }
   }
   for(;o1;o1=o1->next)
@@ -3445,9 +3441,8 @@ static void addmtraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","-myadmst1->_item.r")."
     }
     else
-    {
-      ".&LLNN("bi","adms_NAN")."
-      adms_message_warning((\"%s: '-' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","-1*strtod(aprintf(mypath->_transform,myadmst1),NULL)")."
     }
   }
 }
@@ -3471,10 +3466,12 @@ static void multtimetraverse (p_ptraverse p,p_path mypath,p_admst dot)
     }
     else if((mytype0==admse_basicreal)&&(mytype1==admse_basicreal))
     {
-      ".&LLNN("bi","myadmst0->_item.r*myadmst1->_item.r")."
+      ".&LLNN("br","myadmst0->_item.r*myadmst1->_item.r")."
     }
     else
-      adms_message_fatal((\"%s: '*' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)*strtod(aprintf(mypath->_transform,myadmst1),NULL)")."
+    }
   }
   for(o0=o1?o1:o0;o0;o0=o0->next)
   {
@@ -3484,8 +3481,14 @@ static void multtimetraverse (p_ptraverse p,p_path mypath,p_admst dot)
     {
       ".&LLNN("bi","myadmst0->_item.i")."
     }
+    else if(mytype0==admse_basicreal)
+    {
+      ".&LLNN("br","myadmst0->_item.r")."
+    }
     else
-      adms_message_fatal((\"%s: '*' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)")."
+    }
   }
 }
 static void multdivtraverse (p_ptraverse p,p_path mypath,p_admst dot)
@@ -3508,10 +3511,12 @@ static void multdivtraverse (p_ptraverse p,p_path mypath,p_admst dot)
     }
     else if((mytype0==admse_basicreal)&&(mytype1==admse_basicreal))
     {
-      ".&LLNN("bi","myadmst0->_item.r/myadmst1->_item.r")."
+      ".&LLNN("br","myadmst0->_item.r/myadmst1->_item.r")."
     }
     else
-      adms_message_fatal((\"%s: ':' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","(strtod(aprintf(mypath->_transform,myadmst0),NULL)/strtod(aprintf(mypath->_transform,myadmst1),NULL))")."
+    }
   }
   for(;o0;o0=o0->next)
   {
@@ -3526,7 +3531,9 @@ static void multdivtraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","myadmst0->_item.r/1.0")."
     }
     else
-      adms_message_fatal((\"%s: ':' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","strtod(aprintf(mypath->_transform,myadmst0),NULL)/1.0")."
+    }
   }
   for(;o1;o1=o1->next)
   {
@@ -3541,7 +3548,9 @@ static void multdivtraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","1.0/myadmst1->_item.r")."
     }
     else
-      adms_message_fatal((\"%s: ':' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","1.0/strtod(aprintf(mypath->_transform,myadmst1),NULL)")."
+    }
   }
 }
 static void unaryptraverse (p_ptraverse p,p_path mypath,p_admst dot)
@@ -3562,7 +3571,9 @@ static void unaryptraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","+myadmst0->_item.r")."
     }
     else
-      adms_message_fatal((\"%s: '+' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","+strtod(aprintf(mypath->_transform,myadmst0),NULL)")."
+    }
   }
 }
 static void unarymtraverse (p_ptraverse p,p_path mypath,p_admst dot)
@@ -3583,7 +3594,9 @@ static void unarymtraverse (p_ptraverse p,p_path mypath,p_admst dot)
       ".&LLNN("br","-myadmst0->_item.r")."
     }
     else
-      adms_message_fatal((\"%s: '-' operator - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+    { // Convert the string representation to a number
+      ".&LLNN("br","-strtod(aprintf(mypath->_transform,myadmst0),NULL)")."
+    }
   }
 }
 static void incrptraverse (p_ptraverse p,p_path mypath,p_admst dot)
