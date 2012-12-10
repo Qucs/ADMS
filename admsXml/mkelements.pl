@@ -3985,7 +3985,11 @@ static int atomiclt (const p_path mypath,p_admst myadmst)
         passed=(myreal0<myreal1);
       }
       else
-        adms_message_fatal((\"%s: 'less than' - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+      { // Convert the string representation to a number
+        double myreal0=strtod(aprintf(mypath->_transform,myadmst0),NULL);
+        double myreal1=strtod(aprintf(mypath->_transform,myadmst1),NULL);
+        passed=(myreal0<myreal1);
+      }
     }
   }
   free_ptraverse(p0);
@@ -4022,7 +4026,11 @@ static int atomicgt (const p_path mypath,p_admst myadmst)
         passed=(myreal0>myreal1);
       }
       else
-        adms_message_fatal((\"%s: 'greater than' - case not implemented - sorry!\\n\",adms_transform_uid(mypath->_transform)))
+      { // Convert the string representation to a number
+        double myreal0=strtod(aprintf(mypath->_transform,myadmst0),NULL);
+        double myreal1=strtod(aprintf(mypath->_transform,myadmst1),NULL);
+        passed=(myreal0>myreal1);
+      }
     }
   }
   free_ptraverse(p0);
