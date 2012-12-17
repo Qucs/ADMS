@@ -14,6 +14,34 @@
 <admst:variable name="globalpartitionning"/>
 <admst:variable name="globaltreenode"/>
 
+<admst:variable name="expression:binary"/>
+<admst:template match="expression:binary">
+  <!--
+      item[1] : operation
+      item[2] : operand1
+      item[3] : operand2
+  -->
+  <admst:new datatype="mapply_binary" inputs="item[1],item[2],item[3]">
+    <admst:new datatype="expression" inputs="/module[1],.">
+      <admst:variable name="expression:binary" select="%(.)"/>
+    </admst:new>
+  </admst:new>
+</admst:template>
+
+<admst:variable name="expression:number"/>
+<admst:template match="expression:number">
+  <!--
+      . : number constant
+  -->
+  <admst:new datatype="lexval" inputs=".,'created','0','0'">
+    <admst:new datatype="number" inputs=".">
+      <admst:new datatype="expression" inputs="/module[1],.">
+        <admst:variable name="expression:number" select="%(.)"/>
+      </admst:new>
+    </admst:new>
+  </admst:new>
+</admst:template>
+
 <admst:template match="e:dependency">
   <admst:choose>
     <admst:when test="[datatypename='expression']">
@@ -699,24 +727,91 @@
 		<admst:new datatype="attribute" inputs="'nature'">
 		  <admst:push into="../attribute" select="."/>
 		</admst:new>
-		<admst:value-to select="attribute[name='info']/value" path="name"/>
-		<admst:value-to select="attribute[name='nature']/value" path="../rhs/probe/discipline/potential"/>
-		<admst:reverse select="/module/node"/>
-		<admst:push into="/module/node" select="." onduplicate="ignore"/>
-		<admst:reverse select="/module/node"/>
-	  </admst:new>
-	</admst:if>
+
+        <!-- (pnode/maxsize+1)*(nnode/maxsize+1) -->
+        <admst:new datatype="list" inputs="'inputs'">
+          <!-- This pushes (pnode/maxsize)+1 into the outer inputs list -->
+          <admst:new datatype="list" inputs="'inputs2'">            
+            <admst:push into="item" select="$mysource/branch/pnode/maxsize/tree"/>
+            <admst:apply-templates match="expression:number" select="1">
+              <admst:push into="../item" select="$(expression:number)"/>
+            </admst:apply-templates>
+            <admst:push into="item" select="'addp'"/>
+            <admst:apply-templates match="expression:binary" select=".">
+              <admst:push into="../item" select="$(expression:binary)"/>
+            </admst:apply-templates>
+          </admst:new>
+
+          <!-- This pushes (nnode/maxsize)+1 into the outer inputs list -->
+          <admst:new datatype="list" inputs="'inputs2'">
+            <admst:push into="item" select="$mysource/branch/nnode/maxsize/tree"/>
+            <admst:apply-templates match="expression:number" select="1">
+              <admst:push into="../item" select="$(expression:number)"/>
+            </admst:apply-templates>
+            <admst:push into="item" select="'addp'"/>
+            <admst:apply-templates match="expression:binary" select=".">
+              <admst:push into="../item" select="$(expression:binary)"/>
+            </admst:apply-templates>
+          </admst:new>
+          
+          <admst:push into="item" select="'multtime'"/>
+          <admst:apply-templates match="expression:binary" select=".">
+            <admst:value-to select="$branchnode/maxsize" path="$(expression:binary)"/>
+          </admst:apply-templates>
+        </admst:new>
+
+        <!-- (pnode/minsize+1)*(nnode/minsize+1) -->
+        <admst:new datatype="list" inputs="'inputs'">
+          <!-- This pushes (pnode/minsize)+1 into the outer inputs list -->
+          <admst:new datatype="list" inputs="'inputs2'">            
+            <admst:push into="item" select="$mysource/branch/pnode/minsize/tree"/>
+            <admst:apply-templates match="expression:number" select="1">
+              <admst:push into="../item" select="$(expression:number)"/>
+            </admst:apply-templates>
+            <admst:push into="item" select="'addp'"/>
+            <admst:apply-templates match="expression:binary" select=".">
+              <admst:push into="../item" select="$(expression:binary)"/>
+            </admst:apply-templates>
+          </admst:new>
+          <!-- This pushes (nnode/minsize)+1 into the outer inputs list -->          
+          <admst:new datatype="list" inputs="'inputs2'">
+            <admst:push into="item" select="$mysource/branch/nnode/minsize/tree"/>
+            <admst:apply-templates match="expression:number" select="1">
+              <admst:push into="../item" select="$(expression:number)"/>
+            </admst:apply-templates>
+            <admst:push into="item" select="'addp'"/>
+            <admst:apply-templates match="expression:binary" select=".">
+              <admst:push into="../item" select="$(expression:binary)"/>
+            </admst:apply-templates>
+          </admst:new>
+          <admst:push into="item" select="'multtime'"/>
+          <admst:apply-templates match="expression:binary" select=".">
+            <admst:value-to select="$branchnode/minsize" path="$(expression:binary)"/>
+          </admst:apply-templates>
+        </admst:new>
+        
+	    <admst:value-to select="attribute[name='info']/value" path="name"/>
+	    <admst:value-to select="attribute[name='nature']/value" path="../rhs/probe/discipline/potential"/>
+	    <admst:reverse select="/module/node"/>
+	    <admst:push into="/module/node" select="." onduplicate="ignore"/>
+	    <admst:reverse select="/module/node"/>
+      </admst:new>
+    </admst:if>
 
     <admst:for-each select="rhs/probe">
-      <admst:new datatype="jacobian" inputs="module,$mysource/branch/pnode,branch/pnode">
+      <admst:new datatype="jacobian"
+                 inputs="module,$mysource/branch/pnode,$mysource/branch/pindex,branch/pnode,branch/pindex">
         <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
       </admst:new>
-      <admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$mysource/branch/pnode,branch/nnode">
+      <admst:new test="branch/nnode[grounded='no']" datatype="jacobian"
+                 inputs="module,$mysource/branch/pnode,$mysource/branch/pindex,branch/nnode,branch/nindex">
         <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
       </admst:new>
-      <admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$mysource/branch/nnode,branch/pnode">
+      <admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian"
+                 inputs="module,$mysource/branch/nnode,$mysource/branch/nindex,branch/pnode,branch/pindex">
         <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-        <admst:new test="../branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$mysource/branch/nnode,../branch/nnode">
+        <admst:new test="../branch/nnode[grounded='no']" datatype="jacobian"
+                   inputs="module,$mysource/branch/nnode,$mysource/branch/nindex,../branch/nnode,../branch/nindex">
           <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
         </admst:new>
       </admst:new>
@@ -739,57 +834,75 @@
 		  <admst:push into="/module/node" select="." onduplicate="ignore"/>
 		  <admst:reverse select="/module/node"/>
 		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,branch/pnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,$branchnode,branch/pnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,branch/nnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$branchnode,branch/nnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,$branchnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
+        <admst:apply-templates match="expression:number" select="'0'">
+		  <admst:new datatype="jacobian" 
+                     inputs="module,branch/pnode,branch/pindex,$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new datatype="jacobian" 
+                     inputs="module,$branchnode,$(expression:number),branch/pnode,branch/pindex">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new test="branch/nnode[grounded='no']" datatype="jacobian" 
+                     inputs="module,branch/nnode,branch/nindex,$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new test="branch/nnode[grounded='no']" datatype="jacobian" 
+                     inputs="module,$branchnode,$(expression:number),branch/nnode,branch/nindex">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new datatype="jacobian" 
+                     inputs="module,$branchnode,$(expression:number),$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+        </admst:apply-templates>
 	  </admst:if>
 
 	  <!-- Create a voltage source for voltage contributions. -->
 	  <admst:if test="[$mysource/nature=discipline/potential]">
-		<admst:new datatype="jacobian" inputs="module,$mysource/branch/pnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,$branchnode,$mysource/branch/pnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$mysource/branch/nnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$branchnode,$mysource/branch/nnode">
-		  <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,branch/pnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,$branchnode,branch/pnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,branch/nnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new test="branch/nnode[grounded='no']" datatype="jacobian" inputs="module,$branchnode,branch/nnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
-		<admst:new datatype="jacobian" inputs="module,$branchnode,$branchnode">
-          <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
-		</admst:new>
+        <admst:apply-templates match="expression:number" select="'0'">
+		  <admst:new datatype="jacobian"
+                     inputs="../module,$mysource/branch/pnode,$mysource/branch/pindex,$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new datatype="jacobian" 
+                     inputs="../module,$branchnode,$(expression:number),$mysource/branch/pnode,$mysource/branch/pindex">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" 
+                     inputs="../module,$mysource/branch/nnode,$mysource/branch/nindex,$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new test="$mysource/branch/nnode[grounded='no']" datatype="jacobian" 
+                     inputs="../module,$branchnode,$(expression:number),$mysource/branch/nnode,$mysource/branch/nindex">
+		    <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new datatype="jacobian" 
+                     inputs="../module,../branch/pnode,../branch/pindex,$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new datatype="jacobian" 
+                     inputs="../module,$branchnode,$(expression:number),../branch/pnode,../branch/pindex">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new test="../branch/nnode[grounded='no']" datatype="jacobian" 
+                     inputs="../module,../branch/nnode,../branch/nindex,$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new test="../branch/nnode[grounded='no']" datatype="jacobian" 
+                     inputs="../module,$branchnode,$(expression:number),../branch/nnode,../branch/nindex">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+		  <admst:new datatype="jacobian" 
+                     inputs="../module,$branchnode,$(expression:number),$branchnode,$(expression:number)">
+            <admst:push into="/@jacobian" select="." onduplicate="ignore"/>
+		  </admst:new>
+        </admst:apply-templates>
 	  </admst:if>
       <admst:for-each select="/reverse(@jacobian)">
         <admst:choose>
           <admst:when test="module/jacobian[row=../../row and column=../../column]">
-            <admst:variable name="jacobian" path="module/jacobian[row=../../row and column=../../column]"/>
+            <admst:variable name="jacobian" path="../module/jacobian[row=../../row and column=../../column]"/>
           </admst:when>
           <admst:otherwise>
             <admst:variable name="jacobian" path="."/>

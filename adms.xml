@@ -241,6 +241,8 @@
         <scalar datatypefamily="reference" name="module" datatypename="module" info="back to the module"/>
         <scalar datatypefamily="basictype" name="name" datatypename="basicstring" info="node name"/>
       </uid>
+      <scalar datatypefamily="reference" name="maxsize" datatypename="expression" info="upper bound of node array"/>
+      <scalar datatypefamily="reference" name="minsize" datatypename="expression" info="lower bound of node array"/>
       <scalar datatypefamily="basictype" name="direction" datatypename="basicenumeration" info="its topological direction" default="inout">
         <evalue name="input" info="node is input terminal"/>
         <evalue name="output" info="node is output terminal"/>
@@ -267,10 +269,12 @@
       <scalar datatypefamily="reference" name="branch" datatypename="branch" info="back to branch"/>
     </element>
     <element name="branch" info="branches used by the module">
-      <uid format="$2,$3">
+      <uid format="$2[$3],$4[$5]">
         <scalar datatypefamily="reference" name="module" datatypename="module" info="back to the module"/>
         <scalar datatypefamily="reference" name="pnode" datatypename="node" info="back to pnode"/>
+        <scalar datatypefamily="reference" name="pindex" datatypename="expression" info="pnode index in node array"/>
         <scalar datatypefamily="reference" name="nnode" datatypename="node" info="back to nnode"/>
+        <scalar datatypefamily="reference" name="nindex" datatypename="expression" info="nnode index in node array"/>
       </uid>
       <scalar datatypefamily="reference" name="discipline" datatypename="discipline" info="back to discipline"/>
       <scalar datatypefamily="basictype" name="grounded" datatypename="basicenumeration" info="nnode is ground" default="no">
@@ -482,10 +486,12 @@
       </scalar>
     </element>
     <element name="jacobian" info="jacobians created after compilation">
-      <uid format="$2:$3">
+      <uid format="$2[$3]:$4[$5]">
         <scalar datatypefamily="reference" name="module" datatypename="module" info="back to the module"/>
         <scalar datatypefamily="reference" name="row" datatypename="node" info="back to node (either equation or node)"/>
+        <scalar datatypefamily="reference" name="rowindex" datatypename="expression" info="row index in node array"/>
         <scalar datatypefamily="reference" name="column" datatypename="node" info="back to node (either equation or node)"/>
+        <scalar datatypefamily="reference" name="columnindex" datatypename="expression" info="column index in node array"/>
       </uid>
       <scalar datatypefamily="basictype" name="diagonal" datatypename="basicenumeration" info="this term is in the diagonal" default="no">
         <evalue name="yes" info="it is true"/>

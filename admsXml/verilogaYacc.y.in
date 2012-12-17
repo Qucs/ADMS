@@ -34,6 +34,8 @@ static p_slist gGlobalAttributeList=NULL;
 static p_slist gBlockList=NULL;
 static p_slist gBlockVariableList=NULL;
 static p_branchalias gBranchAlias=NULL;
+static p_expression gNodeMinSize=NULL;
+static p_expression gNodeMaxSize=NULL;
 
 static void adms_veriloga_message_fatal_continue(const p_lexval mytoken)
 {
@@ -298,6 +300,8 @@ R_d.module
           _ gGND=adms_module_list_node_prepend_by_id_once_or_abort(gModule,gModule,"GND"); 
           _ mynodealias->_node=gGND;
           _ gGND->_location=admse_ground;
+          _ gGND->_minsize = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
+          _ gGND->_maxsize = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
           _ for(l=gAttributeList;l;l=l->next)
           _   adms_slist_push(&gModule->_attribute,l->data);
           _ adms_slist_free(gAttributeList); gAttributeList=NULL;
@@ -369,23 +373,31 @@ R_s.declaration
         | ';'
         ;
 R_d.node
-        | R_node.type R_l.terminalnode  ';'
+        | R_node.type R_node.range R_l.terminalnode  ';'
           _ p_slist l;
           _ for(l=gTerminalList;l;l=l->next)
           _   ((p_node)l->data)->_direction=gNodeDirection;
           _ adms_slist_free(gTerminalList); gTerminalList=NULL;
-        | tk_ground R_l.node  ';'
+        | tk_ground R_node.range R_l.node  ';'
           _ p_slist l;
           _ for(l=gNodeList;l;l=l->next)
           _   ((p_node)l->data)->_location=admse_ground;
           _ adms_slist_free(gNodeList); gNodeList=NULL;
-        | tk_ident R_l.node ';'
+        | tk_ident R_node.range R_l.node ';'
           _ char* mydisciplinename=mylexval1;
           _ p_discipline mydiscipline=adms_admsmain_list_discipline_lookup_by_id(root(),mydisciplinename);
           _ p_slist l;
           _ for(l=gNodeList;l;l=l->next)
           _   ((p_node)l->data)->_discipline=mydiscipline;
           _ adms_slist_free(gNodeList); gNodeList=NULL;
+        ;
+R_node.range
+        |
+          _ gNodeMinSize = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
+          _ gNodeMaxSize = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
+        | '[' R_s.expression ':' R_s.expression ']'
+          _ gNodeMinSize = (p_expression)YY($2);
+          _ gNodeMaxSize = (p_expression)YY($4);
         ;
 R_node.type
         | tk_input
@@ -417,6 +429,8 @@ R_s.terminalnode
           _ adms_slist_free(gAttributeList); gAttributeList=NULL;
           _ for(l=gGlobalAttributeList;l;l=l->next)
           _   adms_slist_push(&mynode->_attribute,l->data);
+          _ adms_node_valueto_minsize(mynode,gNodeMinSize);
+          _ adms_node_valueto_maxsize(mynode,gNodeMaxSize);
         ;
 R_s.node
         | tk_ident R_d.attribute.0
@@ -441,16 +455,18 @@ R_s.branchalias
           _ adms_slist_push(&gBranchAliasList,(p_adms)mylexval1);
         ;
 R_s.branch
-        | '(' tk_ident ',' tk_ident ')' R_l.branchalias
+        | '(' tk_ident R_node.index ',' tk_ident R_node.index ')' R_l.branchalias
           _ p_slist l;
           _ p_branch mybranch; 
           _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval2);
-          _ p_node nnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval4);
-          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,nnode); 
+          _ p_node nnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval5);
+          _ p_expression pindex = (p_expression)YY($3);
+          _ p_expression nindex = (p_expression)YY($6);
+          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,nnode,nindex); 
           _ if(!pnode)
           _  adms_veriloga_message_fatal("node never declared\n",$2);
           _ if(!nnode)
-          _  adms_veriloga_message_fatal("node never declared\n",$4);
+          _  adms_veriloga_message_fatal("node never declared\n",$5);
           _ for(l=gBranchAliasList;l;l=l->next)
           _ {
           _   char*aliasname=(char*)l->data;
@@ -462,13 +478,15 @@ R_s.branch
           _ gBranchAliasList=NULL;
           _ for(l=gGlobalAttributeList;l;l=l->next)
           _   adms_slist_push(&mybranch->_attribute,l->data);
-        | '(' tk_ident ')' R_l.branchalias
+        | '(' tk_ident R_node.index ')' R_l.branchalias
           _ p_slist l;
           _ p_branch mybranch;
           _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval2);
+          _ p_expression pindex = (p_expression)YY($3);
+          _ p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
           _ if(!pnode)
           _  adms_veriloga_message_fatal("node never declared\n",$2);
-          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,gGND); 
+          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,gGND,nindex); 
           _ for(l=gBranchAliasList;l;l=l->next)
           _ {
           _   char*aliasname=(char*)l->data;
@@ -691,7 +709,7 @@ R_s.variable.name
           _  adms_veriloga_message_fatal("variable already defined as node\n",$1);
           _ adms_module_list_variable_prepend_once_or_abort(gModule,myvariableprototype); 
           _ adms_slist_push(&gVariableDeclarationList,(p_adms)myvariableprototype);
-        | tk_ident '[' tk_number ':' tk_number ']'
+        | tk_ident '[' tk_integer ':' tk_integer ']'
           _ NEWVARIABLE($1)
           _ if(adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1))
           _  adms_veriloga_message_fatal("variable already defined as node\n",$1);
@@ -1087,7 +1105,7 @@ R_s.blockvariable
           _ NEWVARIABLE($1)
           _ adms_block_list_variable_prepend_once_or_abort(((p_block)gBlockList->data),myvariableprototype); 
           _ adms_slist_push(&gBlockVariableList,(p_adms)myvariableprototype);
-        | tk_ident '[' tk_number ':' tk_number ']'
+        | tk_ident '[' tk_integer ':' tk_integer ']'
           _ NEWVARIABLE($1)
           _ adms_block_list_variable_prepend_once_or_abort(((p_block)gBlockList->data),myvariableprototype); 
           _ adms_slist_push(&gVariableDeclarationList,(p_adms)myvariableprototype);
@@ -1114,29 +1132,33 @@ R_contribution
           _ gBranchAlias=NULL;
         ;
 R_source
-        | tk_ident '(' tk_ident ',' tk_ident ')'
+        | tk_ident '(' tk_ident R_node.index ',' tk_ident R_node.index ')'
           _ p_node Pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval3);
-          _ p_node Nnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval5);
+          _ p_node Nnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval6);
           _ char* natureID=mylexval1;
           _ p_nature mynature=adms_admsmain_list_nature_lookup_by_id(root(),natureID);
-          _ p_branch mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,Pnode,Nnode);
+          _ p_expression pindex = (p_expression)YY($4);
+          _ p_expression nindex = (p_expression)YY($7);
+          _ p_branch mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,Pnode,pindex,Nnode,nindex);
           _ $$=adms_yaccval_new("unknown source file");
           _ if(!mynature)
           _  adms_message_fatal(("[source:error] there is no nature with access %s, missing discipline.h file?\n",natureID))
           _ gSource=adms_module_list_source_prepend_by_id_once_or_ignore(gModule,gModule,mybranch,mynature);
           _ gLexval=$1;
           _ Y($$,(p_adms)gSource);
-        | tk_ident '(' tk_ident ')'
+        | tk_ident '(' tk_ident R_node.index ')'
           _ char* natureID=mylexval1;
           _ p_nature mynature=adms_admsmain_list_nature_lookup_by_id(root(),natureID);
           _ p_branchalias branchalias=adms_module_list_branchalias_lookup_by_id(gModule,gModule,mylexval3);
           _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval3);
+          _ p_expression pindex = (p_expression)YY($4);
+          _ p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
           _ p_branch mybranch=NULL;
           _ $$=adms_yaccval_new("unknown source file");
           _ if(!mynature)
           _  adms_message_fatal(("[source:error] there is no nature with access %s, please, include discipline.h file\n",natureID))
           _ if(pnode)
-          _   mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,gGND);
+          _   mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,gGND,nindex);
           _ else if(branchalias)
           _   mybranch=branchalias->_branch;
           _ else
@@ -1146,6 +1168,17 @@ R_source
           _ gBranchAlias=branchalias;
           _ Y($$,(p_adms)gSource);
         ;
+
+R_node.index
+        |
+          _ $$=adms_yaccval_new("unknown source file");
+          _ p_number default_zero = adms_number_new(adms_lexval_new("0","created value",0,0));
+          _ p_expression default_expr = adms_expression_new(gModule,(p_adms)default_zero);
+          _ Y($$,(p_adms)default_expr);
+        | '[' R_s.expression ']'
+          _ $$ = $2;
+        ;
+
 R_d.while
         | tk_while '(' R_s.expression ')' R_analogcode
           _ p_whileloop mywhileloop=adms_whileloop_new(gModule,(p_expression)YY($3),YY($5));
@@ -1347,6 +1380,24 @@ R_l.enode
           _ p_slist myArgs=(p_slist)YY($1);
           _ $$=$1;
           _ adms_slist_push(&myArgs,YY($3));
+          _ Y($$,(p_adms)myArgs);
+        | tk_ident R_node.index ',' tk_ident R_node.index
+          _ p_slist myArgs = NULL;
+          _ p_slist l;
+          _ p_branch mybranch; 
+          _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
+          _ p_node nnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval4);
+          _ p_expression pindex = (p_expression)YY($2);
+          _ p_expression nindex = (p_expression)YY($5);
+          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,nnode,nindex); 
+          _ if(!pnode)
+          _  adms_veriloga_message_fatal("node never declared\n",$1);
+          _ if(!nnode)
+          _  adms_veriloga_message_fatal("node never declared\n",$4);
+          _ for(l=gGlobalAttributeList;l;l=l->next)
+          _   adms_slist_push(&mybranch->_attribute,l->data);
+          _ $$ = adms_yaccval_new("unknown source file");
+          _ adms_slist_push(&myArgs,(p_adms)mybranch);
           _ Y($$,(p_adms)myArgs);
         ;
 R_s.function_expression
@@ -1651,12 +1702,12 @@ R_e.atomic
           _ p_function myfunction=adms_function_new($1,uid++);
           _ $$=adms_yaccval_new("unknown source file");
           _ Y($$,(p_adms)myfunction);
-        | tk_ident '[' R_expression ']'
+        | '^' tk_ident '[' R_expression ']'
           _ $$=adms_yaccval_new("unknown source file");
-          _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
+          _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$2);
           _ if(!myvariable)
-          _    adms_veriloga_message_fatal("undefined array variable\n",$1);
-          _ Y($$,(p_adms)adms_array_new(myvariable,YY($3)));
+          _    adms_veriloga_message_fatal("undefined array variable\n",$2);
+          _ Y($$,(p_adms)adms_array_new(myvariable,YY($4)));
         | tk_dollar_ident '(' R_l.enode ')'
           _ p_function myfunction=adms_function_new($1,uid++);
           _ p_slist myArgs=(p_slist)YY($3);
@@ -1670,13 +1721,15 @@ R_e.atomic
           _ int narg=adms_slist_length(myArgs);
           _ p_probe myprobe=NULL;
           _ p_nature mynature=adms_admsmain_list_nature_lookup_by_id(root(),myfunctionname);
+          _ p_expression pindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
+          _ p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
           _ $$=adms_yaccval_new("unknown source file");
           _ if(mynature && narg==1)
           _ {
           _   p_adms mychild0=(p_adms)adms_slist_nth_data(myArgs,0);
           _   if(mychild0->_datatypename==admse_node)
           _   {
-          _     p_branch mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,(p_node)mychild0,gGND);
+          _     p_branch mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,(p_node)mychild0,pindex,gGND,nindex);
           _     myprobe=adms_module_list_probe_prepend_by_id_once_or_ignore(gModule,gModule,mybranch,mynature);
           _   }
           _   else if(mychild0->_datatypename==admse_branch)
@@ -1695,7 +1748,7 @@ R_e.atomic
           _     adms_veriloga_message_fatal("second argument of probe is not a node\n",$1);
           _   if(mychild1->_datatypename!=admse_node)
           _     adms_veriloga_message_fatal("first argument of probe is not a node\n",$1);
-          _   mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,(p_node)mychild1,((p_node)mychild0));
+          _   mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,(p_node)mychild1,pindex,((p_node)mychild0),nindex);
           _   myprobe=adms_module_list_probe_prepend_by_id_once_or_ignore(gModule,gModule,mybranch,mynature);
           _ }
           _ if(myprobe)
