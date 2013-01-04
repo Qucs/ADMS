@@ -1399,6 +1399,22 @@ R_l.enode
           _ $$ = adms_yaccval_new("unknown source file");
           _ adms_slist_push(&myArgs,(p_adms)mybranch);
           _ Y($$,(p_adms)myArgs);
+        | tk_ident R_node.index
+          _ p_slist myArgs = NULL;
+          _ p_slist l;
+          _ p_branch mybranch;
+          _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
+          _ p_node nnode=gGND;
+          _ p_expression pindex = (p_expression)YY($2);
+          _ p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
+          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,nnode,nindex);
+          _ if(!pnode)
+          _  adms_veriloga_message_fatal("node never declared\n",$1);
+          _ for(l=gGlobalAttributeList;l;l=l->next)
+          _   adms_slist_push(&mybranch->_attribute,l->data);
+          _ $$ = adms_yaccval_new("unknown source file");
+          _ adms_slist_push(&myArgs,(p_adms)mybranch);
+          _ Y($$,(p_adms)myArgs);
         ;
 R_s.function_expression
         | R_expression
