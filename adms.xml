@@ -516,7 +516,7 @@
               <evalue name="and" info="($2&amp;&amp;$3)"/>
               <evalue name="equ" info="($2==$3)"/>
               <evalue name="notequ" info="($2!=$3)"/>
-              <evalue name="lt" info="($2&lt;=$3)"/>
+              <evalue name="lt" info="($2&lt;$3)"/>
               <evalue name="lt_equ" info="($2&lt;=$3)"/>
               <evalue name="gt" info="($2&gt;$3)"/>
               <evalue name="gt_equ" info="($2&gt;=$3)"/>
