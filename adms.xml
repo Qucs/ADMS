@@ -330,8 +330,8 @@
       </scalar>
       <scalar datatypefamily="basictype" name="scope" datatypename="basicenumeration" info="tells where variable is set/used" default="local">
         <evalue name="local" info="local variable"/>
-        <evalue name="global_model" info="parameter model or set in @model, used atleast in @ask|@instance|@evaluate|@noise|@final"/>
-        <evalue name="global_instance" info="set in @instance, usedatleast in @instance|@evaluate|@noise|@final"/>
+        <evalue name="global_model" info="parameter model or set in @model, used atleast in @ask|@instance|@evaluate|@noise|@final|@cross|@event"/>
+        <evalue name="global_instance" info="set in @instance, usedatleast in @instance|@evaluate|@noise|@final|@cross|@event"/>
         <evalue name="global_final" info="set in @final_step, usedatleast in @ask|@final_step"/>
         <evalue name="global_past" info="obsolete"/>
       </scalar>
@@ -368,6 +368,10 @@
         <evalue name="yes" info="it is true"/>
         <evalue name="no" info="it is false"/>
       </scalar>
+      <scalar datatypefamily="basictype" name="usedinevent" datatypename="basicenumeration" info="variable value used in @cross or @timer" default="no">
+        <evalue name="yes" info="it is true"/>
+        <evalue name="no" info="it is false"/>
+      </scalar>
       <scalar datatypefamily="basictype" name="setinmodel" datatypename="basicenumeration" info="variable value assigned in @model" default="no">
         <evalue name="yes" info="it is true"/>
         <evalue name="no" info="it is false"/>
@@ -389,6 +393,10 @@
         <evalue name="no" info="it is false"/>
       </scalar>
       <scalar datatypefamily="basictype" name="setinfinal" datatypename="basicenumeration" info="variable value assigned in @final" default="no">
+        <evalue name="yes" info="it is true"/>
+        <evalue name="no" info="it is false"/>
+      </scalar>
+      <scalar datatypefamily="basictype" name="setinevent" datatypename="basicenumeration" info="variable value assigned in @cross or @timer" default="no">
         <evalue name="yes" info="it is true"/>
         <evalue name="no" info="it is false"/>
       </scalar>
@@ -658,12 +666,14 @@
           <aliasbis name="usedinevaluate" path="prototype/usedinevaluate"/>
           <aliasbis name="usedinnoise" path="prototype/usedinnoise"/>
           <aliasbis name="usedinfinal" path="prototype/usedinfinal"/>
+          <aliasbis name="usedinevent" path="prototype/usedinevent"/>
           <aliasbis name="setinmodel" path="prototype/setinmodel"/>
           <aliasbis name="setininstance" path="prototype/setininstance"/>
           <aliasbis name="setininitial_step" path="prototype/setininitial_step"/>
           <aliasbis name="setinevaluate" path="prototype/setinevaluate"/>
           <aliasbis name="setinnoise" path="prototype/setinnoise"/>
           <aliasbis name="setinfinal" path="prototype/setinfinal"/>
+          <aliasbis name="setinevent" path="prototype/setinevent"/>
           <aliasbis name="setingetprev" path="prototype/setingetprev"/>
           <aliasbis name="TemperatureDependent" path="prototype/TemperatureDependent"/>
           <aliasbis name="OPdependent" path="prototype/OPdependent"/>

@@ -130,6 +130,9 @@
         <admst:when test="[$globalpartitionning='final_step']">
           <admst:value-to select="variable/usedinfinal" string="yes"/>
         </admst:when>
+        <admst:when test="[$globalpartitionning='event']">
+          <admst:value-to select="variable/usedinevent" string="yes"/>
+        </admst:when>
       </admst:choose>
       <admst:reverse select="function"/>
       <admst:value-to select="math/value" path="tree/math/value"/>
@@ -494,6 +497,9 @@
         <admst:when test="[$globalpartitionning='final_step']">
           <admst:value-to select="$lhs/setinfinal" string="yes"/>
         </admst:when>
+        <admst:when test="[$globalpartitionning='event']">
+          <admst:value-to select="$lhs/setinevent" string="yes"/>
+        </admst:when>
         <admst:otherwise>
           <admst:value-to select="$lhs/setinevaluate" string="yes"/>
         </admst:otherwise>
@@ -547,10 +553,13 @@
         </admst:otherwise>
       </admst:choose>
     </admst:when>
-    <admst:when test="[datatypename='globalevent']">
+    <admst:when test="[datatypename='globalevent' or datatypename='crossevent' or datatypename='timerevent']">
       <admst:reverse select="action/(item|variable)"/>
       <admst:variable name="forcepartitionning" string="yes"/>
       <admst:choose>
+        <admst:when test="[datatypename='crossevent' or datatypename='timerevent']">
+          <admst:variable name="globalpartitionning" string="event"/>
+        </admst:when>
         <admst:when test="[name='initial_model']">
           <admst:variable name="globalpartitionning" string="initial_model"/>
         </admst:when>
@@ -616,7 +625,7 @@
     <admst:assert select="parameterset" test="parameter[input='yes']"
                   format="%(../instantiator).%(parameter/name): is not input parameter\n"/>
   </admst:for-each>
-  <admst:apply-templates select="(analogfunction/tree)|(analog/code)|(globalevent)" match="dependency"/>
+  <admst:apply-templates select="(analogfunction/tree)|(analog/code)|(globalevent)|(timerevent)|(crossevent)" match="dependency"/>
   <admst:for-each select="variable">
     <admst:value-to select="[dependency!='constant']/OPdependent" string="yes"/>
     <admst:value-to select="output" path="input"/>
@@ -633,22 +642,32 @@
     <admst:value-to select="default[exists(tree[datatypename='number' and value='1.0'])]/value" string="is_one"/>
     <admst:value-to select="scope"
       test="[(input='yes' and parametertype='model') or (input='no' and (setinmodel='yes' or usedinmodel='yes')
-        and (setininstance='yes' or setininitial_step='yes' or setinevaluate='yes' or setinnoise='yes' or setinfinal='yes'
-        or usedininstance='yes' or usedininitial_step='yes' or usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or output='yes'))]"
+        and (setininstance='yes' or setininitial_step='yes' or setinevaluate='yes' or setinnoise='yes' or setinfinal='yes' or setinevent='yes'
+        or usedininstance='yes' or usedininitial_step='yes' or usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or usedinevent='yes'
+        or output='yes'))]"
       string="global_model"/>
     <admst:value-to select="scope"
       test="[(input='yes' and parametertype='instance') or
       (input='no' and setinmodel='no' and usedinmodel='no' and
-        (((setininstance='yes' or usedininstance='yes') and (setininitial_step='yes' or setinevaluate='yes' or setinnoise='yes' or setinfinal='yes'
-        or usedininitial_step='yes' or usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or output='yes'))
-        or ((setininitial_step='yes' or usedininitial_step='yes') and (setinevaluate='yes' or setinnoise='yes' or setinfinal='yes'
-        or usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or output='yes'))
-        or ((setinevaluate='yes' or usedinevaluate='yes') and (setinnoise='yes' or setinfinal='yes'
-          or usedinnoise='yes' or usedinfinal='yes' or output='yes'))
-        or ((setinnoise='yes' or usedinnoise='yes') and (setinfinal='yes' or usedinfinal='yes' or output='yes'))
-        or ((setinfinal='yes' or usedinfinal='yes') and output='yes')
-        or (setinmodel='no' and setininstance='no' and setinevaluate='no' and setinnoise='no' and setinfinal='no' and
-            usedinmodel='no' and usedininstance='no' and usedinevaluate='no' and usedinnoise='no' and usedinfinal='no' and output='yes')
+        (
+            ((setininstance='yes' or usedininstance='yes') and
+            (setininitial_step='yes' or setinevaluate='yes' or setinnoise='yes' or setinfinal='yes' or setinevent='yes' or
+             usedininitial_step='yes' or usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or usedinevent='yes' or output='yes'))
+        or
+            ((setininitial_step='yes' or usedininitial_step='yes') and
+             (setinevaluate='yes' or setinnoise='yes' or setinfinal='yes' or setinevent='yes' or
+              usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or usedinevent='yes' or output='yes'))
+        or
+            ((setinevaluate='yes' or usedinevaluate='yes') and (setinnoise='yes' or setinfinal='yes' or
+              usedinnoise='yes' or usedinfinal='yes' or output='yes'))
+        or
+            ((setinnoise='yes' or usedinnoise='yes') and (setinfinal='yes' or usedinfinal='yes' or output='yes')) or
+            ((setinfinal='yes' or usedinfinal='yes') and output='yes')
+        or
+            (setinevent='yes')
+        or
+            (setinmodel='no' and setininstance='no' and setinevaluate='no' and setinnoise='no' and setinfinal='no' and
+             usedinmodel='no' and usedininstance='no' and usedinevaluate='no' and usedinnoise='no' and usedinfinal='no' and output='yes')
       ))]"
       string="global_instance"/>
     <admst:value-to select="isstate"
