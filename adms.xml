@@ -776,8 +776,8 @@
         <alias name="dynamic" element="math" attribute="dynamic"/>
         <scalar datatypefamily="basictype" name="name" datatypename="basicstring" default="" info="obsolete - not used"/>
       </element>
-      <element name="assignment" info="assignement: variable=expression;">
-        <uid format="$2=$3;">
+      <element name="assignment" info="assignement: variable=expression">
+        <uid format="$2=$3">
           <scalar datatypefamily="reference" name="module" datatypename="module" info="back to the module"/>
           <scalar datatypefamily="reference" name="lhs" datatypename="adms" info="left-hand-side (variable or array)"/>
           <scalar datatypefamily="reference" name="rhs" datatypename="expression" info="right-hand-side"/>
