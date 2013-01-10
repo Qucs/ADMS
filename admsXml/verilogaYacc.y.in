@@ -1381,40 +1381,6 @@ R_l.enode
           _ $$=$1;
           _ adms_slist_push(&myArgs,YY($3));
           _ Y($$,(p_adms)myArgs);
-        | tk_ident R_node.index ',' tk_ident R_node.index
-          _ p_slist myArgs = NULL;
-          _ p_slist l;
-          _ p_branch mybranch; 
-          _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
-          _ p_node nnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval4);
-          _ p_expression pindex = (p_expression)YY($2);
-          _ p_expression nindex = (p_expression)YY($5);
-          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,nnode,nindex); 
-          _ if(!pnode)
-          _  adms_veriloga_message_fatal("node never declared\n",$1);
-          _ if(!nnode)
-          _  adms_veriloga_message_fatal("node never declared\n",$4);
-          _ for(l=gGlobalAttributeList;l;l=l->next)
-          _   adms_slist_push(&mybranch->_attribute,l->data);
-          _ $$ = adms_yaccval_new("unknown source file");
-          _ adms_slist_push(&myArgs,(p_adms)mybranch);
-          _ Y($$,(p_adms)myArgs);
-        | tk_ident R_node.index
-          _ p_slist myArgs = NULL;
-          _ p_slist l;
-          _ p_branch mybranch;
-          _ p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
-          _ p_node nnode=gGND;
-          _ p_expression pindex = (p_expression)YY($2);
-          _ p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
-          _ mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,nnode,nindex);
-          _ if(!pnode)
-          _  adms_veriloga_message_fatal("node never declared\n",$1);
-          _ for(l=gGlobalAttributeList;l;l=l->next)
-          _   adms_slist_push(&mybranch->_attribute,l->data);
-          _ $$ = adms_yaccval_new("unknown source file");
-          _ adms_slist_push(&myArgs,(p_adms)mybranch);
-          _ Y($$,(p_adms)myArgs);
         ;
 R_s.function_expression
         | R_expression
@@ -1718,12 +1684,26 @@ R_e.atomic
           _ p_function myfunction=adms_function_new($1,uid++);
           _ $$=adms_yaccval_new("unknown source file");
           _ Y($$,(p_adms)myfunction);
-        | '^' tk_ident '[' R_expression ']'
+        | tk_ident '[' R_expression ']'
           _ $$=adms_yaccval_new("unknown source file");
-          _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$2);
-          _ if(!myvariable)
-          _    adms_veriloga_message_fatal("undefined array variable\n",$2);
-          _ Y($$,(p_adms)adms_array_new(myvariable,YY($4)));
+          _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
+          _ if(myvariable) {
+          _     Y($$,(p_adms)adms_array_new(myvariable,YY($3)));
+          _ } else {
+          _     p_slist l;
+          _     p_branch mybranch;
+          _     p_node pnode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
+          _     p_node nnode=gGND;
+          _     p_expression pindex = (p_expression)YY($3);
+          _     p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
+          _     mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,pnode,pindex,nnode,nindex);
+          _     if(!pnode)
+          _      adms_veriloga_message_fatal("node never declared\n",$1);
+          _     for(l=gGlobalAttributeList;l;l=l->next)
+          _       adms_slist_push(&mybranch->_attribute,l->data);
+          _     $$ = adms_yaccval_new("unknown source file");
+          _     Y($$,(p_adms)mybranch);
+          _ }
         | tk_dollar_ident '(' R_l.enode ')'
           _ p_function myfunction=adms_function_new($1,uid++);
           _ p_slist myArgs=(p_slist)YY($3);
@@ -1740,26 +1720,40 @@ R_e.atomic
           _ p_expression pindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
           _ p_expression nindex = adms_expression_new(gModule,(p_adms)adms_number_new(adms_lexval_new("0","created value",0,0)));
           _ $$=adms_yaccval_new("unknown source file");
-          _ if(mynature && narg==1)
-          _ {
+          _ if(mynature && narg==1) {
           _   p_adms mychild0=(p_adms)adms_slist_nth_data(myArgs,0);
-          _   if(mychild0->_datatypename==admse_node)
-          _   {
+          _   if(mychild0->_datatypename==admse_node) {
           _     p_branch mybranch=adms_module_list_branch_prepend_by_id_once_or_ignore(gModule,gModule,(p_node)mychild0,pindex,gGND,nindex);
           _     myprobe=adms_module_list_probe_prepend_by_id_once_or_ignore(gModule,gModule,mybranch,mynature);
-          _   }
-          _   else if(mychild0->_datatypename==admse_branch)
-          _   {
+          _   } else if(mychild0->_datatypename==admse_branch) {
           _     myprobe=adms_module_list_probe_prepend_by_id_once_or_ignore(gModule,gModule,(p_branch)mychild0,mynature);
-          _   }
-          _   else
+          _   } else {
           _     adms_veriloga_message_fatal("bad argument (expecting node or branch)\n",$1);
+          _   }
           _ }
           _ else if(mynature && narg==2)
           _ {
           _   p_adms mychild0=(p_adms)adms_slist_nth_data(myArgs,0);
           _   p_adms mychild1=(p_adms)adms_slist_nth_data(myArgs,1);
           _   p_branch mybranch;
+          _   if(mychild0->_datatypename == admse_branch && mychild1->_datatypename == admse_branch) {
+          _       p_branch a = (p_branch)mychild1;
+          _       p_branch b = (p_branch)mychild0;
+          _   /* If there was a probe defined for (a,b), then we had to temporary create two branches:
+          _    *  (a,GND) and (b,GND) which will now get transformed back into (a,b) */
+          _       if(a->_nnode == gGND && b->_nnode == gGND) {
+          _           mychild0 = (p_adms)b->_pnode;
+          _           mychild1 = (p_adms)a->_pnode;
+          _           adms_expression_free(pindex);
+          _           adms_expression_free(nindex);
+          _           pindex = a->_pindex;
+          _           nindex = b->_pindex;
+          _           adms_slist_pull(&a->_module->_branch); // This is slightly suspect. I'm not 100% sure if the
+          _           adms_slist_pull(&b->_module->_branch); // temporary branches will always be at the end...
+          _           adms_branch_free(a);
+          _           adms_branch_free(b);
+          _       }
+          _   }
           _   if(mychild0->_datatypename!=admse_node)
           _     adms_veriloga_message_fatal("second argument of probe is not a node\n",$1);
           _   if(mychild1->_datatypename!=admse_node)
