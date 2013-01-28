@@ -709,15 +709,15 @@ R_s.variable.name
           _  adms_veriloga_message_fatal("variable already defined as node\n",$1);
           _ adms_module_list_variable_prepend_once_or_abort(gModule,myvariableprototype); 
           _ adms_slist_push(&gVariableDeclarationList,(p_adms)myvariableprototype);
-        | tk_ident '[' tk_integer ':' tk_integer ']'
+        | tk_ident '[' R_s.expression ':' R_s.expression ']'
           _ NEWVARIABLE($1)
           _ if(adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1))
           _  adms_veriloga_message_fatal("variable already defined as node\n",$1);
           _ adms_module_list_variable_prepend_once_or_abort(gModule,myvariableprototype); 
           _ adms_slist_push(&gVariableDeclarationList,(p_adms)myvariableprototype);
           _ myvariableprototype->_sizetype=admse_array;
-          _ myvariableprototype->_minsize=adms_number_new($3);
-          _ myvariableprototype->_maxsize=adms_number_new($5);
+          _ myvariableprototype->_minsize=(p_expression)YY($3);
+          _ myvariableprototype->_maxsize=(p_expression)YY($5);
         ;
 R_s.parameter.range
         |
@@ -1105,13 +1105,13 @@ R_s.blockvariable
           _ NEWVARIABLE($1)
           _ adms_block_list_variable_prepend_once_or_abort(((p_block)gBlockList->data),myvariableprototype); 
           _ adms_slist_push(&gBlockVariableList,(p_adms)myvariableprototype);
-        | tk_ident '[' tk_integer ':' tk_integer ']'
+        | tk_ident '[' R_s.expression ':' R_s.expression ']'
           _ NEWVARIABLE($1)
           _ adms_block_list_variable_prepend_once_or_abort(((p_block)gBlockList->data),myvariableprototype); 
           _ adms_slist_push(&gVariableDeclarationList,(p_adms)myvariableprototype);
           _ myvariableprototype->_sizetype=admse_array;
-          _ myvariableprototype->_minsize=adms_number_new($3);
-          _ myvariableprototype->_maxsize=adms_number_new($5);
+          _ myvariableprototype->_minsize=(p_expression)YY($3);
+          _ myvariableprototype->_maxsize=(p_expression)YY($5);
         ;
 R_d.contribution
         | R_contribution R_d.attribute.0 ';'

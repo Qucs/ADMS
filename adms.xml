@@ -318,8 +318,8 @@
         <evalue name="real" info="variable has real values"/>
         <evalue name="string" info="variable has string values"/>
       </scalar>
-      <scalar datatypefamily="reference" name="maxsize" datatypename="number" info="upper index of variable (array)"/>
-      <scalar datatypefamily="reference" name="minsize" datatypename="number" info="lower index of variable (array)"/>
+      <scalar datatypefamily="reference" name="maxsize" datatypename="expression" info="upper index of variable (array)"/>
+      <scalar datatypefamily="reference" name="minsize" datatypename="expression" info="lower index of variable (array)"/>
       <scalar datatypefamily="basictype" name="input" datatypename="basicenumeration" info="parameter variable" default="no">
         <evalue name="yes" info="it is true"/>
         <evalue name="no" info="it is false"/>
