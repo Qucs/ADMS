@@ -664,7 +664,9 @@
             ((setinnoise='yes' or usedinnoise='yes') and (setinfinal='yes' or usedinfinal='yes' or output='yes')) or
             ((setinfinal='yes' or usedinfinal='yes') and output='yes')
         or
-            (setinevent='yes')
+            ((setinevent='yes' or usedinevent='yes') and
+            (setininitial_step='yes' or setinevaluate='yes' or setinnoise='yes' or setinfinal='yes' or setininstance='yes' or
+             usedininitial_step='yes' or usedinevaluate='yes' or usedinnoise='yes' or usedinfinal='yes' or usedininstance='yes' or output='yes'))
         or
             (setinmodel='no' and setininstance='no' and setinevaluate='no' and setinnoise='no' and setinfinal='no' and
              usedinmodel='no' and usedininstance='no' and usedinevaluate='no' and usedinnoise='no' and usedinfinal='no' and output='yes')
@@ -874,7 +876,7 @@
       <admst:for-each select="/reverse(@jacobian)">
         <admst:choose>
           <admst:when test="module/jacobian[row=../../row and column=../../column]">
-            <admst:variable name="jacobian" path="../module/jacobian[row=../../row and column=../../column]"/>
+            <admst:variable name="jacobian" path="module/jacobian[row=../../row and column=../../column]"/>
           </admst:when>
           <admst:otherwise>
             <admst:variable name="jacobian" path="."/>
