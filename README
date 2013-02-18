@@ -2,13 +2,11 @@ Forked from the source code available at: http://sourceforge.net/projects/mot-ad
 The original SVN repo is now password-protected, so here we are.
 
 You should be able to build with:
-    ./configure --enable-maintainer-mode
+    ./configure
     make -j1
     make install
 
-I wasn't interested in poluting my commits with auto-generated code, so I removed (most of?) the code
-that is automatically generated and frequently changes when other files change, which is why you must
-specify the --enable-maintainer-mode flag. Also, it doesn't seem like the original author considered
+Also, it doesn't seem like the original author considered
 parallel builds, so if you have an alias for make to parallelize, you'll have to override that with -j1.
 
 There was an INSTALL file, but I removed it because zsh kept suggesting it as a correction when running

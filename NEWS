@@ -1,32 +1,3 @@
-/*
- * RCS Info
- * $Id: NEWS 505 2007-01-23 11:17:43Z r29173 $
- * 
- * Log
- * $Log$
- * Revision 1.4  2005/05/03 07:58:29  r29173
- * moved admsNS into admsFile
- *
- * Revision 1.3  2004/08/03 12:33:54  r29173
- * import adms-1.21.0 from local CVS
- *
- * Revision 1.1.1.1  2004/05/21 12:20:01  r29173
- * recreated cvs data structure (crashed after revision 1.13.0!)
- *
- * Revision 1.2  2003/06/19 12:00:34  r29173
- * moved contents of ChangeLog to NEWS
- *
- * Revision 1.2  2003/06/18 14:16:21  r29173
- * release 1.1.12
- *
- * Revision 1.4  2003/05/23 14:32:48  r29173
- * admsAds looks for agilent's files using the value of HPEESOF_DIR
- *
- * Revision 1.3  2003/05/21 14:18:00  r29173
- * add rcs info
- *
- */
-
 #####################################################################
 #                      ChangeLog                                    #
 #####################################################################
