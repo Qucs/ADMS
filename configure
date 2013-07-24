@@ -17081,7 +17081,7 @@ if test "$PERL" = ":"; then
     as_fn_error $? "The $PACKAGE package requires an installed perl." "$LINENO" 5
 fi;
 
-ac_perl_list_modules="XML::LibXML 0"
+ac_perl_list_modules="XML::LibXML 2"
 # Make sure we have perl
 if test -z "$PERL"; then
 # Extract the first word of "perl", so it can be a program name with args.
@@ -17175,7 +17175,7 @@ $as_echo "failed" >&6; }
 else
   as_fn_error $? "could not find perl" "$LINENO" 5
 fi
-ac_perl_list_modules="GD 0"
+ac_perl_list_modules="GD 2.4"
 # Make sure we have perl
 if test -z "$PERL"; then
 # Extract the first word of "perl", so it can be a program name with args.

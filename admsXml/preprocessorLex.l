@@ -1,3 +1,6 @@
+%option outfile="lex.yy.c"
+%option prefix="preprocessor"
+
 %{
 
 #include "adms.h"

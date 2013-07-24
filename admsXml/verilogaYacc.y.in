@@ -1,3 +1,6 @@
+%define api.prefix veriloga
+%defines
+
 %{
 #define YYDEBUG 1
 #define YYPARSE_PARAM myadmsmain

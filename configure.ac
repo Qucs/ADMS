@@ -80,10 +80,10 @@ if test "$PERL" = ":"; then
     AC_MSG_ERROR([The $PACKAGE package requires an installed perl.])
 fi;
 
-AX_PERL_MODULE_VERSION([XML::LibXML 0],[],[
+AX_PERL_MODULE_VERSION([XML::LibXML 2],[],[
     AC_MSG_RESULT(failed)
     AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
-AX_PERL_MODULE_VERSION([GD 0],[],[
+AX_PERL_MODULE_VERSION([GD 2.4],[],[
     AC_MSG_ERROR([Perl package GD:: may be downloaded from http://search.cpan.org/dist/GD])])
 
 AC_CONFIG_FILES([Makefile

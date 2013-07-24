@@ -1,3 +1,6 @@
+%define api.prefix preprocessor
+%defines
+
 %{
 
 #include "admsPreprocessor.h"

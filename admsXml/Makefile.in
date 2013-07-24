@@ -83,11 +83,13 @@ bin_PROGRAMS = admsXml$(EXEEXT)
 noinst_PROGRAMS = admsCheck$(EXEEXT)
 subdir = admsXml
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	preprocessorLex.c verilogaLex.c $(top_srcdir)/auxconf/depcomp \
+	admstpathYacc.c preprocessorLex.c preprocessorYacc.c \
+	verilogaYacc.c verilogaLex.c $(top_srcdir)/auxconf/depcomp \
 	$(top_srcdir)/auxconf/ylwrap $(dist_man_MANS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_append_flag.m4 \
 	$(top_srcdir)/m4/ax_cflags_warn_all.m4 \
+	$(top_srcdir)/m4/ax_compiler_vendor.m4 \
 	$(top_srcdir)/m4/ax_perl_module_version.m4 \
 	$(top_srcdir)/m4/ax_prog_bison.m4 \
 	$(top_srcdir)/m4/ax_prog_flex.m4 $(top_srcdir)/m4/libtool.m4 \
@@ -150,9 +152,9 @@ libadmsElement_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	-o $@
 libadmsPreprocessor_la_DEPENDENCIES = libadmsElement.la
 am_libadmsPreprocessor_la_OBJECTS =  \
-	libadmsPreprocessor_la-preprocessorYacc.lo \
 	libadmsPreprocessor_la-preprocessorLex.lo \
-	libadmsPreprocessor_la-preprocessorMain.lo
+	libadmsPreprocessor_la-preprocessorMain.lo \
+	libadmsPreprocessor_la-preprocessorYacc.lo
 libadmsPreprocessor_la_OBJECTS = $(am_libadmsPreprocessor_la_OBJECTS)
 libadmsPreprocessor_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
@@ -216,6 +218,15 @@ am__v_LEX_ = $(am__v_LEX_@AM_DEFAULT_V@)
 am__v_LEX_0 = @echo "  LEX     " $@;
 am__v_LEX_1 = 
 YLWRAP = $(top_srcdir)/auxconf/ylwrap
+am__yacc_c2h = sed -e s/cc$$/hh/ -e s/cpp$$/hpp/ -e s/cxx$$/hxx/ \
+		   -e s/c++$$/h++/ -e s/c$$/h/
+YACCCOMPILE = $(YACC) $(AM_YFLAGS) $(YFLAGS)
+LTYACCCOMPILE = $(LIBTOOL) $(AM_V_lt) $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(YACC) $(AM_YFLAGS) $(YFLAGS)
+AM_V_YACC = $(am__v_YACC_@AM_V@)
+am__v_YACC_ = $(am__v_YACC_@AM_DEFAULT_V@)
+am__v_YACC_0 = @echo "  YACC    " $@;
+am__v_YACC_1 = 
 SOURCES = $(libadmsAdmstpath_la_SOURCES) $(libadmsElement_la_SOURCES) \
 	$(libadmsPreprocessor_la_SOURCES) \
 	$(libadmsVeriloga_la_SOURCES) $(admsCheck_SOURCES) \
@@ -393,15 +404,15 @@ lib_LTLIBRARIES = libadmsElement.la libadmsPreprocessor.la libadmsVeriloga.la li
 libadmsElement_la_SOURCES = adms.c
 libadmsElement_la_CPPFLAGS = -DinsideElement
 libadmsElement_la_LDFLAGS = -no-undefined
-libadmsPreprocessor_la_SOURCES = preprocessorYacc.c preprocessorLex.l preprocessorMain.c
+libadmsPreprocessor_la_SOURCES = preprocessorLex.l preprocessorMain.c preprocessorYacc.h preprocessorYacc.y
 libadmsPreprocessor_la_CPPFLAGS = -DinsidePreprocessor
 libadmsPreprocessor_la_LDFLAGS = -no-undefined
 libadmsPreprocessor_la_LIBADD = libadmsElement.la
-libadmsVeriloga_la_SOURCES = verilogaYacc.c verilogaLex.l
+libadmsVeriloga_la_SOURCES = verilogaYacc.y verilogaLex.l verilogaYacc.h
 libadmsVeriloga_la_CPPFLAGS = -DinsideVeriloga
 libadmsVeriloga_la_LDFLAGS = -no-undefined
 libadmsVeriloga_la_LIBADD = libadmsElement.la
-libadmsAdmstpath_la_SOURCES = admstpathYacc.c admstpathYacc.h
+libadmsAdmstpath_la_SOURCES = admstpathYacc.y admstpathYacc.h
 libadmsAdmstpath_la_CPPFLAGS = -DinsideadmstpathYacc
 libadmsAdmstpath_la_LDFLAGS = -no-undefined
 libadmsAdmstpath_la_LIBADD = libadmsElement.la
@@ -418,7 +429,7 @@ CLEANFILES = .*.swp *\~ core $(generated_FILES)
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .vams .vams.c .va .va.c .xml .xml.c .y.in .c .l .lo .o .obj
+.SUFFIXES: .vams .vams.c .va .va.c .xml .xml.c .y.in .c .l .lo .o .obj .y
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -614,13 +625,6 @@ libadmsElement_la-adms.lo: adms.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsElement_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libadmsElement_la-adms.lo `test -f 'adms.c' || echo '$(srcdir)/'`adms.c
 
-libadmsPreprocessor_la-preprocessorYacc.lo: preprocessorYacc.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsPreprocessor_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libadmsPreprocessor_la-preprocessorYacc.lo -MD -MP -MF $(DEPDIR)/libadmsPreprocessor_la-preprocessorYacc.Tpo -c -o libadmsPreprocessor_la-preprocessorYacc.lo `test -f 'preprocessorYacc.c' || echo '$(srcdir)/'`preprocessorYacc.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libadmsPreprocessor_la-preprocessorYacc.Tpo $(DEPDIR)/libadmsPreprocessor_la-preprocessorYacc.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='preprocessorYacc.c' object='libadmsPreprocessor_la-preprocessorYacc.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsPreprocessor_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libadmsPreprocessor_la-preprocessorYacc.lo `test -f 'preprocessorYacc.c' || echo '$(srcdir)/'`preprocessorYacc.c
-
 libadmsPreprocessor_la-preprocessorLex.lo: preprocessorLex.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsPreprocessor_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libadmsPreprocessor_la-preprocessorLex.lo -MD -MP -MF $(DEPDIR)/libadmsPreprocessor_la-preprocessorLex.Tpo -c -o libadmsPreprocessor_la-preprocessorLex.lo `test -f 'preprocessorLex.c' || echo '$(srcdir)/'`preprocessorLex.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libadmsPreprocessor_la-preprocessorLex.Tpo $(DEPDIR)/libadmsPreprocessor_la-preprocessorLex.Plo
@@ -634,6 +638,13 @@ libadmsPreprocessor_la-preprocessorMain.lo: preprocessorMain.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='preprocessorMain.c' object='libadmsPreprocessor_la-preprocessorMain.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsPreprocessor_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libadmsPreprocessor_la-preprocessorMain.lo `test -f 'preprocessorMain.c' || echo '$(srcdir)/'`preprocessorMain.c
+
+libadmsPreprocessor_la-preprocessorYacc.lo: preprocessorYacc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsPreprocessor_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libadmsPreprocessor_la-preprocessorYacc.lo -MD -MP -MF $(DEPDIR)/libadmsPreprocessor_la-preprocessorYacc.Tpo -c -o libadmsPreprocessor_la-preprocessorYacc.lo `test -f 'preprocessorYacc.c' || echo '$(srcdir)/'`preprocessorYacc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libadmsPreprocessor_la-preprocessorYacc.Tpo $(DEPDIR)/libadmsPreprocessor_la-preprocessorYacc.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='preprocessorYacc.c' object='libadmsPreprocessor_la-preprocessorYacc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsPreprocessor_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libadmsPreprocessor_la-preprocessorYacc.lo `test -f 'preprocessorYacc.c' || echo '$(srcdir)/'`preprocessorYacc.c
 
 libadmsVeriloga_la-verilogaYacc.lo: verilogaYacc.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libadmsVeriloga_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libadmsVeriloga_la-verilogaYacc.lo -MD -MP -MF $(DEPDIR)/libadmsVeriloga_la-verilogaYacc.Tpo -c -o libadmsVeriloga_la-verilogaYacc.lo `test -f 'verilogaYacc.c' || echo '$(srcdir)/'`verilogaYacc.c
@@ -651,6 +662,9 @@ libadmsVeriloga_la-verilogaLex.lo: verilogaLex.c
 
 .l.c:
 	$(AM_V_LEX)$(am__skiplex) $(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
+
+.y.c:
+	$(AM_V_YACC)$(am__skipyacc) $(SHELL) $(YLWRAP) $< y.tab.c $@ y.tab.h `echo $@ | $(am__yacc_c2h)` y.output $*.output -- $(YACCCOMPILE)
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -823,8 +837,11 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-rm -f admstpathYacc.c
 	-rm -f preprocessorLex.c
+	-rm -f preprocessorYacc.c
 	-rm -f verilogaLex.c
+	-rm -f verilogaYacc.c
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
@@ -920,29 +937,20 @@ uninstall-man: uninstall-man1
 
 $(incfilec):%.c:% ${srcdir}/mkctext.pl
 	$(PERL) ${srcdir}/mkctext.pl $< $(top_srcdir)
+
 admstpathYacc.y admstpathYacc.h adms.h adms.c: ${top_srcdir}/adms.xml ${top_srcdir}/admstpath.xml ${srcdir}/mkelements.pl
 	$(PERL) ${srcdir}/mkelements.pl $(top_srcdir)
+
 verilogaYacc.y: ${srcdir}/verilogaYacc.y.in ${srcdir}/mkgrammar.pl
 	$(PERL) ${srcdir}/mkgrammar.pl ${srcdir}/verilogaYacc.y.in
-# -b -> re-defines file-prefix (not y.tab.c)
-# -d -> creates #define file
-verilogaLex.c: verilogaLex.l
-	flex -Pveriloga -overilogaLex.c verilogaLex.l
-verilogaYacc.c: verilogaYacc.y verilogaLex.l
-	bison -by -d -pveriloga verilogaYacc.y 
-	mv -f y.tab.c verilogaYacc.c 
-	mv -f y.tab.h verilogaYacc.h 
-admstpathYacc.c: admstpathYacc.y admstpathYacc.h
-	bison -by -padmstpath admstpathYacc.y 
-	mv -f y.tab.c admstpathYacc.c 
-preprocessorLex.c: preprocessorLex.l
-	flex -Ppreprocessor -opreprocessorLex.c preprocessorLex.l
-preprocessorYacc.c: preprocessorYacc.y preprocessorLex.l
-	bison -by -d -ppreprocessor preprocessorYacc.y 
-	mv -f y.tab.c preprocessorYacc.c 
-	mv -f y.tab.h preprocessorYacc.h 
 
-preprocessorLex.l: $(incfilec) 
+preprocessorLex.l: $(incfilec) preprocessorYacc.c preprocessorYacc.h
+preprocessorYacc.h: preprocessorYacc.c
+
+verilogLex.l: $(incfilec) verilogaYacc.c verilogYacc.h
+verilogYacc.h: verilogYacc.c
+
+admstpathYacc.y: admstpathYacc.h
 
 admsXml.c: adms.implicit.xml.c
 

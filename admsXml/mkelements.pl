@@ -1933,6 +1933,7 @@ print "$top_srcdir/admsXml/admstpathYacc.h: created\n";
 
 open admstpathYacc_y,">$top_srcdir/admsXml/admstpathYacc.y";
 print admstpathYacc_y "$BUILDER
+%define api.prefix admstpath
 \%{
 #include \"admstpathYacc.h\"
 ";
