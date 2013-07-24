@@ -7,6 +7,7 @@ AC_CONFIG_HEADER([config.h])
 
 # specific configuration.
 AC_CONFIG_AUX_DIR([auxconf])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -18,35 +19,26 @@ AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
+LT_INIT
 
 # Automake Initialisation.
-AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION, -)
+AM_INIT_AUTOMAKE
 
-#force use of flex/bison
-if test "x$LEX" != "xflex"; then
-  AC_MSG_WARN(Program flex not found (found $LEX))
-  AC_MSG_ERROR(Please install gnu flex from http://www.gnu.org/software/flex/)
-fi
-if test "x$YACC" != "xbison -y"; then
-  AC_MSG_WARN(Program bison not found (found $YACC))
-  AC_MSG_ERROR(Please install gnu bison from http://www.gnu.org/software/bison/)
-fi
+AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
+                 AC_MSG_ERROR(Please install gnu flex from http://www.gnu.org/software/flex/)])
+AX_PROG_BISON([],[AC_MSG_WARN(Program bison not found (found $YACC))
+                  AC_MSG_ERROR(Please install gnu bison from http://www.gnu.org/software/bison/)])
+
 
 #advice use of gcc
-if test "x$GCC" = "xyes"; then
-  case "$CFLAGS" in
-  *-Wall*)
-    # already present
-    ;;
-  *)
-    CFLAGS="$CFLAGS -Wall"
-  esac
-else
+AX_COMPILER_VENDOR
+if test "x$ax_cv_c_compiler_vendor" != "xgnu"; then
   AC_MSG_WARN(Seems that the selected C-compiler is not gnu gcc C-compiler)
   AC_MSG_WARN(We advice you to use gcc as C-compiler)
   AC_MSG_WARN(You can install it from http://www.gnu.org/software/gcc/)
 fi
+
+AX_CFLAGS_WARN_ALL
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
@@ -87,22 +79,12 @@ AC_PATH_PROG(PERL, perl, :)
 if test "$PERL" = ":"; then
     AC_MSG_ERROR([The $PACKAGE package requires an installed perl.])
 fi;
-AC_MSG_CHECKING(for XML::LibXML Perl module)
-have_xml="`$PERL -MXML::LibXML -e 'exit 0;' >/dev/null 2>&1`"
-if test $? != "0"; then
+
+AX_PERL_MODULE_VERSION([XML::LibXML 0],[],[
     AC_MSG_RESULT(failed)
-    AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])
-else
-    AC_MSG_RESULT(ok)
-fi;
-AC_MSG_CHECKING(for GD Perl module)
-have_gd="`$PERL -MGD -e 'exit 0;' >/dev/null 2>&1`"
-if test $? != "0"; then
-    AC_MSG_RESULT(failed)
-    AC_MSG_ERROR([Perl package GD:: may be downloaded from http://search.cpan.org/dist/GD])
-else
-    AC_MSG_RESULT(ok)
-fi;
+    AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
+AX_PERL_MODULE_VERSION([GD 0],[],[
+    AC_MSG_ERROR([Perl package GD:: may be downloaded from http://search.cpan.org/dist/GD])])
 
 AC_CONFIG_FILES([Makefile
                  admsXml/Makefile

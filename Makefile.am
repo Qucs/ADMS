@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 EXTRA_DIST=make.win make.cyg \
 	adms.xml admst.xml admstpath.xml \
 	adms.css admst.dtd metaadms.dtd metaadmst.dtd metaadmstpath.dtd \
