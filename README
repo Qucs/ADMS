@@ -3,16 +3,12 @@ The original SVN repo is now password-protected, so here we are.
 
 You should be able to build with:
     ./configure
-    make -j1
+    make
     make install
 
-Also, it doesn't seem like the original author considered
-parallel builds, so if you have an alias for make to parallelize, you'll have to override that with -j1.
 
 There was an INSTALL file, but I removed it because zsh kept suggesting it as a correction when running
 `make install`. If you find that you really need it, you can replace it by running: `automake --add-missing`
-
-Maybe I'll try to clean up the build system someday...
 
 Original author's build instructions: (for posterity)
 
