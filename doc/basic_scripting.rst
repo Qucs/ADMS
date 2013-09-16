@@ -72,7 +72,7 @@ You can generate an interactive tree representation of the object tree locally w
 
     xsltproc adms.xml -o adms.html
 
-`There is also a compiled version available online. <adms.html>`_
+`There is also a compiled version available online. <http://upverter.github.io/ADMS/2.3/adms.html>`_
 
 Variables
 ---------
