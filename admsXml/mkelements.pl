@@ -173,6 +173,9 @@ $adms_h.=q@
 #  elif defined(__APPLE__)
 #    define ADMS_OS_DARWIN
 #    define ADMS_OS "DARWIN"
+#  elif defined(__linux)
+#    define ADMS_OS_LINUX
+#    define ADMS_OS "LINUX"
 #  else
 #    define ADMS_OS_UNKNOWN
 #    define ADMS_OS "UNKNOWN"
@@ -201,6 +204,11 @@ $adms_h.=q@
 #      define ADMS_COMPILER_CLANG
 #      define ADMS_COMPILER "CLANG"
 #    elif defined(__GNUC__)
+#      define ADMS_COMPILER_GCC
+#      define ADMS_COMPILER "GCC"
+#    endif
+#  elif defined(__linux)
+#    if defined(__GNUC__)
 #      define ADMS_COMPILER_GCC
 #      define ADMS_COMPILER "GCC"
 #    endif
