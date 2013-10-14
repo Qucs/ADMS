@@ -44,10 +44,9 @@ if($cygpath_top_srcdir=`cygpath -ad $top_srcdir 2>/dev/null`)
   chomp $cygpath_top_srcdir;
   $cygpath_top_srcdir="\"$cygpath_top_srcdir\"";
 }
-my$SVN;
-$SVN=`svnversion -n $cygpath_top_srcdir 2>/dev/null` or $SVN="unknown";
-$SVN =~ s/^\d+://;
-print "svn version: $SVN\n";
+my$GIT;
+$GIT=`git log --pretty=format:'%h' -n 1` or $GIT="unknown";
+print "git version: $GIT\n";
 #parse adms.xml
 my $EA;
 my $EH;
@@ -90,7 +89,7 @@ $adms_h.=$BUILDER;
 $adms_h.="#ifndef adms_h\n";
 $adms_h.="#define adms_h\n";
 $adms_h.="\n";
-$adms_h.="#define SVN \"$SVN\" /* svn release version */\n";
+$adms_h.="#define GIT \"$GIT\" /* git release version */\n";
 $adms_h.=q@
 /*headers -- depend on compiler, OS, ...*/
 #  if defined(_MSC_VER)

@@ -4,16 +4,16 @@ my $filename=shift;
 my $top_srcdir=shift;
 $top_srcdir=".." if not defined $top_srcdir;
 
-#svn
+#git
 my$cygpath_top_srcdir=$top_srcdir;
 if($cygpath_top_srcdir=`cygpath -ad $top_srcdir 2>/dev/null`)
 {
   chomp $cygpath_top_srcdir;
   $cygpath_top_srcdir="\"$cygpath_top_srcdir\"";
 }
-my$SVN;
-$SVN=`svnversion -n $cygpath_top_srcdir 2>/dev/null` or $SVN="unknown";
-print "svn version: $SVN\n";
+my$GIT;
+$GIT=`git log --pretty=format:'%h' -n 1u` or $GIT="unknown";
+print "git version: $GIT\n";
 
 sub text2ccode
 {
@@ -35,7 +35,7 @@ sub text2ccode
     $line=~s/\n$//;
     $line=~s/\\/\\\\/g;
     $line=~s/"/\\"/g;
-    $line=~s/\@SVN_VERSION=[^@]*\@/\@SVN_VERSION=$SVN\@/g;
+    $line=~s/\@GIT_VERSION=[^@]*\@/\@GIT_VERSION=$GIT\@/g;
     printf(OCF "\"%s\\n\"\n", $line);
   }
   printf(OCF ";\n");

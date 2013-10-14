@@ -558,7 +558,7 @@ static void parseva (const int argc,const char** argv,char* myverilogamsfile)
   root()->_filename=basename(myverilogamsfile);
   root()->_fullfilename=adms_kclone(myverilogamsfile);
   root()->_curfilename=adms_kclone(myverilogamsfile);
-  adms_message_info(("%sXml-%s (%s) %s %s\n",PACKAGE_NAME,PACKAGE_VERSION,SVN,__DATE__,__TIME__))
+  adms_message_info(("%sXml-%s (%s) %s %s\n",PACKAGE_NAME,PACKAGE_VERSION,GIT,__DATE__,__TIME__))
   /* preprocess input file */
   {
     p_preprocessor mypreprocessor=(p_preprocessor)malloc(sizeof(t_preprocessor));
@@ -2656,7 +2656,7 @@ int main (const int argc,const char**argv)
     ((argc==3)&&!strcmp(argv[1],"--")&&!strcmp(argv[2],"help"))
   )
   {
-    adms_message_usage(("%sXml-%s (%s) ",PACKAGE_NAME,PACKAGE_VERSION,SVN))
+    adms_message_usage(("%sXml-%s (%s) ",PACKAGE_NAME,PACKAGE_VERSION,GIT))
     adms_message_usage_continue(("%s %s (os=%s compiler=%s)\n",__DATE__,__TIME__,ADMS_OS,ADMS_COMPILER))
     adms_message_usage(("%sXml source [options] -e script1 [-e script2 ...]\n",PACKAGE_NAME))
     adms_message_usage(("files:\n"))
@@ -2705,7 +2705,7 @@ int main (const int argc,const char**argv)
     adms_message_usage(("  home-page=\"http://mot-adms.sourceforge.net\"\n"))
     adms_message_usage(("  mailing-list=\"mot-adms-users@lists.sourceforge.net\">\n"))
     adms_message_usage(("  <release name=\"%s\" version=\"%s\" ",PACKAGE_NAME,PACKAGE_VERSION))
-    adms_message_usage_continue(("svn=\"%s\" date=\"%s\" time=\"%s\"/>\n",SVN,__DATE__,__TIME__))
+    adms_message_usage_continue(("git=\"%s\" date=\"%s\" time=\"%s\"/>\n",GIT,__DATE__,__TIME__))
     adms_message_usage(("</info>\n"))
     return 0;
   }
