@@ -3,7 +3,6 @@
 
 %{
 #define YYDEBUG 1
-#define YYPARSE_PARAM myadmsmain
 #include "admsVeriloga.h"
 
 #define NEWVARIABLE(l) p_variableprototype myvariableprototype=adms_variableprototype_new(gModule,l,(p_adms)gBlockList->data);

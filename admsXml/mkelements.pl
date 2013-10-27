@@ -1952,6 +1952,8 @@ print "$top_srcdir/admsXml/admstpathYacc.h: created\n";
 open admstpathYacc_y,">$top_srcdir/admsXml/admstpathYacc.y";
 print admstpathYacc_y "$BUILDER
 %define api.prefix {admstpath}
+%lex-param {p_pparse mypparse}
+%parse-param {p_pparse mypparse}
 \%{
 #include \"admstpathYacc.h\"
 ";
@@ -3665,9 +3667,7 @@ static int expression01 (const p_path mypath,p_admst dot)
   return 0;
 }
 
-#define YYLEX_PARAM mypparse
-#define YYPARSE_PARAM mypparse
-#define admstpatherror(msgid) admstpatherrorimpl(mypparse,msgid)
+#define admstpatherror(mypparse,msgid) admstpatherrorimpl(mypparse,msgid)
 
 #define ISPATH     ((int)(long)globalctxt->data==0)
 #define ISTEXT     ((int)(long)globalctxt->data==1)
