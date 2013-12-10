@@ -6,6 +6,10 @@ generated_FILES=adms.h adms.c verilogaYacc.y admstpathYacc.y admstpathYacc.h $(i
                 preprocessorLex.c preprocessorYacc.c preprocessorYacc.h
 
 SUFFIXES=.vams .vams.c .va .va.c .xml .xml.c .y.in
+
+# use mkctext.pl to create C files containing the contents of each input file
+# in a C character array. The output is used by make check only
+
 $(incfilec):%.c:% ${srcdir}/mkctext.pl
 	$(PERL) ${srcdir}/mkctext.pl $< $(top_srcdir)
 
@@ -52,6 +56,7 @@ admsXml_LDADD=-lm libadmsElement.la libadmsVeriloga.la libadmsPreprocessor.la li
 
 admsXml.c: adms.implicit.xml.c
 
+# Rules to create the admsCheck test program
 admsCheck.c=$(incfilec)
 admsCheck_SOURCES=admsCheck.c
 admsCheck_LDADD=libadmsElement.la
