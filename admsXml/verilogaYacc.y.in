@@ -1116,7 +1116,7 @@ R_instance.module.name
         | tk_ident
           _ gInstanceModule=adms_admsmain_list_module_lookup_by_id(root(),mylexval1);
           _ if(!gInstanceModule)
-          _   adms_message_fatal(("module '%s' not found\n",mylexval1))
+          _   adms_message_fatal(("module '%s' not found\n",mylexval1));
         ;
 R_l.instance.parameter
         | R_s.instance.parameter
