@@ -63,3 +63,10 @@ TARGET_LINK_LIBRARIES(admsXml admsElement admsVeriloga admsPreprocessor admsAdms
 ADD_EXECUTABLE(admsCheck admsCheck.c)
 TARGET_LINK_LIBRARIES(admsCheck admsElement)
 
+#
+# Handle installation
+#
+INSTALL(TARGETS admsXml DESTINATION bin)
+
+
+INSTALL(FILES admsXml.1 DESTINATION share/man/man1)
