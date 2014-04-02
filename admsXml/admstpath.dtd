@@ -1,6 +1,6 @@
 
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Spec interne d'un chemin 'admstpath'. Validation: xmllint dbgp.xml -noout -postvalid -noblanks --> 
+<!-- Spec interne d'un chemin 'admstpath'. Validation: xmllint dbgp.xml -noout -postvalid -noblanks -->
 <!--
 Fichier dbgp.xml
 <?xml version="1.0"?>

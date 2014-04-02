@@ -1,4 +1,4 @@
-%define api.prefix {veriloga}
+%define api.prefix "veriloga"
 %defines
 
 %{

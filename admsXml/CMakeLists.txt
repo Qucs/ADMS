@@ -11,7 +11,8 @@ ADD_CUSTOM_COMMAND(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorYacc.c ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorYacc.h
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND ${BISON_EXECUTABLE}
-    ARGS -by -d ${BISON_APIPREFIX}preprocessor -opreprocessorYacc.c preprocessorYacc.y
+    #ARGS -by -d ${BISON_APIPREFIX}preprocessor -opreprocessorYacc.c preprocessorYacc.y
+    ARGS -by -d -opreprocessorYacc.c preprocessorYacc.y
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorYacc.y
 )
 
@@ -30,7 +31,8 @@ ADD_CUSTOM_COMMAND(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.c ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.h
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND ${BISON_EXECUTABLE}
-    ARGS -by -d ${BISON_APIPREFIX}veriloga -overilogaYacc.c verilogaYacc.y
+    #ARGS -by -d ${BISON_APIPREFIX}veriloga -overilogaYacc.c verilogaYacc.y
+    ARGS -by -d -overilogaYacc.c verilogaYacc.y
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.y
 )
 
@@ -50,7 +52,8 @@ ADD_CUSTOM_COMMAND(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/admstpathYacc.c ${CMAKE_CURRENT_SOURCE_DIR}/admstpathYacc.h
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND ${BISON_EXECUTABLE}
-    ARGS -by ${BISON_APIPREFIX}admstpath -oadmstpathYacc.c admstpathYacc.y
+    #ARGS -by ${BISON_APIPREFIX}admstpath -oadmstpathYacc.c admstpathYacc.y
+    ARGS -by -oadmstpathYacc.c admstpathYacc.y
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/admstpathYacc.y
 )
 
