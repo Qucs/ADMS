@@ -1,14 +1,37 @@
+
+ADMS - An automatic device model synthesizer.
+
 Forked from the source code available at: http://sourceforge.net/projects/mot-adms/files/adms-source/2.3/
 The original SVN repo is now password-protected, so here we are.
 
+## Autotools install:
+
 You should be able to build with:
-    ./configure
+    ./configure --prefix=/install/location/
     make
     make install
 
 
 There was an INSTALL file, but I removed it because zsh kept suggesting it as a correction when running
 `make install`. If you find that you really need it, you can replace it by running: `automake --add-missing`
+
+
+## CMake install:
+
+Requires bison (2.6+), flex.
+Tested on Mac OS X and Ubuntu 12.04.
+Changes for other systems should probably be done in admsXml/CMakeLists.txt and admsXml/config.h.
+
+To install:
+
+  bash create_files.sh
+  mkdir cmake
+  cd cmake
+  cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
+  make install
+
+
+---
 
 Original author's build instructions: (for posterity)
 
