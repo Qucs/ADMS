@@ -24,6 +24,9 @@ LT_INIT
 # Automake Initialisation.
 AM_INIT_AUTOMAKE
 
+# Maintainer mode is used to detect/run Perl (XML::LibXml and GD modules) and make dist tarball
+AM_MAINTAINER_MODE
+
 AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
                  AC_MSG_ERROR(Please install gnu flex from http://www.gnu.org/software/flex/)])
 AX_PROG_BISON([],[AC_MSG_WARN(Program bison not found (found $YACC))
@@ -81,17 +84,20 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 AC_SUBST([LIBTOOL_DEPS])
 
-dnl perl and libXML
-AC_PATH_PROG(PERL, perl, :)
-if test "$PERL" = ":"; then
-    AC_MSG_ERROR([The $PACKAGE package requires an installed perl.])
-fi;
+dnl Perl, XML::LibXML and GD modules required for maintainer
+if test $USE_MAINTAINER_MODE = yes; then
 
-AX_PERL_MODULE_VERSION([XML::LibXML 2],[],[
-    AC_MSG_RESULT(failed)
-    AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
-AX_PERL_MODULE_VERSION([GD 2.4],[],[
-    AC_MSG_ERROR([Perl package GD:: may be downloaded from http://search.cpan.org/dist/GD])])
+  AC_PATH_PROG(PERL, perl, :)
+  if test "$PERL" = ":"; then
+      AC_MSG_ERROR([The $PACKAGE package requires an installed perl.])
+  fi;
+
+  AX_PERL_MODULE_VERSION([XML::LibXML 2],[],[
+      AC_MSG_RESULT(failed)
+      AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
+  AX_PERL_MODULE_VERSION([GD 2.4],[],[
+      AC_MSG_ERROR([Perl package GD:: may be downloaded from http://search.cpan.org/dist/GD])])
+fi
 
 AC_CONFIG_FILES([Makefile
                  admsXml/Makefile
