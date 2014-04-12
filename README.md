@@ -1,44 +1,116 @@
 
-ADMS - An automatic device model synthesizer.
+# ADMS - An automatic device model synthesizer
 
-Forked from the source code available at: http://sourceforge.net/projects/mot-adms/files/adms-source/2.3/
+ADMS is a code generator that converts electrical compact device models specified
+in high-level description language into ready-to-compile C code for the API of spice
+simulators. Based on transformations specified in XML language, ADMS transforms
+Verilog-AMS code into other target languages.
+
+This version is forked from the code previously available at:
+<http://sourceforge.net/projects/mot-adms/files/adms-source/2.3/>
+
 The original SVN repo is now password-protected, so here we are.
 
-## Autotools install:
+This version is based on ADMS 2.3.0, the last version released by the original author.
 
-You should be able to build with:
-    ./configure --prefix=/install/location/
-    make
+Currently only a subset of the Verilog-AMS language is supported.
+
+- Homepage (unmaintained): <http://vacomp.noovela.com/>
+- Source code: <http://sourceforge.net/projects/mot-adms/>
+
+## Platforms
+
+ADMS is known to work on these platforms.
+
+- GNU/Linux
+- Darwin/OS X
+- FreeBSD
+- Windows
+
+
+## Dependencies
+
+- C compiler (gcc, clang)
+- Autotools (autoconf, automake,...) or CMake
+- GNU Flex
+- GNU Bison 2.6+
+- GNU Libtool
+- Perl with XML::LibXml and GD modules (only for maintainers)
+
+
+## Installation
+
+Autotools is the original build system and is more complete. Prefered for maintainance and packaging.
+CMake was introduced more recently and is not as tested.
+
+
+### Maintainers Install and Packaging
+
+This section is relevant in case ADMS is compiled from the Git repository.
+
+#### Compilation Using Autotools
+
+The `--enable-maintainer` makes sure the required files are generated (using Perl and LibXml).
+
+    sh bootstrap.sh
+    ./configure --enable-maintainer
+    make install
+
+Autotools it recommended for creating release packages, an `adms-x.x.x.tar.gz` source code archive
+
+    sh bootstrap.sh
+    ./configure --enable-maintainer
+    make clean
+    make dist
+
+#### Compilation Using CMake
+
+The `create_files.sh` invokes Perl to generate required source files.
+
+    sh create_files.sh
+    mkdir cmake; cd cmake
+    cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
+    make install
+
+Packaging is not yet supported with CMake.
+
+
+## Users Install
+
+This section is relevant in case ADMS is compiled from a source code archive (`adms-x.x.x.tar.gz`).
+Users should be able to build without Perl (and the required modules XML::LibXml and GD).
+
+#### Compilation Using Autotools
+
+    ./configure --prefix=[/install/location/]
+    make install
+
+#### Compilation Using CMake
+
+    mkdir cmake; cd cmake
+    cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
     make install
 
 
-There was an INSTALL file, but I removed it because zsh kept suggesting it as a correction when running
-`make install`. If you find that you really need it, you can replace it by running: `automake --add-missing`
+## Credits
 
+See AUTHORS file.
 
-## CMake install:
+## License
 
-Requires bison (2.6+), flex.
-Tested on Mac OS X and Ubuntu 12.04.
-Changes for other systems should probably be done in admsXml/CMakeLists.txt and admsXml/config.h.
+ADMS is under LGPL-GNU Lesser General Public License, version 2.1. See COPYING file.
 
-To install:
-
-  bash create_files.sh
-  mkdir cmake
-  cd cmake
-  cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
-  make install
 
 
 ---
 
 Original author's build instructions: (for posterity)
 
+```
 
 0- Prerequisites
     0- gnu make is required (do not use other native make)
- 
+
 1- Description
   ADMS is a code generator that converts electrical compact device models
   specified in high-level description language into ready-to-compile c code
@@ -58,7 +130,7 @@ Original author's build instructions: (for posterity)
     6- run: gmake install
     In two shots:
       autoheader && aclocal && automake && autoconf && ./configure
-      gmake && gmake install 
+      gmake && gmake install
 
 3- Installation - Windows with cygwin environment
     0- run: ./configure - see file INSTALLATION for more options
@@ -74,7 +146,7 @@ Original author's build instructions: (for posterity)
     6- run: gmake install
     In two shots:
       autoheader && aclocal && automake && autoconf && ./configure
-      gmake && gmake install 
+      gmake && gmake install
 
 4- Installation windows (no cygwin environment)
   0- run:
@@ -87,7 +159,7 @@ Original author's build instructions: (for posterity)
 5- Directory Structure
    adms
     - metaadms.dtd
-      DTD of file adms.xml 
+      DTD of file adms.xml
     - adms.xml
       This file defines the data structure used by adms to save parsed hdl code.
     - auxconf
@@ -108,7 +180,7 @@ Original author's build instructions: (for posterity)
   5- run: autoconf (create configure)
   6- run: ./configure --enable-maintainer-mode
   In three shots:
-    rm -rf auxconf && autoheader && mkdir auxconf && aclocal && libtoolize --force --ltdl -c 
+    rm -rf auxconf && autoheader && mkdir auxconf && aclocal && libtoolize --force --ltdl -c
     touch ChangeLog && automake -a -c && autoconf
     ./configure --enable-maintainer-mode
-
+```
