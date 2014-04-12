@@ -53,12 +53,12 @@
  -->
    <!-- handling of device: starting point -->
    <admst:for-each select="/module">
-     <admst:open file="%(name).xhtml">
+     <admst:open file="%(name).html">
      <admst:text format="&lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot;?&gt;\n"/>
      <admst:text format="&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://www.w3.org/Math/XSL/pmathml.xsl&quot;?&gt;\n"/>
      <admst:text format="&lt;!-- created by %(/simulator/fullname) on %(/simulator/currentdate) --&gt;\n"/>
      <admst:text format="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;&quot;\n"/>
-[
+
   &lt;!ENTITY ac               &quot;&amp;#x0290F;&quot; &gt;&lt;!--most positive --&gt;
   &lt;!ENTITY acE              &quot;&amp;#x029DB;&quot; &gt;&lt;!--most positive, two lines below --&gt;
   &lt;!ENTITY amalg            &quot;&amp;#x02A3F;&quot; &gt;&lt;!--/amalg B: amalgamation or coproduct --&gt;
@@ -178,8 +178,6 @@
   &lt;!ENTITY xutri            &quot;&amp;#x025B3;&quot; &gt;&lt;!--/bigtriangleup B: big up tri, open --&gt;
   &lt;!ENTITY xvee             &quot;&amp;#x022C1;&quot; &gt;&lt;!--/bigvee L: logical and operator --&gt;
   &lt;!ENTITY xwedge           &quot;&amp;#x022C0;&quot; &gt;&lt;!--/bigwedge L: logical or operator --&gt;
-]
-     <admst:text format="&gt;\n\n"/>
 
      <html xmlns="http://www.w3.org/1999/xhtml" xmlns:html="http://www.w3.org/1999/xhtml">
        <head>
@@ -189,41 +187,8 @@
          <meta name="keywords" content="vlatomml.xml adms compact modeling"/>
          <meta name="Generator" content="%(/simulator/fullname) [%(/simulator/currentdate)]"/>
          <meta name="Originator" content="%(/simulator/package_string) [r29173@users.sourceforge.net http://mot-adms.sourceforge.net/]"/>
-         <OBJECT ID="MathPlayer" CLASSID="clsid:32F66A20-7614-11D4-BD11-00104BD3F987" title="MathPlayer"/>
-         <admst:text format="&lt;?import namespace=&quot;m&quot; implementation=&quot;#MathPlayer&quot; ?&gt;"/>
-         <script language="javascript">
-           <admst:text format="&lt;!-- \n"/>function IsMPInstalled()\n
-           {\n
-             try {\n
-               var oMP = new ActiveXObject(&quot;MathPlayer.Factory.1&quot;);\n
-               return true;\n
-             }\n
-             catch(e) {\n
-               return false;\n
-             }\n
-           }\n
-           function IsIE55LaterWindows()\n
-           {\n
-             var pos=navigator.appVersion.indexOf(&quot;MSIE &quot;)+5;\n
-             return( navigator.appName==&quot;Microsoft Internet Explorer&quot;\n
-             &amp;&amp; navigator.platform==&quot;Win32&quot; &amp;&amp; parseFloat(navigator.appVersion.substr(pos))>=&quot;5.5&quot;);\n
-           }\n
-           <admst:text format=" --&gt;\n"/>
-         </script>
        </head>
        <body text="#000000" vLink="#00b2b2" link="#0000e5" bgColor="#ffffff">
-         <script language="javascript">
-           <admst:text format="&lt;!-- \n"/>if(IsIE55LaterWindows() ) {\n
-             if(!IsMPInstalled() ) {\n
-               if( confirm(&quot;This page requires Design Science's MathPlayer to display equations and symbols.\\nMathPlayer is not currently installed, so equations and symbols will not display properly.\\n\\nWould you like to download and install MathPlayer now?&quot;) )\n
-                  window.open(&quot;http://www.dessci.com/en/products/mathplayer&quot;, &quot;MPDownload&quot;);\n
-             }\n
-           }\n
-           else {\n
-             alert(&quot;This page uses Design Science's MathPlayer to display equations and symbols,\\nand requires Microsoft Internet Explorer 5.5 or later on Windows.\\n\\nAs you are using a different browser, equations and symbols will not display properly.&quot;);\n
-           }\n
-           <admst:text format=" --&gt;\n"/>
-         </script>
          <h1>Module %(name) (%(/simulator/currentdate))</h1>
          <small><div style="font-style: italic; text-align: left; margin-left: 40px;">
          <span style="font-style: italic;">Note:\n
@@ -242,10 +207,9 @@
          <div>Usefull links:</div>
          <ul>
            <li><a href="http://mot-adms.sourceforge.net/xml-files/scripts/vlatomml.xml">\n
-               vlatomml.xml</a>: script used to convert verilog-ams code into xhtml+mathml format using\n
+               vlatommlMODULE.htm.xml</a>: script used to convert verilog-ams code into html+mathml format using\n
                <a href="http://mot-adms.sourceforge.net">adms</a>
            </li>
-           <li><a href="http://www.dessci.com/">MathPlayer</a>: displays mathml equations in browser (IE5/IE6 only)</li>
            <li><a href="http://www.w3.org/Math/">W3C-MathML</a>: good starting point to learn mathml</li>
          </ul>
          </div></small>
@@ -420,7 +384,7 @@
        </body>
      </html>
    </admst:open>
-   <admst:text format="%(name).xhtml\n"/>
+   <admst:text format="%(name).html\n"/>
    </admst:for-each>
    <!-- handling of expression -->
    <admst:template match=":expression">
