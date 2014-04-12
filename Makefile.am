@@ -1,8 +1,17 @@
 ACLOCAL_AMFLAGS = -I m4
 
-EXTRA_DIST= adms.xml admst.xml admstpath.xml \
-	adms.css admst.dtd metaadms.dtd metaadmst.dtd metaadmstpath.dtd \
-	admsstyle.xsl admstpathstyle.xsl admststyle.xsl
+EXTRA_DIST= \
+  adms.css           \
+  adms.xml           \
+  admsstyle.xsl      \
+  admst.dtd          \
+  admst.xml          \
+  admstpath.xml      \
+  admstpathstyle.xsl \
+  admststyle.xsl     \
+  metaadms.dtd       \
+  metaadmst.dtd      \
+  metaadmstpath.dtd
 
 SUBDIRS=scripts images admsXml
 
