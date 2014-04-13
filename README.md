@@ -1,4 +1,6 @@
 
+[![Build Status](https://travis-ci.org/Qucs/ADMS.svg?branch=master)](https://travis-ci.org/Qucs/ADMS)
+
 # ADMS - An automatic device model synthesizer
 
 ADMS is a code generator that converts electrical compact device models specified
@@ -44,7 +46,7 @@ Autotools is the original build system and is more complete. Prefered for mainta
 CMake was introduced more recently and is not as tested.
 
 
-### Maintainers Install and Packaging
+### Maintainers Install and Packaging from Git
 
 This section is relevant in case ADMS is compiled from the Git repository.
 
@@ -75,18 +77,22 @@ The `create_files.sh` invokes Perl to generate required source files.
 Packaging is not yet supported with CMake.
 
 
-## Users Install
+## Users Install from Tarball
 
 This section is relevant in case ADMS is compiled from a source code archive (`adms-x.x.x.tar.gz`).
 Users should be able to build without Perl (and the required modules XML::LibXml and GD).
 
 #### Compilation Using Autotools
 
+    tar -xvfz adms-x.x.x.tar.gz
+    cd adms-x.x.x
     ./configure --prefix=[/install/location/]
     make install
 
 #### Compilation Using CMake
 
+    tar -xvfz adms-x.x.x.tar.gz
+    cd adms-x.x.x
     mkdir cmake; cd cmake
     cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
     make install
