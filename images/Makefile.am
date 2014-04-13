@@ -1,4 +1,11 @@
-generated_FILES=adms-scalar.png adms-element.png adms-enumeration.png adms-uid.png adms-alias.png
+generated_FILES= \
+   adms-alias.png        \
+   adms-element.png      \
+   adms-enumeration.png  \
+   adms-list.png         \
+   adms-scalar.png       \
+   adms-uid.png
+
 EXTRA_DIST=mkimages.pl $(generated_FILES)
 
 # Perl GD module only required for maintainers

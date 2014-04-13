@@ -29,6 +29,11 @@ admsXml/preprocessorYacc.[ch]
 admsXml/verilogaLex.c
 admsXml/verilogaYacc.[chy]
 
+images/adms-alias.png
+images/adms-element.png
+images/adms-enumeration.png
 images/adms-list.png
+images/adms-scalar.png
+images/adms-uid.png
 
 *.tar.gz

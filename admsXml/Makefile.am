@@ -25,7 +25,7 @@ verilogaYacc.y: ${srcdir}/verilogaYacc.y.in ${srcdir}/mkgrammar.pl
 
 endif
 
-dist_man_MANS = admsXml.1
+dist_man_MANS = admsXml.1 admsCheck.1
 
 lib_LTLIBRARIES=libadmsElement.la libadmsPreprocessor.la libadmsVeriloga.la libadmsAdmstpath.la
 
@@ -69,6 +69,7 @@ admsCheck_LDADD=libadmsElement.la
 
 EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  preprocessorYacc.h admsPreprocessor.h verilogaYacc.h admsVeriloga.h \
- $(incfile) $(incfilec)
+ $(incfile) $(incfilec) verilogaYacc.y.in .adms.implicit.xml admstpath.dtd \
+ CMakeLists.txt config.h basicLibrary.xml
 
 CLEANFILES=.*.swp *\~ core $(generated_FILES)

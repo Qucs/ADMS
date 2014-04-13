@@ -55,13 +55,13 @@ This section is relevant in case ADMS is compiled from the Git repository.
 The `--enable-maintainer` makes sure the required files are generated (using Perl and LibXml).
 
     sh bootstrap.sh
-    ./configure --enable-maintainer
+    ./configure --enable-maintainer-mode
     make install
 
-Autotools it recommended for creating release packages, an `adms-x.x.x.tar.gz` source code archive
+Autotools it recommended for creating release packages, the `adms-x.x.x.tar.gz` source code archive.
 
     sh bootstrap.sh
-    ./configure --enable-maintainer
+    ./configure --enable-maintainer-mode
     make clean
     make dist
 
@@ -77,24 +77,24 @@ The `create_files.sh` invokes Perl to generate required source files.
 Packaging is not yet supported with CMake.
 
 
-## Users Install from Tarball
+### Users Install from Tarball
 
 This section is relevant in case ADMS is compiled from a source code archive (`adms-x.x.x.tar.gz`).
 Users should be able to build without Perl (and the required modules XML::LibXml and GD).
 
 #### Compilation Using Autotools
 
-    tar -xvfz adms-x.x.x.tar.gz
+    tar xvfz adms-x.x.x.tar.gz
     cd adms-x.x.x
     ./configure --prefix=[/install/location/]
     make install
 
 #### Compilation Using CMake
 
-    tar -xvfz adms-x.x.x.tar.gz
+    tar xvfz adms-x.x.x.tar.gz
     cd adms-x.x.x
-    mkdir cmake; cd cmake
-    cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
+    mkdir build; cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=[/install/location/]
     make install
 
 
