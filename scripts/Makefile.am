@@ -7,8 +7,10 @@ EXTRA_DIST= \
   blockvariables.xml      \
   croixvariable.xml       \
   dependency.xml          \
+  discipline.h            \
   getargv.xml             \
   getenv.xml              \
+  getinstance.va          \
   getinstance.xml         \
   gettransform.xml        \
   sort.xml                \

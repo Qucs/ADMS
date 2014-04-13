@@ -1,0 +1,35 @@
+
+    `include "discipline.h"
+    module c(ct1,ct2);
+      inout      ct1, ct2;
+      electrical ct1, ct2;
+      parameter real cP1 = 10;
+      parameter real cP2 = 10;
+      analog
+        begin
+          I(ct1,ct2)<+V(ct1,ct2)/(cP1+cP2);
+        end
+    endmodule
+    module b(bt1,bt2);
+      inout      bt1, bt2;
+      electrical bt1, bt2;
+      parameter real bP1 = 10;
+      parameter real bP2 = 10;
+      analog
+        begin
+          I(bt1,bt2)<+V(bt1,bt2)/bP1;
+        end
+        c #(.cP1(bP2),.cP2(bP1)) C1(bt1,bt2);
+    endmodule
+    module a(at1, at2);
+      parameter real aP=1.0;
+      inout      at1, at2;
+      electrical at1, at2;
+      electrical topin;
+      analog
+        begin
+          I(at1,at2)<+V(at1,at2)/aP;
+        end
+        b #(.bP1(aP),.bP2(1/aP)) B1(at1,at2);
+        b #(.bP2(aP)) B2(at2,at1);
+    endmodule
