@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([adms],[2.3.0],[r29173@users.sourceforge.net])
+AC_INIT([adms],[2.3.2],[qucs-devel@lists.sourceforge.net])
 AC_CONFIG_HEADER([config.h])
 
 # specific configuration.
