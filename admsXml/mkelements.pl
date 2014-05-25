@@ -185,8 +185,8 @@ $adms_h.=q@
 #    ifndef WIN32
 #      define WIN32
 #    endif
-#    define ADMS_COMPILER_MINGCC
-#    define ADMS_COMPILER "MINGCC"
+#    define ADMS_COMPILER_MINGW32
+#    define ADMS_COMPILER "MINGW32"
 #  elif defined(__CYGWIN__)
 #    ifndef WIN32
 #      define WIN32
