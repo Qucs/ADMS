@@ -37,3 +37,6 @@ images/adms-scalar.png
 images/adms-uid.png
 
 *.tar.gz
+
+.DS_Store
+.adms.implicit.xml
