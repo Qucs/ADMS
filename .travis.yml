@@ -27,6 +27,10 @@ before_install:
 
 script:
   - sh bootstrap.sh
-  - ./configure --enable-maintainer-mode
+  - ./configure --enable-maintainer-mode --prefix=/usr
   - make
+  - sudo make install
+
+  # test
+  - admsXml -h
 
