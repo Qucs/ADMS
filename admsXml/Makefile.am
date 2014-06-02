@@ -69,7 +69,7 @@ admsCheck_LDADD=libadmsElement.la
 
 EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  preprocessorYacc.h admsPreprocessor.h verilogaYacc.h admsVeriloga.h \
- $(incfile) $(incfilec) verilogaYacc.y.in .adms.implicit.xml admstpath.dtd \
+ $(incfile) $(incfilec) verilogaYacc.y.in admstpath.dtd \
  CMakeLists.txt ../config.h basicLibrary.xml
 
 CLEANFILES=.*.swp *\~ core $(generated_FILES)
