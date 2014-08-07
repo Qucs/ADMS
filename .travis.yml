@@ -5,11 +5,6 @@ compiler:
   - clang
 
 before_install:
-   - $CC --version
-   - which $CC
-
-  # workaround clang not system wide, fail on sudo make install
-  - export CC=`which $CC`
 
   - sudo apt-get install automake libtool flex
 
@@ -32,6 +27,11 @@ before_install:
   - sudo cpan -f GD
 
 script:
+  - $CC --version
+  - which $CC
+  # workaround clang not system wide, fail on sudo make install
+  - export CC=`which $CC`
+
   - ./bootstrap.sh
   - ./configure --enable-maintainer-mode --prefix=/usr
   - make
