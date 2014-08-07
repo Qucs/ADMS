@@ -5,6 +5,12 @@ compiler:
   - clang
 
 before_install:
+   - $CC --version
+   - which $CC
+
+  # workaround clang not system wide, fail on sudo make install
+  - export CC=`which $CC`
+
   - sudo apt-get install automake libtool flex
 
   # ubuntu 12.04 gives bison 2.5, need to install 2.6
@@ -26,7 +32,7 @@ before_install:
   - sudo cpan -f GD
 
 script:
-  - sh bootstrap.sh
+  - ./bootstrap.sh
   - ./configure --enable-maintainer-mode --prefix=/usr
   - make
   - sudo make install
