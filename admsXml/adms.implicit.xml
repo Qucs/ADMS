@@ -161,12 +161,37 @@
       <admst:choose>
         <admst:when test="[name='\$realtime' or name='\$temperature' or name='\$vt' or name='idt' or name='ddt' or
                            name='\$param_given' or name='\$given' or name='ddx' or name='flicker_noise' or name='white_noise']"/>
+
+        <!-- Table 4-14 - Standard Functions -->
+        <!-- Table 4-15 - Trigonometric and Hyperbolic Functions-->
         <admst:when
           test="[name='analysis' or name='\$analysis' or name='\$simparam' or name='simparam' or
-          name='\$shrinka' or name='\$shrinkl' or name='\$limexp' or
-          name='abs' or name='acos' or name='asin' or name='atan' or name='cos' or name='cosh' or name='exp' or
-          name='hypot' or name='limexp' or name='ln' or name='log' or name='max' or name='min' or name='pow' or
-          name='sin' or name='sinh' or name='sqrt' or name='tan' or name='tanh' or name='atanh' or name='floor' or name='ceil']">
+          name='\$shrinka' or name='\$shrinkl' or name='\$limexp' or name='limexp' or name='\$limit' or
+          name='ln' or
+          name='log' or
+          name='exp' or
+          name='sqrt' or
+          name='min' or
+          name='max' or
+          name='abs' or
+          name='pow' or
+          name='floor' or
+          name='ceil' or
+          name='sin' or
+          name='cos' or
+          name='tan' or
+          name='asin' or
+          name='acos' or
+          name='atan' or
+          name='atan2' or
+          name='hypot' or
+          name='sinh' or
+          name='cosh' or
+          name='tanh' or
+          name='asinh' or
+          name='acosh' or
+          name='atanh'
+          ]">
           <admst:push into="$globalexpression/function" select="."/>
           <admst:value-to select="class" string="builtin"/>
         </admst:when>

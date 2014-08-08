@@ -1,3 +1,7 @@
+adms-MASTER:
+ * adms.implitic.xml
+	 * add all standard functions and transcendental functions (LRM v2.3.1)
+	 * add `$limit` function, used in Xyce
 
 adms-2.3.2:
  * further cleanup, no new language features
