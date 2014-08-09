@@ -70,7 +70,7 @@ wn1 [ \t\v\f\r?\n]+
 ident      [A-Za-z_][A-Za-z0-9_]*
 attribute  [A-Za-z_][A-Za-z0-9_:.]*
 attributevalue {wn0}={wn0}{anystring} 
-anystring  \"[^\"]*\"
+anystring  \"([^\"]|\\\")*\"
 b8_int     0[0-9]*
 b10_uint   [1-9][0-9]*
 b16_int    0[xX][0-9A-Fa-f]+

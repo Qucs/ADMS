@@ -193,12 +193,14 @@ notpragma	 [^#`a-zA-Z_\r\n]+
 xpath	         \"[^\"]*\"
 ipath	         \<[^>]+\>
 continuator	 \\\r?\n
-anystring  \"[^\"]*\"
+anystring  \"([^\"]|\\\")*\"
 b10_uint   [1-9][0-9]*
- 
+
 comment          \/\*[^\*]*\*+([^\*\/][^\*]*\*+)*\/
 comment_oneline  \/\/[^\r\n]*
 
+ /* port branch access  I(<a>) --> I(a,a) */
+iprb             I\(\<[A-Za-z_][A-Za-z0-9_]*\>\)
 
 %x PRAGMA_PATH
 %x PRAGMA_COMMENT
@@ -221,7 +223,7 @@ comment_oneline  \/\/[^\r\n]*
 
 %%
 
-\"[^"]*\"  {
+{anystring}  {
   preprocessorlval.mystr = strdup( yytext );
   tkreturn(TK_STRING)
 }
@@ -267,6 +269,29 @@ comment_oneline  \/\/[^\r\n]*
 {comment_oneline} {
   preprocessorlval.mystr=adms_preprocessor_lex_skipp_text (); return(TK_COMMENT);
 }
+
+ /* port branch access  I(<a>) --> I(a,a) */
+{iprb} {
+    {
+        const char *t1 = strchr(yytext, '<');
+        const char *t2 = strchr(yytext, '>');
+        int len = 2*(t2-t1) + 5;
+        char *tn = (char*)malloc(len);
+        const char *tt;
+        preprocessorlval.mystr = tn;
+        *tn++ = 'I';
+        *tn++ = '(';
+        for (tt = t1+1; tt < t2; tt++)
+            *tn++ = *tt;
+        *tn++ = ',';
+        for (tt = t1+1; tt < t2; tt++)
+            *tn++ = *tt;
+        *tn++ = ')';
+        *tn = 0;
+    }
+    tkreturn(TK_IDENT)
+}
+
 
  /* pragma */
 
@@ -570,6 +595,17 @@ comment_oneline  \/\/[^\r\n]*
   preprocessorlval.mystr=adms_preprocessor_lex_skipp_text (); return(TK_COMMENT);
 }
 
+<PRAGMA_DEFINE_TEXT>{anystring} {
+  /* SRW - fix bsim6 parse error, comma in quoted string macro arg caused
+   * string to be tokenized, so argument list was hosed.  This prevents
+   * a single '"' from being a viable non-ident.
+   */
+  pproot()->cr_scanner->cur_char_position+=yyleng;
+  preprocessorlval.mystr=strdup(yytext);
+  return(TK_SPACE );
+}
+
+
 <PRAGMA_DEFINE_TEXT>.  {
   preprocessorlval.mystr = strdup(yytext);
   tkreturn(TK_NOT_IDENT)
@@ -801,7 +837,11 @@ comment_oneline  \/\/[^\r\n]*
     }
   else
     yyterminate ();
-  adms_k2strconcat(&string,"# ");
+
+  /* SRW -- added newline below to avoid lex error due to last line of
+   * included file being whitespace only.
+   */
+  adms_k2strconcat(&string,"\n# ");
   adms_strconcat(&string,adms_integertostring(pproot()->cr_scanner->cur_line_position+1));
   adms_k2strconcat(&string," \"");
   adms_k2strconcat(&string,pproot()->cr_scanner->filename);

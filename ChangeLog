@@ -1,3 +1,21 @@
+adms-2.3.4:
+ * able to parse BSIM6, BSIMCMG (107.0.0)
+ * merge patches from WRspice
+ * preprocessorLex.l:
+   * remove print to screen of `disciplines.vams`
+	 * Change string recognition to allow embedded \" as literal quote
+	 * Capture quoted string containing line continuation character `\`
+	 * avoid spurious fatal error from an included file which last line contains
+	 onlywhite space.
+ * preprocessorYacc.y:
+   * fix BSIM6 parse problem, string macro arg broken by continuator
+     caused 'unexpected end-of-line' error.
+ * verilogLex.l:
+	 * Change string recognition to allow embedded \" as literal quote
+ * admsXml.c:
+	 * update website address on info message
+	 * turn error on verbose message for mismatched assignments (WRspice)
+
 adms-2.3.3:
  * adms.implitic.xml
 	 * add all standard functions and transcendental functions (LRM v2.3.1)

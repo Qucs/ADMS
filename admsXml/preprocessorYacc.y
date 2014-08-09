@@ -553,6 +553,13 @@ R_arg
             p_preprocessor_text newtext=adms_preprocessor_new_text_as_string($1);
             $$=adms_slist_new((p_adms)newtext);
           }
+        | TK_CONTINUATOR
+          {
+            /* SRW - fix bsim6.va parse problem, string macro arg broken by
+             * continuator caused 'unexpected end of line' error.
+             */
+            $$=0;
+          }
         | TK_COMMENT
           {
             p_preprocessor_text newtext=adms_preprocessor_new_text_as_string($1);

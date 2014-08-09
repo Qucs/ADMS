@@ -473,8 +473,17 @@ static void awrite (p_transform mytransform,p_admst mylhs,p_admst myrhsori)
   }
   else if(mylhs->_pseudo!=admse_empty && myrhs->_pseudo!=admse_empty && mylhs->_pseudo!=myrhs->_pseudo)
   {
+    /* SRW -- Changed this to a verbose message.  This gets triggered when
+    we replace a one-line conditional with a block, which must happen
+    if we add a line such as for contribution splitting.  Since the
+    operation is done below anyway, it shouldn't be considered as an
+    error.
+
     adms_message_error_continue(("mismatch in assigment - lhs=%s rhs=%s\n",ns_etostr(mylhs->_pseudo),ns_etostr(myrhs->_pseudo)))
     adms_message_error(("see %s\n",adms_transform_uid(mytransform)))
+    */
+    adms_message_verbose(("mismatch in assigment - lhs=%s rhs=%s\n",ns_etostr(mylhs->_pseudo),ns_etostr(myrhs->_pseudo)))
+    adms_message_verbose(("see %s\n",adms_transform_uid(mytransform)))
     ((p_valueto)mylhs->_valueto)(mylhs->_previous->_item.p,myrhs->_item.p);
   }
   else
@@ -2702,7 +2711,7 @@ int main (const int argc,const char**argv)
     adms_message_usage(("<info\n",PACKAGE_BUGREPORT))
     adms_message_usage(("  author=\"laurent lemaitre\"\n",PACKAGE_BUGREPORT))
     adms_message_usage(("  bug-report=\"%s\"\n",PACKAGE_BUGREPORT))
-    adms_message_usage(("  home-page=\"http://mot-adms.sourceforge.net\"\n"))
+    adms_message_usage(("  home-page=\"https://sourceforge.net/projects/mot-adms/\"\n"))
     adms_message_usage(("  mailing-list=\"mot-adms-users@lists.sourceforge.net\">\n"))
     adms_message_usage(("  <release name=\"%s\" version=\"%s\" ",PACKAGE_NAME,PACKAGE_VERSION))
     adms_message_usage_continue(("git=\"%s\" date=\"%s\" time=\"%s\"/>\n",GIT,__DATE__,__TIME__))
