@@ -23,7 +23,10 @@ EXTRA_DIST= \
   metaadmst.xsd      \
   metaadmstpath.dtd  \
   metaadmstpath.xsd  \
-  $(extra)
+  $(extra)           \
+  config.h           \
+  config.h.cmake     \
+  cmake/modules/FindPerlModules.cmake
 
 SUBDIRS=scripts images admsXml
 

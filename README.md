@@ -11,7 +11,7 @@ Verilog-AMS code into other target languages.
 This version is forked from the code previously available at:
 <http://sourceforge.net/projects/mot-adms/files/adms-source/2.3/>
 
-The original SVN repo is now password-protected, so here we are.
+The original SVN repo no longer available.
 
 This version is based on ADMS 2.3.0, the last version released by the original author.
 
@@ -43,7 +43,7 @@ ADMS is known to work on these platforms.
 ## Installation
 
 Autotools is the original build system and is more complete. Prefered for maintainance and packaging.
-CMake was introduced more recently and is not as tested.
+CMake was recently introduced and is not as well tested.
 
 
 ### Maintainers Install and Packaging from Git
@@ -52,13 +52,13 @@ This section is relevant in case ADMS is compiled from the Git repository.
 
 #### Compilation Using Autotools
 
-The `--enable-maintainer` makes sure the required files are generated (using Perl and LibXml).
+The `--enable-maintainer-mode` makes sure the required files are generated (using Perl and LibXml).
 
     sh bootstrap.sh
     ./configure --enable-maintainer-mode
     make install
 
-Autotools it recommended for creating release packages, the `adms-x.x.x.tar.gz` source code archive.
+Autotools it currently used for creating release packages, the `adms-x.x.x.tar.gz` source code archive.
 
     sh bootstrap.sh
     ./configure --enable-maintainer-mode
@@ -67,11 +67,10 @@ Autotools it recommended for creating release packages, the `adms-x.x.x.tar.gz` 
 
 #### Compilation Using CMake
 
-The `create_files.sh` invokes Perl to generate required source files.
+The `-DUSE_MAINTAINER_MODE=ON` makes sure the required files are generated (using Perl and LibXml).
 
-    sh create_files.sh
     mkdir cmake; cd cmake
-    cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
+    cmake .. -DUSE_MAINTAINER_MODE=ON -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
     make install
 
 Packaging is not yet supported with CMake.
@@ -80,7 +79,7 @@ Packaging is not yet supported with CMake.
 ### Users Install from Tarball
 
 This section is relevant in case ADMS is compiled from a source code archive (`adms-x.x.x.tar.gz`).
-Users should be able to build without Perl (and the required modules XML::LibXml and GD).
+Users should be able to build without Perl (and the maintainer required modules XML::LibXml and GD).
 
 #### Compilation Using Autotools
 

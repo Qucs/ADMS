@@ -1,4 +1,4 @@
-%option outfile="lex.yy.c"
+%option outfile="verilogaLex.c"
 %option prefix="veriloga"
 
 %{

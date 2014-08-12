@@ -44,7 +44,7 @@ if($cygpath_top_srcdir=`cygpath -ad $top_srcdir 2>/dev/null`)
 }
 my$GIT;
 $GIT=`git log --pretty=format:'%h' -n 1u` or $GIT="unknown";
-print "git version: $GIT\n";
+#print "git version: $GIT\n";
 
 sub text2ccode
 {
