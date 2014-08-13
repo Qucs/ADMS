@@ -29,6 +29,8 @@ admsXml/preprocessorYacc.[ch]
 admsXml/verilogaLex.c
 admsXml/verilogaYacc.[chy]
 
+admsXml/*.a
+
 images/adms-alias.png
 images/adms-element.png
 images/adms-enumeration.png
