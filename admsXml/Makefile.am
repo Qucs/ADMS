@@ -54,8 +54,7 @@ libadmsAdmstpath_la_LDFLAGS=-no-undefined
 libadmsAdmstpath_la_LIBADD=libadmsElement.la
 
 #depends on adms.implicit.xml
-bin_PROGRAMS=admsXml
-noinst_PROGRAMS=admsCheck
+bin_PROGRAMS=admsXml admsCheck
 
 admsXml_SOURCES=admsXml.c
 admsXml_LDADD=-lm libadmsElement.la libadmsVeriloga.la libadmsPreprocessor.la libadmsAdmstpath.la
