@@ -10,6 +10,7 @@ adms-MASTER:
  * preprocessorLex.l: make optional output name explicit to `preprocessorLex.c`
  * verilogaLex.l: make optional output name explicit to `verilogaLex.c`
  * install admsCheck: this is a test program for admsXml
+ * admsXml, admsCheck: link libraries statically
 
 adms-2.3.2:
  * further cleanup, no new language features
