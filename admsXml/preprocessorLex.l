@@ -85,7 +85,7 @@ void preprocessorerror (const char *message)
 static void adms_file_fprintf ( char *filename, const char *filedata)
 {
   FILE *ofh = fopen (filename,"w");
-  if (fprintf (ofh, filedata)==EOF)
+  if (fprintf ( ofh,  "%s", filedata)==EOF)
     adms_message_fatal(("%s: cannot write file\n", filename))
   fclose (ofh);
 }
