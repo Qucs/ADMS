@@ -15,7 +15,7 @@
   <ignore value="*t&amp;&amp;isspace(*t)" id="space">space - ignored during parsing</ignore>
   <regexp id="openE"><![CDATA[  else if(!strncmp(t,"(",1))
   {
-    t+=1, mypparse->_tkid=tktk_openE;
+    t+=1, mypparse->_tkid= (admse) tktk_openE;
     paren++;
   }
 ]]></regexp>
@@ -23,11 +23,11 @@
   {
     if(PARENMATCH)
     {
-      t+=1, mypparse->_tkid=tktk_closeE, adms_slist_pull(&parenidx);
+      t+=1, mypparse->_tkid= (admse) tktk_closeE, adms_slist_pull(&parenidx);
       adms_slist_pull(&globalctxt);
     }
     else
-      t+=1, mypparse->_tkid=tktk_closeE;
+      t+=1, mypparse->_tkid= (admse) tktk_closeE;
     paren--;
   }
 ]]></regexp>
@@ -36,7 +36,7 @@
     t++;
     t++;
     paren++; adms_slist_push(&parenidx,(p_adms)(long)paren); SETTEXT
-    mypparse->_tkid=tktk_dollarvariable;
+    mypparse->_tkid= (admse) tktk_dollarvariable;
   }
 ]]></regexp>
   <regexp id="kdollarvariable"><![CDATA[  else if(*t=='$')
@@ -45,7 +45,7 @@
     while(isalnum(*t)||*t=='_') t++;
     mypparse->_tkstart=tstart+1;
     mypparse->_tklen=(int)(long)(t-(tstart+1));
-    mypparse->_tkid=tktk_kdollarvariable;
+    mypparse->_tkid= (admse) tktk_kdollarvariable;
   }
 ]]></regexp>
   <regexp id="arobavariable"><![CDATA[  else if(*t=='@'&&*(t+1)=='(')
@@ -53,7 +53,7 @@
     t++;
     t++;
     paren++; adms_slist_push(&parenidx,(p_adms)(long)paren); SETTEXT
-    mypparse->_tkid=tktk_arobavariable;
+    mypparse->_tkid= (admse) tktk_arobavariable;
   }
 ]]></regexp>
   <regexp id="karobavariable"><![CDATA[  else if(*t=='@')
@@ -62,7 +62,7 @@
     while(isalnum(*t)||*t=='_') t++;
     mypparse->_tkstart=tstart+1;
     mypparse->_tklen=(int)(long)(t-(tstart+1));
-    mypparse->_tkid=tktk_karobavariable;
+    mypparse->_tkid= (admse) tktk_karobavariable;
   }
 ]]></regexp>
   <regexp id="croixcroixvariable"><![CDATA[  else if(*t=='#'&&*(t+1)=='#'&&*(t+2)=='(')
@@ -71,7 +71,7 @@
     t++;
     t++;
     paren++; adms_slist_push(&parenidx,(p_adms)(long)paren); SETTEXT
-    mypparse->_tkid=tktk_croixcroixvariable;
+    mypparse->_tkid= (admse) tktk_croixcroixvariable;
   }
 ]]></regexp>
   <regexp id="croixstar"><![CDATA[  else if(*t=='#'&&*(t+1)=='*')
@@ -81,7 +81,7 @@
     while(isalnum(*t)||*t=='_') t++;
     mypparse->_tkstart=tstart+1;
     mypparse->_tklen=(int)(long)(t-(tstart+1));
-    mypparse->_tkid=tktk_croixstar;
+    mypparse->_tkid= (admse) tktk_croixstar;
   }
 ]]></regexp>
   <regexp id="kcroixcroixvariable"><![CDATA[  else if(*t=='#'&&*(t+1)=='#')
@@ -91,7 +91,7 @@
     while(isalnum(*t)||*t=='_') t++;
     mypparse->_tkstart=tstart+1;
     mypparse->_tklen=(int)(long)(t-(tstart+1));
-    mypparse->_tkid=tktk_kcroixcroixvariable;
+    mypparse->_tkid= (admse) tktk_kcroixcroixvariable;
   }
 ]]></regexp>
   <regexp id="croixvariable"><![CDATA[  else if(*t=='#'&&*(t+1)=='(')
@@ -99,7 +99,7 @@
     t++;
     t++;
     paren++; adms_slist_push(&parenidx,(p_adms)(long)paren); SETTEXT
-    mypparse->_tkid=tktk_croixvariable;
+    mypparse->_tkid= (admse) tktk_croixvariable;
   }
 ]]></regexp>
   <regexp id="kcroixvariable"><![CDATA[  else if(*t=='#')
@@ -108,13 +108,13 @@
     while(isalnum(*t)||*t=='_') t++;
     mypparse->_tkstart=tstart+1;
     mypparse->_tklen=(int)(long)(t-(tstart+1));
-    mypparse->_tkid=tktk_kcroixvariable;
+    mypparse->_tkid= (admse) tktk_kcroixvariable;
   }
 ]]></regexp>
   <regexp id="oquote"><![CDATA[  else if(*t=='\'')
   {
     SETTIC
-    t+=1, mypparse->_tkid=tktk_oquote;
+    t+=1, mypparse->_tkid= (admse) tktk_oquote;
   }
 ]]></regexp>
   <constant value="!=" id="notequal">Boolean not-equal</constant>
@@ -157,7 +157,7 @@
   <regexp id="ident"><![CDATA[  else if(isalpha(*t))
   {
     while(isalnum(*t)||*t=='_'||*t==':') t++;
-    mypparse->_tkid=tktk_ident;
+    mypparse->_tkid= (admse) tktk_ident;
     mypparse->_tkstart=tstart;
     mypparse->_tklen=(int)(long)(t-tstart);
   }
@@ -169,13 +169,13 @@
     {
       t++;
       while(isdigit(*t)) t++;
-      mypparse->_tkid=tktk_real;
+      mypparse->_tkid= (admse) tktk_real;
       mypparse->_tkstart=tstart;
       mypparse->_tklen=(int)(long)(t-tstart);
     }
     else
     {
-      mypparse->_tkid=tktk_integer;
+      mypparse->_tkid= (admse) tktk_integer;
       mypparse->_tkstart=tstart;
       mypparse->_tklen=(int)(long)(t-tstart);
     }

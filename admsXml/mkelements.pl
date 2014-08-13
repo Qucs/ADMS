@@ -4632,53 +4632,53 @@ static const char* tparsecb (p_pparse mypparse)
   else if(*t=='\\\''&&INSIDEPATH)
   {
     adms_slist_pull(&globalctxt);
-    t+=1, mypparse->_tkid=tktk_cquote;
+    t+=1, mypparse->_tkid= (admse) tktk_cquote;
   }
   else if(*t=='\%')
   {
     if(*(t+1)=='\\0')
-      t+=1, mypparse->_tkid=tktk_anytext;
+      t+=1, mypparse->_tkid= (admse) tktk_anytext;
     else if(*(t+1)=='s')
-      t+=2, mypparse->_tkid=tktk_percents;
+      t+=2, mypparse->_tkid= (admse) tktk_percents;
     else if(*(t+1)=='\%')
     {
       mypparse->_tkstart=t+1;
-      t+=2, mypparse->_tkid=tktk_anytext;
+      t+=2, mypparse->_tkid= (admse) tktk_anytext;
     }
     else if(*(t+1)=='(')
     {
       paren++; adms_slist_push(&parenidx,(p_adms)(long)paren); SETPATH
       mypparse->_tkstart=t+2;
-      t+=2, mypparse->_tkid=tktk_percent;
+      t+=2, mypparse->_tkid= (admse) tktk_percent;
     }
     else
-      t+=2, mypparse->_tkid=tktk_anytext;
+      t+=2, mypparse->_tkid= (admse) tktk_anytext;
   }
   else if(*t=='\\\\')
   {
     if(*(t+1)=='\\0')
-      t+=1, mypparse->_tkid=tktk_anytext;
+      t+=1, mypparse->_tkid= (admse) tktk_anytext;
     if(*(t+1)=='n')
-      t+=2, mypparse->_tkid=tktk_cr;
+      t+=2, mypparse->_tkid= (admse) tktk_cr;
     else if(*(t+1)=='r')
-      t+=2, mypparse->_tkid=tktk_cr;
+      t+=2, mypparse->_tkid= (admse) tktk_cr;
     else if(*(t+1)=='t')
-      t+=2, mypparse->_tkid=tktk_tab;
+      t+=2, mypparse->_tkid= (admse) tktk_tab;
     else
     {
       mypparse->_tkstart=t+1;
-      t+=2, mypparse->_tkid=tktk_anytext;
+      t+=2, mypparse->_tkid= (admse) tktk_anytext;
     }
   }
   else if(*t=='\$')
   {
     if(*(t+1)=='\\0')
-      t+=1, mypparse->_tkid=tktk_anytext;
+      t+=1, mypparse->_tkid= (admse) tktk_anytext;
     if(*(t+1)=='(')
     {
       paren++; adms_slist_push(&parenidx,(p_adms)(long)paren); SETTEXT
       mypparse->_tkstart=t+2;
-      t+=2, mypparse->_tkid=tktk_dollarvariable;
+      t+=2, mypparse->_tkid= (admse) tktk_dollarvariable;
     }
     else
     {
@@ -4686,18 +4686,18 @@ static const char* tparsecb (p_pparse mypparse)
       t++;
       while(*t&&(isalnum(*t)||*t=='_'))
         t++;
-      mypparse->_tkid=tktk_kdollarvariable;
+      mypparse->_tkid= (admse) tktk_kdollarvariable;
     }
   }
   else if(ISTEXT&&(*t==')'))
   {
     if(PARENMATCH)
     {
-      t+=1, mypparse->_tkid=tktk_closeE, adms_slist_pull(&parenidx);
+      t+=1, mypparse->_tkid= (admse) tktk_closeE, adms_slist_pull(&parenidx);
       adms_slist_pull(&globalctxt);
     }
     else
-      t+=1, mypparse->_tkid=tktk_anytext;
+      t+=1, mypparse->_tkid= (admse) tktk_anytext;
     paren--;
   }
   else
@@ -4730,7 +4730,7 @@ static const char* tparsecb (p_pparse mypparse)
       else
         adms_message_fatal((\"%s:'%s' unexpected error in apath parser - please report to r29173\@users.sourceforge.net\\n\",adms_transform_uid(mypparse->_transform),mypparse->_value))
     }
-    mypparse->_tkid=tktk_anytext;
+    mypparse->_tkid= (admse) tktk_anytext;
   }
   mypparse->_tklen=(int)(long)(t-mypparse->_tkstart);
   return t;
@@ -4750,7 +4750,7 @@ static int admstpathlex (p_pparse mypparse)
 map {print admstpathYacc_y "  while(".xvalue($_).") t++;\n";} $admstpathxml->findnodes("//ignore");
 print admstpathYacc_y "  tstart=t;
   if(!strncmp(t,\"\\\'%p\\'\",4)&&!isalpha(*(t+4)))
-    t+=4, mypparse->_tkid=tktk_ticptr;
+    t+=4, mypparse->_tkid= (admse) tktk_ticptr;
   else if(!ISPATH)
     t=tparsecb(mypparse);
 ";
@@ -4764,13 +4764,13 @@ foreach($admstpathxml->findnodes("//constant|//regexp"))
   {
     my$len=length(xvalue($_));
     print admstpathYacc_y "  else if(!strncmp(t,\"".xvalue($_)."\",$len)&&!isalpha(*(t+$len)))\n";
-    print admstpathYacc_y "    t+=$len, mypparse->_tkid=tktk_".xid($_).";\n";
+    print admstpathYacc_y "    t+=$len, mypparse->_tkid= (admse) tktk_".xid($_).";\n";
   }
   else
   {
     my$len=length(xvalue($_));
     print admstpathYacc_y "  else if(!strncmp(t,\"".xvalue($_)."\",$len))\n";
-    print admstpathYacc_y "    t+=$len, mypparse->_tkid=tktk_".xid($_).";\n";
+    print admstpathYacc_y "    t+=$len, mypparse->_tkid= (admse) tktk_".xid($_).";\n";
   }
 }
 print admstpathYacc_y "  else
