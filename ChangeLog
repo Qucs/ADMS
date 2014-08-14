@@ -1,4 +1,4 @@
-adms-MASTER:
+adms-2.3.2:
  * adms.implitic.xml
 	 * add all standard functions and transcendental functions (LRM v2.3.1)
 	 * add `$limit` function, used in Xyce
@@ -11,6 +11,8 @@ adms-MASTER:
  * verilogaLex.l: make optional output name explicit to `verilogaLex.c`
  * install admsCheck: this is a test program for admsXml
  * admsXml, admsCheck: link libraries statically
+   * Set static linking on Linux, OSX
+   * Drop DLL support on MINGW (Win32), static linked
 
 adms-2.3.2:
  * further cleanup, no new language features

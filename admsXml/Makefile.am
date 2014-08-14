@@ -30,21 +30,17 @@ dist_man_MANS = admsXml.1 admsCheck.1
 noinst_LIBRARIES=libadmsElement.a libadmsPreprocessor.a libadmsVeriloga.a libadmsAdmstpath.a
 
 libadmsElement_a_SOURCES=adms.c
-libadmsElement_a_CPPFLAGS=-DinsideElement
 
 preprocessorLex.l: $(incfilec) preprocessorYacc.c preprocessorYacc.h
 preprocessorYacc.h: preprocessorYacc.c
 libadmsPreprocessor_a_SOURCES=preprocessorLex.l preprocessorMain.c preprocessorYacc.h preprocessorYacc.y
-libadmsPreprocessor_a_CPPFLAGS=-DinsidePreprocessor
 
 verilogLex.l: $(incfilec) verilogaYacc.c verilogYacc.h
 verilogYacc.h: verilogYacc.c
 libadmsVeriloga_a_SOURCES=verilogaYacc.y verilogaLex.l verilogaYacc.h
-libadmsVeriloga_a_CPPFLAGS=-DinsideVeriloga
 
 admstpathYacc.y: admstpathYacc.h
 libadmsAdmstpath_a_SOURCES= admstpathYacc.y admstpathYacc.h
-libadmsAdmstpath_a_CPPFLAGS=-DinsideadmstpathYacc
 
 #depends on adms.implicit.xml
 bin_PROGRAMS=admsXml admsCheck
