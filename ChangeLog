@@ -1,4 +1,4 @@
-adms-2.3.2:
+adms-2.3.3:
  * adms.implitic.xml
 	 * add all standard functions and transcendental functions (LRM v2.3.1)
 	 * add `$limit` function, used in Xyce
