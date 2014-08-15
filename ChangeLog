@@ -7,11 +7,11 @@ adms-2.3.2:
 	 the generated source code.
    * added module to search for Perl modules (maintainer mode)
    * it runs the Perl scripts to generate source code
- * preprocessorLex.l: make optional output name explicit to `preprocessorLex.c`
- * verilogaLex.l: make optional output name explicit to `verilogaLex.c`
+ * preprocessorLex.l: set Flex ptional output name to `preprocessorLex.c`
+ * verilogaLex.l: set Flex optional output name to `verilogaLex.c`
  * install admsCheck: this is a test program for admsXml
  * admsXml, admsCheck: link libraries statically
-   * Set static linking on Linux, OSX
+   * Set static linking on Linux, OSX, Windows
    * Drop DLL support on MINGW (Win32), static linked
 
 adms-2.3.2:
