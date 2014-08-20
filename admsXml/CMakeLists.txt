@@ -82,7 +82,8 @@ ENDIF ( USE_MAINTAINER_MODE )
 #
 ADD_LIBRARY(admsElement adms.c)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+# mkctext.pl -> dummy.va.c ends up on the top dir with in maintainer mode
+include_directories(${CMAKE_BINARY_DIR} )
 
 #
 # -= admsPreprocessor =-
