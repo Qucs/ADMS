@@ -1,5 +1,12 @@
-PROJECT(ADMS)
+# skip CMake 3.0 project version management for the moment
+if(POLICY CMP0048)
+  cmake_policy(SET CMP0048 OLD)
+endif()
+
+#==================================
+PROJECT(ADMS C)
 cmake_minimum_required(VERSION 2.8)
+
 
 option ( USE_MAINTAINER_MODE "Enable generation of code (parser source) from Perl scripts." OFF )
 

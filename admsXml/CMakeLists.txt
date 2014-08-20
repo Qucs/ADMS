@@ -1,7 +1,7 @@
 
-INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
+INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} )
 
-# FIXME: not in use, config.h is included direcltly no conditional
+# FIXME: not in use, config.h is included directly no conditional
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 
 
@@ -19,7 +19,7 @@ if ( USE_MAINTAINER_MODE )
     MESSAGE(STATUS "Running mkelements.pl code generator")
 
     EXECUTE_PROCESS(COMMAND
-                    perl ${CMAKE_SOURCE_DIR}/admsXml/mkelements.pl ${CMAKE_SOURCE_DIR}
+                    perl ${PROJECT_SOURCE_DIR}/admsXml/mkelements.pl ${PROJECT_SOURCE_DIR}
                     RESULT_VARIABLE element_result )
 
     IF(element_result EQUAL 0)
@@ -48,7 +48,7 @@ if ( USE_MAINTAINER_MODE )
       MESSAGE(STATUS "Running mkctext.pl code generator on ${inc}")
 
       EXECUTE_PROCESS( COMMAND
-                       perl ${CMAKE_SOURCE_DIR}/admsXml/mkctext.pl ${CMAKE_SOURCE_DIR}/admsXml/${inc} ${CMAKE_SOURCE_DIR}/admsXml
+                       perl ${PROJECT_SOURCE_DIR}/admsXml/mkctext.pl ${PROJECT_SOURCE_DIR}/admsXml/${inc} ${PROJECT_SOURCE_DIR}/admsXml
                        RESULT_VARIABLE text_result )
 
       IF(text_result EQUAL 0)
@@ -66,7 +66,7 @@ if ( USE_MAINTAINER_MODE )
     #
     MESSAGE(STATUS "Running mkgrammar.pl code generator")
 
-    EXECUTE_PROCESS(COMMAND perl ${CMAKE_SOURCE_DIR}/admsXml/mkgrammar.pl ${CMAKE_SOURCE_DIR}/admsXml/verilogaYacc.y.in
+    EXECUTE_PROCESS(COMMAND perl ${PROJECT_SOURCE_DIR}/admsXml/mkgrammar.pl ${PROJECT_SOURCE_DIR}/admsXml/verilogaYacc.y.in
                     RESULT_VARIABLE grammar_result )
 
     IF(grammar_result EQUAL 0)
@@ -82,7 +82,7 @@ ENDIF ( USE_MAINTAINER_MODE )
 #
 ADD_LIBRARY(admsElement adms.c)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 #
 # -= admsPreprocessor =-
@@ -136,6 +136,7 @@ ADD_CUSTOM_COMMAND(
 #
 ADD_EXECUTABLE(admsXml admsXml.c)
 TARGET_LINK_LIBRARIES(admsXml admsElement admsVeriloga admsPreprocessor admsAdmstpath -lm)
+
 
 #
 # -= admsCheck =-
