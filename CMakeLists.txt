@@ -36,7 +36,7 @@ if ( USE_MAINTAINER_MODE )
   # Check all required modules at once
   SET(CMAKE_MODULE_PATH "${ADMS_SOURCE_DIR}/cmake/modules")
   include(FindPerlModules)
-  find_package(PerlModules COMPONENTS XML::LibXml GD)
+  find_package(PerlModules COMPONENTS XML::LibXML GD)
   if(NOT PERLMODULES_FOUND)
     message(FATAL_ERROR "Not all required perl modules were found on your system")
   endif(NOT PERLMODULES_FOUND)
