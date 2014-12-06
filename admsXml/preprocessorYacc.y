@@ -1,4 +1,4 @@
-%define api.prefix "preprocessor"
+%name-prefix "preprocessor"
 %defines
 
 %{
