@@ -32,14 +32,6 @@ AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
 AX_PROG_BISON([],[AC_MSG_WARN(Program bison not found (found $YACC))
                   AC_MSG_ERROR(Please install gnu bison from http://www.gnu.org/software/bison/)])
 
-# Check bison minimun version.
-if test -n "$YACC"; then
-  BISON_VERSION=`$YACC --version | head -1 | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'`
-  AC_MSG_NOTICE([found bison version $BISON_VERSION])
-  AX_COMPARE_VERSION([2.6],[gt],[$BISON_VERSION],
-      AC_MSG_ERROR([You need at least version 2.6 of the 'bison' parse generator to use 'api.prefix' definitions.]))
-fi
-
 #advice use of gcc
 AX_COMPILER_VENDOR
 if test "x$ax_cv_c_compiler_vendor" != "xgnu"; then
