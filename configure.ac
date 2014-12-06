@@ -23,6 +23,7 @@ LT_INIT
 
 # Automake Initialisation.
 AM_INIT_AUTOMAKE
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # Maintainer mode is used to detect/run Perl (XML::LibXml and GD modules) and make dist tarball
 AM_MAINTAINER_MODE
