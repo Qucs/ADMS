@@ -19,6 +19,7 @@ AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 
 # Automake Initialisation.
