@@ -1,4 +1,4 @@
-%option outfile="preprocessorLex.c"
+%option outfile="lex.yy.c"
 %option prefix="preprocessor"
 
 %{
