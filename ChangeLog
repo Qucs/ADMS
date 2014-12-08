@@ -1,3 +1,10 @@
+adms-2.3.x:
+
+ * Perl GD module is no longer required at build time.
+   The GD module is becoming hard to install, and it is only used to create
+   a few images used on the html documentation. If images need to be changed,
+   run the mkimage.pl script and update the repository.
+
 adms-2.3.4:
  * able to parse BSIM6, BSIMCMG (107.0.0)
  * merge patches from WRspice
