@@ -18,13 +18,10 @@ before_install:
   - cd ..
 
   - sudo apt-get install libxml2 libxml2-dev
-  - sudo apt-get install zlib1g zlib1g-dev
-  - sudo apt-get install libgd2-xpm-dev
 
   # configure cpan, no waiting for user input
   - (echo y;echo o conf prerequisites_policy follow;echo o conf commit)| sudo cpan
   - sudo cpan -i XML::LibXML
-  - sudo cpan -f GD
 
 script:
   - $CC --version

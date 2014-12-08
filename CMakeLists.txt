@@ -27,7 +27,7 @@ CHECK_FUNCTION_EXISTS (putenv HAVE_PUTENV)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-# Only care about Perl in case maintainer neededs to recreate souces
+# Only care about Perl in case maintainer needs to recreate sources
 # * mkelements.pl
 # * mktext.pl
 # * mkgrammar.pl
@@ -36,7 +36,7 @@ if ( USE_MAINTAINER_MODE )
   # Check all required modules at once
   SET(CMAKE_MODULE_PATH "${ADMS_SOURCE_DIR}/cmake/modules")
   include(FindPerlModules)
-  find_package(PerlModules COMPONENTS XML::LibXML GD)
+  find_package(PerlModules COMPONENTS XML::LibXML)
   if(NOT PERLMODULES_FOUND)
     message(FATAL_ERROR "Not all required perl modules were found on your system")
   endif(NOT PERLMODULES_FOUND)

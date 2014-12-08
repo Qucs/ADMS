@@ -24,7 +24,7 @@ LT_INIT
 # Automake Initialisation.
 AM_INIT_AUTOMAKE
 
-# Maintainer mode is used to detect/run Perl (XML::LibXml and GD modules) and make dist tarball
+# Maintainer mode is used to detect/run Perl (XML::LibXml) and make dist tarball
 AM_MAINTAINER_MODE
 
 AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
@@ -84,7 +84,7 @@ AC_CHECK_FUNCS([floor memset putenv setenv strdup strstr strtol])
 AC_PROG_LIBTOOL
 AC_SUBST([LIBTOOL_DEPS])
 
-dnl Perl, XML::LibXML and GD modules required for maintainer
+dnl Perl, XML::LibXML module required for maintainer
 if test $USE_MAINTAINER_MODE = yes; then
 
   AC_PATH_PROG(PERL, perl, :)
@@ -95,12 +95,9 @@ if test $USE_MAINTAINER_MODE = yes; then
   AX_PERL_MODULE_VERSION([XML::LibXML 2],[],[
       AC_MSG_RESULT(failed)
       AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
-  AX_PERL_MODULE_VERSION([GD 2.4],[],[
-      AC_MSG_ERROR([Perl package GD:: may be downloaded from http://search.cpan.org/dist/GD])])
 fi
 
 AC_CONFIG_FILES([Makefile
                  admsXml/Makefile
-                 images/Makefile
                  scripts/Makefile])
 AC_OUTPUT

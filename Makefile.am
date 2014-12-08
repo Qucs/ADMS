@@ -28,6 +28,6 @@ EXTRA_DIST= \
   config.h.cmake     \
   cmake/modules/FindPerlModules.cmake
 
-SUBDIRS=scripts images admsXml
+SUBDIRS=scripts admsXml
 
 CLEANFILES=*\~ .*.swp
