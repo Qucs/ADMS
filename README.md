@@ -11,7 +11,7 @@ Verilog-AMS code into other target languages.
 This version is forked from the code previously available at:
 <http://sourceforge.net/projects/mot-adms/files/adms-source/2.3/>
 
-The original SVN repo no longer available.
+The original SVN repo is no longer available.
 
 This version is based on ADMS 2.3.0, the last version released by the original author.
 
@@ -37,7 +37,8 @@ ADMS is known to work on these platforms.
 - GNU Flex
 - GNU Bison 2.6+
 - GNU Libtool
-- Perl with XML::LibXml and GD modules (only for maintainers)
+- Perl with XML::LibXml (only for maintainers)
+  - GD modules to manually update documentation images
 
 
 ## Installation
