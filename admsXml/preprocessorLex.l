@@ -3,6 +3,8 @@
 
 %{
 
+#define YY_NO_INPUT
+
 #include "adms.h"
 #include "admsPreprocessor.h"
 #include "preprocessorYacc.h"

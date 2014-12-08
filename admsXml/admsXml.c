@@ -2486,7 +2486,6 @@ static void creearbrex(const char*xcode,const char*myadmstfile)
 static void creearbrex(const char*myadmstfile)
 #endif
 {
-    char* xdata0;
 #if defined(STANDALONE)
     char* xfile=adms_kclone(myadmstfile);
     char* xdata=adms_kclone(xcode);
@@ -2515,7 +2514,6 @@ static void creearbrex(const char*myadmstfile)
     xdata=(char*)realloc(xdata,readbytes+1);
     *(xdata+readbytes)='\0';
 #endif
-    xdata0=xdata;
     racine.Y0=NULL;
     racine.Y=NULL;
     arbre(xdata,myadmstfile);
