@@ -4,19 +4,15 @@ compiler:
   - gcc
   - clang
 
+# Settings to try
+env:
+  matrix:
+    - BUILD_SYSTEM=autotools
+    - BUILD_SYSTEM=cmake
+
 before_install:
 
   - sudo apt-get install automake libtool flex
-
-  # ubuntu 12.04 gives bison 2.5, need to install 2.6
-  - wget http://ftp.gnu.org/gnu/bison/bison-2.6.tar.gz -O /tmp/bison-2.6.tar.gz
-  - tar -xzvf /tmp/bison-2.6.tar.gz
-  - cd bison-2.6
-  - ./configure
-  - make
-  - sudo make install
-  - cd ..
-
   - sudo apt-get install libxml2 libxml2-dev
 
   # configure cpan, no waiting for user input
@@ -24,15 +20,27 @@ before_install:
   - sudo cpan -i XML::LibXML
 
 script:
+  - bison --version
+  - flex --version
   - $CC --version
   - which $CC
   # workaround clang not system wide, fail on sudo make install
   - export CC=`which $CC`
 
-  - ./bootstrap.sh
-  - ./configure --enable-maintainer-mode --prefix=/usr
-  - make
-  - sudo make install
+  - case $BUILD_SYSTEM in
+      autotools)
+        ./bootstrap.sh &&
+        ./configure --enable-maintainer-mode --prefix=/usr &&
+        make &&
+        sudo make install
+        ;;
+      cmake)
+        mkdir build && cd build &&
+        cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_MAINTAINER_MODE=ON &&
+        make &&
+        sudo make install
+        ;;
+      esac ;
 
   # test
   - admsXml -h

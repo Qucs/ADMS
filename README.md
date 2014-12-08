@@ -35,7 +35,7 @@ ADMS is known to work on these platforms.
 - C compiler (gcc, clang)
 - Autotools (autoconf, automake,...) or CMake
 - GNU Flex
-- GNU Bison 2.6+
+- GNU Bison (tested with 2.5+)
 - GNU Libtool
 - Perl with XML::LibXml (only for maintainers)
   - GD modules to manually update documentation images

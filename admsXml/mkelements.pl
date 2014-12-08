@@ -1925,7 +1925,7 @@ print "$top_srcdir/admsXml/admstpathYacc.h: created\n";
 
 open admstpathYacc_y,">$top_srcdir/admsXml/admstpathYacc.y";
 print admstpathYacc_y "$BUILDER
-%define api.prefix \"admstpath\"
+%name-prefix \"admstpath\"
 %lex-param {p_pparse mypparse}
 %parse-param {p_pparse mypparse}
 \%{
