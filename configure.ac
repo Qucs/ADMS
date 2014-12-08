@@ -34,6 +34,11 @@ AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
 AX_PROG_BISON([],[AC_MSG_WARN(Program bison not found (found $YACC))
                   AC_MSG_ERROR(Please install gnu bison from http://www.gnu.org/software/bison/)])
 
+AC_ARG_VAR([BISON], [Path to Bison parser generator])
+AC_ARG_VAR([FLEX], [Path to Flex lexical analyser generator])
+AC_PATH_PROG([BISON], [bison])
+AC_PATH_PROG([FLEX], [flex])
+
 #advice use of gcc
 AX_COMPILER_VENDOR
 if test "x$ax_cv_c_compiler_vendor" != "xgnu"; then
@@ -95,3 +100,22 @@ AC_CONFIG_FILES([Makefile
                  admsXml/Makefile
                  scripts/Makefile])
 AC_OUTPUT
+
+dnl Print results.
+AC_MSG_RESULT([])
+AC_MSG_RESULT([ $PACKAGE version $VERSION configured successfully.])
+AC_MSG_RESULT([
+Configure Information:
+  C Compiler : $CC
+  DEFS       :   $DEFS
+  CFLAGS     :   $CFLAGS
+
+  Linker     : $LD
+  LIBS       :   $LIBS
+
+  Prefix     : $prefix
+  Perl       : $PERL
+  Flex       : $FLEX
+  Bison      : $BISON
+])
+
