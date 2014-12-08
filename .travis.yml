@@ -4,6 +4,12 @@ compiler:
   - gcc
   - clang
 
+# Settings to try
+env:
+  matrix:
+    - BUILD_SYSTEM=autotools
+    - BUILD_SYSTEM=cmake
+
 before_install:
 
   - sudo apt-get install automake libtool flex
@@ -21,10 +27,20 @@ script:
   # workaround clang not system wide, fail on sudo make install
   - export CC=`which $CC`
 
-  - ./bootstrap.sh
-  - ./configure --enable-maintainer-mode --prefix=/usr
-  - make
-  - sudo make install
+  - case $BUILD_SYSTEM in
+      autotools)
+        ./bootstrap.sh &&
+        ./configure --enable-maintainer-mode --prefix=/usr &&
+        make &&
+        sudo make install
+        ;;
+      cmake)
+        mkdir build && cd build &&
+        cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_MAINTAINER_MODE=ON &&
+        make &&
+        sudo make install
+        ;;
+      esac ;
 
   # test
   - admsXml -h
