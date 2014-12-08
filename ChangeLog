@@ -1,5 +1,6 @@
 adms-2.3.x:
 
+ * Relax Bison requirement, tested with (2.5, 3.0.2)
  * Perl GD module is no longer required at build time.
    The GD module is becoming hard to install, and it is only used to create
    a few images used on the html documentation. If images need to be changed,
