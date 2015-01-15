@@ -1,6 +1,15 @@
 adms-2.3.x:
 
+ * Check scaling factors againd LRM 2.0.4
+   * Add missing K scaling (uppercase kilo)
+   * standard scale_factor T|G|M|K|k|m|u|n|p|f|a
+   * Add testset (va and xml files) to test the scaling factors
+
+ * Handle non-standard scaling factors with warning E|P|D|h|d|c|A
+   Patch by Geoffrey Coram
+
  * Relax Bison requirement, tested with (2.5, 3.0.2)
+
  * Perl GD module is no longer required at build time.
    The GD module is becoming hard to install, and it is only used to create
    a few images used on the html documentation. If images need to be changed,
