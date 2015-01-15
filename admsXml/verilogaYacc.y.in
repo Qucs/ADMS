@@ -220,6 +220,7 @@ R_s.nature_assignment
           _ else if(!strcmp(mylexval4,"T")) myunit=admse_T;
           _ else if(!strcmp(mylexval4,"G")) myunit=admse_G;
           _ else if(!strcmp(mylexval4,"M")) myunit=admse_M;
+          _ else if(!strcmp(mylexval4,"K")) myunit=admse_K;
           _ else if(!strcmp(mylexval4,"k")) myunit=admse_k;
           _ else if(!strcmp(mylexval4,"h")) myunit=admse_h;
           _ else if(!strcmp(mylexval4,"D")) myunit=admse_D;
@@ -1466,6 +1467,7 @@ R_e.atomic
           _ else if(!strcmp(mylexval2,"T")) myunit=admse_T;
           _ else if(!strcmp(mylexval2,"G")) myunit=admse_G;
           _ else if(!strcmp(mylexval2,"M")) myunit=admse_M;
+          _ else if(!strcmp(mylexval2,"K")) myunit=admse_K;
           _ else if(!strcmp(mylexval2,"k")) myunit=admse_k;
           _ else if(!strcmp(mylexval2,"h")) myunit=admse_h;
           _ else if(!strcmp(mylexval2,"D")) myunit=admse_D;
@@ -1496,6 +1498,7 @@ R_e.atomic
           _ else if(!strcmp(mylexval2,"T")) myunit=admse_T;
           _ else if(!strcmp(mylexval2,"G")) myunit=admse_G;
           _ else if(!strcmp(mylexval2,"M")) myunit=admse_M;
+          _ else if(!strcmp(mylexval2,"K")) myunit=admse_K;
           _ else if(!strcmp(mylexval2,"k")) myunit=admse_k;
           _ else if(!strcmp(mylexval2,"h")) myunit=admse_h;
           _ else if(!strcmp(mylexval2,"D")) myunit=admse_D;
