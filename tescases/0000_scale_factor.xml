@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE admst SYSTEM "admst.dtd">
+
+<admst version="2.3.5">
+
+  <!-- handle number element -->
+  <admst:template match=":number">
+
+    <!-- check type -->
+    <admst:if test="[cast='i']">
+        <admst:variable name="cast" select="int"/> <!-- store -->
+    </admst:if>
+    <admst:if test="[cast='d']">
+        <admst:variable name="cast" select="double"/> <!-- store -->
+    </admst:if>
+
+    <!-- pretty print value and scaling -->
+    <admst:value-of select="value"/>
+    <admst:choose>
+      <admst:when test="[scalingunit='1']">%s</admst:when>
+
+      <admst:when test="[scalingunit='T']">$(cast) %se12</admst:when>
+      <admst:when test="[scalingunit='G']">$(cast) %se+9</admst:when>
+      <admst:when test="[scalingunit='M']">$(cast) %se+6</admst:when>
+      <admst:when test="[scalingunit='K']">$(cast) %se+3</admst:when>
+      <admst:when test="[scalingunit='k']">$(cast) %se+3</admst:when>
+      <admst:when test="[scalingunit='m']">$(cast) %se-3</admst:when>
+      <admst:when test="[scalingunit='u']">$(cast) %se-6</admst:when>
+      <admst:when test="[scalingunit='n']">$(cast) %se-9</admst:when>
+      <admst:when test="[scalingunit='p']">$(cast) %se-12</admst:when>
+      <admst:when test="[scalingunit='f']">$(cast) %se-15</admst:when>
+      <admst:when test="[scalingunit='a']">$(cast) %se-18</admst:when>
+
+      <admst:when test="[scalingunit='E']">$(cast) %se+18</admst:when>
+      <admst:when test="[scalingunit='P']">$(cast) %se+15</admst:when>
+      <admst:when test="[scalingunit='h']">$(cast) %se+2</admst:when>
+      <admst:when test="[scalingunit='D']">$(cast) %se+1</admst:when>
+      <admst:when test="[scalingunit='d']">$(cast) %se-1</admst:when>
+      <admst:when test="[scalingunit='c']">$(cast) %se-2</admst:when>
+      <admst:when test="[scalingunit='A']">$(cast) %se-10</admst:when>
+
+      <admst:otherwise>
+        <admst:value-of select="scalingunit"/>
+        <admst:fatal format="%s%s: scaling unit not supported\n"/>
+      </admst:otherwise>
+    </admst:choose>
+  </admst:template>
+
+  <!-- handle default element  -->
+  <admst:template match=":expression">
+    <!-- get type of data -->
+    <admst:value-of select="tree/adms/datatypename"/>
+    <admst:variable name="type" select="%s"/> <!-- store -->
+    <admst:text format="\t$(type) "/>
+    <admst:apply-templates select="tree" match=":$(type)" required="yes"/>
+  </admst:template>
+
+  <!-- loop over modules -->
+  <admst:for-each select="/module">
+
+    <!-- print module name -->
+    <admst:value-of select="./name" />
+    <admst:text format="module : %s\n"/>
+
+      <!-- print name of variables, type and its default value -->
+      <admst:for-each select="variable">
+        <admst:value-of select="./name" />
+        <admst:text format="variable : %s  " />
+        <admst:apply-templates select="default" match=":expression"/>
+        <admst:text format="\n" />
+      </admst:for-each>
+
+  </admst:for-each>  <!-- module -->
+
+</admst>
+
+

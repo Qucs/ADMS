@@ -553,6 +553,7 @@
             <evalue name="T" info="multiplication factor = 1.0e+12 (tera)"/>
             <evalue name="G" info="multiplication factor = 1.0e+9  (giga)"/>
             <evalue name="M" info="multiplication factor = 1.0e+6  (mega)"/>
+            <evalue name="K" info="multiplication factor = 1.0e+3  (Kilo)"/>
             <evalue name="k" info="multiplication factor = 1.0e+3  (kilo)"/>
             <evalue name="h" info="multiplication factor = 1.0e+2  (hecto)"/>
             <evalue name="D" info="multiplication factor = 1.0e+1  (deka)"/>

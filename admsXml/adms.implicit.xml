@@ -206,9 +206,11 @@
           <admst:value-to select="math/value" path="value"/>
         </admst:when>
         <admst:when test="[scalingunit='E']">
+          <admst:warning format="%(lexval/(f|':'|l|':'|c)): non-standard scale factor: %(scalingunit)\n"/>
           <admst:value-to select="math/value" string="%(value)e+18"/>
         </admst:when>
         <admst:when test="[scalingunit='P']">
+          <admst:warning format="%(lexval/(f|':'|l|':'|c)): non-standard scale factor: %(scalingunit)\n"/>
           <admst:value-to select="math/value" string="%(value)e+15"/>
         </admst:when>
         <admst:when test="[scalingunit='T']">
@@ -220,16 +222,22 @@
         <admst:when test="[scalingunit='M']">
           <admst:value-to select="math/value" string="%(value)e+6"/>
         </admst:when>
+        <admst:when test="[scalingunit='K']">
+          <admst:value-to select="math/value" string="%(value)e+3"/>
+        </admst:when>
         <admst:when test="[scalingunit='k']">
           <admst:value-to select="math/value" string="%(value)e+3"/>
         </admst:when>
         <admst:when test="[scalingunit='h']">
           <admst:value-to select="math/value" string="%(value)e+2"/>
+          <admst:warning format="%(lexval/(f|':'|l|':'|c)): non-standard scale factor: %(scalingunit)\n"/>
         </admst:when>
         <admst:when test="[scalingunit='D']">
           <admst:value-to select="math/value" string="%(value)e+1"/>
+          <admst:warning format="%(lexval/(f|':'|l|':'|c)): non-standard scale factor: %(scalingunit)\n"/>
         </admst:when>
         <admst:when test="[scalingunit='d']">
+          <admst:warning format="%(lexval/(f|':'|l|':'|c)): non-standard scale factor: %(scalingunit)\n"/>
           <admst:value-to select="math/value" string="%(value)e-1"/>
         </admst:when>
         <admst:when test="[scalingunit='c']">
@@ -245,6 +253,7 @@
           <admst:value-to select="math/value" string="%(value)e-9"/>
         </admst:when>
         <admst:when test="[scalingunit='A']">
+          <admst:warning format="%(lexval/(f|':'|l|':'|c)): non-standard scale factor: %(scalingunit)\n"/>
           <admst:value-to select="math/value" string="%(value)e-10"/>
         </admst:when>
         <admst:when test="[scalingunit='p']">

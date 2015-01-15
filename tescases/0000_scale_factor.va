@@ -1,0 +1,47 @@
+
+// scale_factor ::= T|G|M|K|k|m|u|n|p|f|a
+
+// non-standard  E P D h d c A
+
+module scaling();
+ parameter integer itera  = 1T;
+ parameter integer igiga  = 1G;
+ parameter integer imega  = 1M;
+ parameter integer iKilo  = 1K;
+ parameter integer ikilo  = 1k;
+ parameter integer imili  = 1m;
+ parameter integer imicro = 1u;
+ parameter integer inano  = 1n;
+ parameter integer ipico  = 1p;
+ parameter integer ifemto = 1f;
+ parameter integer iatto  = 1a;
+
+ parameter integer iexa      = 1E;
+ parameter integer ipeta     = 1P;
+ parameter integer ihecto    = 1h;
+ parameter integer ideca     = 1D;
+ parameter integer ideci     = 1d;
+ parameter integer icenti    = 1c;
+ parameter integer iamgstron = 1A;
+
+ parameter real tera  = 1.0T;
+ parameter real giga  = 1.0G;
+ parameter real mega  = 1.0M;
+ parameter real Kilo  = 1.0K;
+ parameter real kilo  = 1.0k;
+ parameter real mili  = 1.0m;
+ parameter real micro = 1.0u;
+ parameter real nano  = 1.0n;
+ parameter real pico  = 1.0p;
+ parameter real femto = 1.0f;
+ parameter real atto  = 1.0a;
+
+ parameter real exa      = 1.0E;
+ parameter real peta     = 1.0P;
+ parameter real hecto    = 1.0h;
+ parameter real deca     = 1.0D;
+ parameter real deci     = 1.0d;
+ parameter real centi    = 1.0c;
+ parameter real amgstron = 1.0A;
+
+endmodule
