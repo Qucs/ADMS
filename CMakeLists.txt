@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 2.8)
 option ( USE_MAINTAINER_MODE "Enable generation of code (parser source) from Perl scripts." OFF )
 
 SET(PACKAGE_NAME "adms")
-SET(PACKAGE_VERSION "2.3.3")
+SET(PACKAGE_VERSION "2.3.5")
 SET(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
 
 INCLUDE( CheckIncludeFile )
