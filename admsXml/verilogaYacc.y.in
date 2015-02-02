@@ -1119,12 +1119,16 @@ R_s.case.item
           _ mycaseitem->_defaultcase=admse_yes;
           _ Y($$,(p_adms)mycaseitem);
         ;
+R_s.paramlist.0
+        |
+        | '#' '(' R_l.instance.parameter ')'
+       ;
 R_s.instance
-        | R_instance.module.name '#' '(' R_l.instance.parameter ')' tk_ident '(' R_l.node ')' ';'
+        | R_instance.module.name R_s.paramlist.0 tk_ident '(' R_l.node ')' ';'
           _ p_instance myinstance;
           _ p_slist l1;
           _ p_slist l2;
-          _ myinstance=adms_module_list_instance_prepend_by_id_once_or_abort(gModule,gModule,gInstanceModule,mylexval6);
+          _ myinstance=adms_module_list_instance_prepend_by_id_once_or_abort(gModule,gModule,gInstanceModule,mylexval3);
           _ adms_slist_inreverse(&gInstanceModule->_node);
           _ l2=gInstanceModule->_node;
           _ l2=l2->next; /*GND ignored*/
