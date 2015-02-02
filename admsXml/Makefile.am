@@ -12,6 +12,8 @@ SUFFIXES=.vams .vams.c .va .va.c .xml .xml.c .y.in
 
 # Perl XML::LibXml module are only required for maintainer
 # Parser created by maintainer
+# BUG: these rules are also required when building from git.
+# workaround: default to maintainer mode when building from git.
 if MAINTAINER_MODE
 
 $(incfilec):%.c:% ${srcdir}/mkctext.pl
