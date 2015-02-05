@@ -584,8 +584,8 @@ win32_interface p_new adms_admsxml_new (p_ktransform mytransform,const char* ena
 win32_interface p_cmp adms_admsxml_cmp (p_kadmst myadmst);
 #endif /* adms_h */\n";
 
-open FILE,">$top_srcdir/admsXml/adms.h"; print FILE $adms_h; close FILE;
-print "$top_srcdir/admsXml/adms.h: created\n";
+open FILE,">adms.h"; print FILE $adms_h; close FILE;
+print "adms.h: created\n";
 
 sub pnew
 {
@@ -1830,8 +1830,8 @@ $adms_c.="  fflush($ofh);\n";
 $adms_c.="}\n";
 }
 
-open FILE,">$top_srcdir/admsXml/adms.c"; print FILE $adms_c; close FILE;
-print "$top_srcdir/admsXml/adms.c: created\n";
+open FILE,">adms.c"; print FILE $adms_c; close FILE;
+print "adms.c: created\n";
 
 #apath language
 
@@ -1883,7 +1883,7 @@ sub LLNN
   my($type,$rhs)=(shift,shift);
   return "p_admst d=adms_admst_new$type(dot,dot,$rhs);".&ALLLASTPOS("d");
 }
-open admstpath_dtd,">$top_srcdir/admsXml/admstpath.dtd";
+open admstpath_dtd,">admstpath.dtd";
 my$dtd=q[
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Spec interne d'un chemin 'admstpath'. Validation: xmllint dbgp.xml -noout -postvalid -noblanks -->
@@ -1902,9 +1902,9 @@ Fichier dbgp.xml
 
 print admstpath_dtd $dtd;
 close admstpath_dtd;
-print "$top_srcdir/admsXml/admstpath.dtd: created\n";
+print "admstpath.dtd: created\n";
 
-open admstpathYacc_h,">$top_srcdir/admsXml/admstpathYacc.h";
+open admstpathYacc_h,">admstpathYacc.h";
 print admstpathYacc_h "$BUILDER
 #include \"adms.h\"
 
@@ -1946,10 +1946,10 @@ win32_interface void Xassert (p_transform mytransform,p_admst dot,p_admst dotdot
 win32_interface void xtraverse (p_slist mytransforms,p_admst dot,p_admst dotdot);
 ";
 close admstpathYacc_h;
-print "$top_srcdir/admsXml/admstpathYacc.h: created\n";
+print "admstpathYacc.h: created\n";
 
 
-open admstpathYacc_y,">$top_srcdir/admsXml/admstpathYacc.y";
+open admstpathYacc_y,">admstpathYacc.y";
 print admstpathYacc_y "$BUILDER
 %name-prefix \"admstpath\"
 %lex-param {p_pparse mypparse}
@@ -4877,5 +4877,5 @@ int apath_main (int argc,char **argv)
 }
 ";
 close admstpathYacc_y;
-print "$top_srcdir/admsXml/admstpathYacc.y: created\n";
+print "admstpathYacc.y: created\n";
 
