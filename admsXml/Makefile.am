@@ -35,14 +35,12 @@ libadmsElement_la_SOURCES=adms.c
 libadmsElement_la_CPPFLAGS=-DinsideElement
 libadmsElement_la_LDFLAGS=-no-undefined
 
-preprocessorLex.l: $(incfilec) preprocessorYacc.c preprocessorYacc.h
 preprocessorYacc.h: preprocessorYacc.c
 libadmsPreprocessor_la_SOURCES=preprocessorLex.l preprocessorMain.c preprocessorYacc.h preprocessorYacc.y
 libadmsPreprocessor_la_CPPFLAGS=-DinsidePreprocessor
 libadmsPreprocessor_la_LDFLAGS=-no-undefined
 libadmsPreprocessor_la_LIBADD=libadmsElement.la
 
-verilogLex.l: $(incfilec) verilogaYacc.c verilogYacc.h
 verilogYacc.h: verilogYacc.c
 libadmsVeriloga_la_SOURCES=verilogaYacc.y verilogaLex.l verilogaYacc.h
 libadmsVeriloga_la_CPPFLAGS=-DinsideVeriloga
@@ -67,6 +65,8 @@ admsXml.c: adms.implicit.xml.c
 admsCheck.c=$(incfilec)
 admsCheck_SOURCES=admsCheck.c
 admsCheck_LDADD=libadmsElement.la
+
+BUILT_SOURCES=verilogaYacc.h adms.h adms.c $(incfilec)
 
 EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  preprocessorYacc.h admsPreprocessor.h verilogaYacc.h admsVeriloga.h \
