@@ -80,6 +80,7 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([floor memset putenv setenv strdup strstr strtol])
 
 # Libtool initialisation.
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 AC_SUBST([LIBTOOL_DEPS])
 
