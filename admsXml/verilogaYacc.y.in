@@ -608,17 +608,16 @@ R_l.analogfunction.real.variable
           _   myvariableprototype->_type=admse_real;
           _ }
         ;
-R_variable.type
-        | tk_integer R_d.attribute.0
+R_variable.type.set
+        | tk_integer
           _ gVariableType=admse_integer;
-          _ adms_slist_concat(&gGlobalAttributeList,gAttributeList);
-          _ gAttributeList=NULL;
-        | tk_real R_d.attribute.0
+        | tk_real
           _ gVariableType=admse_real;
-          _ adms_slist_concat(&gGlobalAttributeList,gAttributeList);
-          _ gAttributeList=NULL;
-        | tk_string R_d.attribute.0
+        | tk_string
           _ gVariableType=admse_string;
+        ;
+R_variable.type
+        | R_variable.type.set R_d.attribute.0
           _ adms_slist_concat(&gGlobalAttributeList,gAttributeList);
           _ gAttributeList=NULL;
         ;
@@ -1522,25 +1521,16 @@ R_e.atomic
           _ Y($$,(p_adms)adms_string_new(mylexval1));
         | tk_ident
           _ $$=adms_yaccval_new("unknown source file");
-          _ if(gAnalogfunction)
+          _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
+          _ if(myvariable)
+          _   Y($$,(p_adms)myvariable);
+          _ else if (!gAnalogfunction)
           _ {
-          _   p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
-          _   if(myvariable)
-          _     Y($$,(p_adms)myvariable);
-          _ }
-          _ else
-          _ {
-          _   p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
-          _   if(myvariable)
-          _     Y($$,(p_adms)myvariable);
-          _   else
-          _   {
           _     p_branchalias mybranchalias=adms_module_list_branchalias_lookup_by_id(gModule,gModule,mylexval1);
           _     p_node mynode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
           _     if(mynode) Y($$,(p_adms)mynode);
           _     if(mybranchalias)
           _       Y($$,(p_adms)mybranchalias->_branch);
-          _   }
           _ }
           _ if(!YY($$))
           _   adms_veriloga_message_fatal("identifier never declared\n",$1);
