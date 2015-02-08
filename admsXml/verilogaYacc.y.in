@@ -5,6 +5,10 @@
 #define YYDEBUG 1
 #include "admsVeriloga.h"
 
+static e_verilogactx ctx;
+e_verilogactx verilogactx (){return ctx;}
+void set_context(e_verilogactx x){ctx=x;}
+
 #define NEWVARIABLE(l) p_variableprototype myvariableprototype=adms_variableprototype_new(gModule,l,(p_adms)gBlockList->data);
 
 inline static void   Y (p_yaccval myyaccval,p_adms myusrdata) {myyaccval->_usrdata=myusrdata;}

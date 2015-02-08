@@ -233,7 +233,17 @@ exclude {TKRETURN(yytext,yyleng); return tk_exclude;}
 inf {TKRETURN(yytext,yyleng); return tk_inf;}
 INF {TKRETURN(yytext,yyleng); return tk_inf;}
 
-{ident} {TKRETURN(yytext,yyleng); return tk_ident;}
+{ident} {
+  TKRETURN(yytext,yyleng);
+  switch (verilogactx()){
+    case ctx_moduletop:
+      if (adms_admsmain_list_discipline_lookup_by_id(root(),yytext)) {
+	return tk_disc_id;
+      }
+    default:
+      return tk_ident;
+  }
+}
 
 \>\> {TKRETURN(yytext,yyleng); return tk_op_shr;}
 \<\< {TKRETURN(yytext,yyleng); return tk_op_shl;}
