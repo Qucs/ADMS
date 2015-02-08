@@ -253,3 +253,5 @@ INF {TKRETURN(yytext,yyleng); return tk_inf;}
 %%
 
 int yywrap (void) {return 1;}
+
+// vim:sw=2:ts=8:noet:
