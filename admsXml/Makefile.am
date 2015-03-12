@@ -66,7 +66,7 @@ admsCheck.c=$(incfilec)
 admsCheck_SOURCES=admsCheck.c
 admsCheck_LDADD=libadmsElement.la
 
-BUILT_SOURCES=verilogaYacc.h adms.h adms.c $(incfilec)
+BUILT_SOURCES=verilogaYacc.c preprocessorYacc.c adms.h adms.c $(incfilec)
 
 EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  preprocessorYacc.h admsPreprocessor.h verilogaYacc.h admsVeriloga.h \
