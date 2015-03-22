@@ -1,0 +1,29 @@
+// these devices do not make any sense.
+// intended for testing the function stash within globalexpression
+`include "discipline.h"
+
+module sometest(p,n);
+	inout p,n;
+	electrical p,n;
+
+	parameter real c=1e-6 from [0:inf);
+	analog begin
+		begin
+			I(p,n) <+ c*ddt(V(n,p)*9);
+			I(p,n) <+ exp(ddt(V(p,n)));
+		end
+	end
+endmodule
+
+module anothertest(p,n);
+	inout p,n;
+	electrical p,n;
+
+	parameter real c=1e-6 from [0:inf);
+	analog begin
+		begin
+			real foo; foo = c*idt(exp(V(p,n)));
+			I(p,n) <+ pow(ddt(foo*V(p,n)),2);
+		end
+	end
+endmodule
