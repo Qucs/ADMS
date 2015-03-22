@@ -582,6 +582,7 @@
           <scalar datatypefamily="reference" name="definition" datatypename="analogfunction" info="back to analogfunction"/>
           <scalar datatypefamily="basictype" name="class" datatypename="basicenumeration" info="type of function (builtin, userdefined, ...)" default="analog">
             <evalue name="builtin" info="builtin standard math function"/>
+            <evalue name="operator" info="operators"/>
             <evalue name="analog" info="analog function - user defined"/>
             <evalue name="digital" info="digital function - user defined"/>
           </scalar>
