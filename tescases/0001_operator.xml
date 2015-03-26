@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--  push operator calls into globalexpression/function
+   -  and set class to "operator".
+   -  then print all operators for each model
+   -
+   -  invoke with
+   -  ../admsXml/admsXml -e 0001_operator.xml 0001_operator.va
+   -->
+
+<!DOCTYPE admst SYSTEM "admst.dtd">
+<admst version="2.3.0" xmlns:admst="http://mot-adms.sourceforge.net/adms/admst.xml">
+
+<admst:variable name="globalmodule"/>
+<admst:variable name="globalexpression"/>
+
+<admst:template match="e:dependency">
+  <admst:choose>
+    <admst:when test="[datatypename='expression']">
+      <admst:variable name="globalexpression" path="."/>
+      <admst:apply-templates select="tree" match="e:dependency"/>
+    </admst:when>
+    <admst:when test="[datatypename='function']">
+      <admst:apply-templates select="arguments" match="e:dependency"/>
+      <admst:message format="found a function call: %(.)\n"/>
+      <admst:value-to select="subexpression/expression" path="$globalexpression"/>
+      <admst:choose>
+        <admst:when test="[name='exp' or name='pow']"/>
+        <admst:when test="[name='ddt' or name='idt']">
+          <admst:message format="it's an operator: %(.)\n"/>
+          <admst:push into="$globalexpression/function" select="."/>
+          <admst:value-to select="class" string="operator"/>
+        </admst:when>
+        <admst:otherwise>
+          <admst:assert test="[exists(definition)]" format="%(lexval/(f|':'|l|':'|c)): analog function '%(name)' is undefined\n"/>
+        </admst:otherwise>
+      </admst:choose>
+    </admst:when>
+	 <admst:when test="[datatypename='probe' or
+                       datatypename='number' or
+                       datatypename='variable']"/>
+	 <admst:when test="[datatypename='mapply_binary']">
+      <admst:apply-templates select="arg1|arg2" match="e:dependency"/>
+    </admst:when>
+    <admst:otherwise>
+      <admst:fatal format="%(datatypename): case not handled\n"/>
+    </admst:otherwise>
+  </admst:choose>
+</admst:template>
+
+<admst:template match="dependency">
+  <admst:choose>
+    <admst:when test="[datatypename='callfunction']">
+      <admst:apply-templates select="function/arguments" match="e:dependency"/>
+      <admst:value-to select="dependency" path="function/dependency"/>
+    </admst:when>
+    <admst:when test="[datatypename='contribution']">
+      <admst:variable name="globalcontribution" path="."/>
+      <admst:apply-templates select="rhs" match="e:dependency"/>
+      <admst:variable name="globalcontribution"/>
+      <admst:push into="lhs/probe" select="rhs/probe" onduplicate="ignore"/>
+      <admst:value-to select="dependency" string="nonlinear"/>
+    </admst:when>
+    <admst:when test="[datatypename='assignment']">
+      <admst:choose>
+        <admst:when test="[lhs/datatypename='array']">
+          <admst:variable name="lhs" path="lhs/variable"/>
+        </admst:when>
+        <admst:otherwise>
+          <admst:variable name="lhs" path="lhs"/>
+        </admst:otherwise>
+      </admst:choose>
+      <admst:variable name="globalassignment" path="."/>
+      <admst:apply-templates select="rhs" match="e:dependency"/>
+      <admst:variable name="globalassignment"/>
+      <admst:push into="$lhs/variable" select="rhs/variable" onduplicate="ignore"/>
+      <admst:value-to test="rhs/variable[TemperatureDependent='yes']" select="$lhs/TemperatureDependent" string="yes"/>
+      <admst:value-to select="dependency" path="rhs/dependency"/>
+      <admst:push into="$lhs/probe" select="rhs/probe" onduplicate="ignore"/>
+    </admst:when>
+    <admst:when test="[datatypename='block']">
+      <admst:reverse select="item|variable"/>
+      <admst:variable name="forcepartitionning" string="yes"/>
+      <admst:apply-templates select="item" match="dependency"/>
+      <admst:variable test="[$forcepartitionning='yes']" name="globalpartitionning"/>
+      <admst:choose>
+        <admst:when test="item[dependency='nonlinear']">
+          <admst:value-to select="dependency" string="nonlinear"/>
+        </admst:when>
+        <admst:when test="item[dependency='linear']">
+          <admst:value-to select="dependency" string="linear"/>
+        </admst:when>
+        <admst:when test="item[dependency='noprobe']">
+          <admst:value-to select="dependency" string="noprobe"/>
+        </admst:when>
+        <admst:otherwise>
+          <admst:value-to select="dependency" string="constant"/>
+        </admst:otherwise>
+      </admst:choose>
+    </admst:when>
+    <admst:when test="[datatypename='nilled']"/>
+    <admst:when test="[datatypename='blockvariable']"/>
+    <admst:otherwise>
+      <admst:fatal format="%(datatypename): case not handled\n"/>
+    </admst:otherwise>
+  </admst:choose>
+</admst:template>
+
+<admst:template match="adms.implicit.xml.module">
+  <admst:apply-templates select="(analogfunction/tree)|(analog/code)" match="dependency"/>
+  <admst:variable name="globalmodule" path="."/>
+  <admst:reverse select="analogfunction|analogfunction/variable|node|variable
+                         |instance|instance/terminal|contribution|forloop|whileloop|case|callfunction"/>
+  <admst:value-to select="node[location='ground']/grounded" string="yes"/>
+  <admst:push into="@analogitems" select="assignment|assignment/rhs|contribution|contribution/rhs|block|forloop|whileloop|case|callfunction|conditional|conditional/if"/>
+  <admst:value-to select="@analogitems[#modifys=1 or #modifyn=1 or #modifyc=1]/static" string="yes"/>
+  <admst:value-to select="@analogitems[#modifys!=1 and #modifyn!=1 and #modifyc!=1]/dynamic" string="yes"/>
+
+  <admst:value-to select="(.|blockvariable)/variable[exists(instance[#modifys=1 or #modifyd=1 or #modifyn=1])]/insource" string="yes"/>
+  <admst:value-to select="(.|blockvariable)/variable[exists(instance[#modifys=1 or #modifyn=1 or #modifyc=1])]/static" string="yes"/>
+  <admst:value-to select="(.|blockvariable)/variable[exists(instance[#modifyd=1])]/dynamic" string="yes"/>
+  <admst:value-to select="source[#modifys=1 or #modifyn=1]/static" string="yes"/>
+  <admst:value-to select="source[#modifyd=1]/dynamic" string="yes"/>
+
+</admst:template>
+
+<admst:template match="adms.implicit.xml">
+  <admst:apply-templates select="/module" match="adms.implicit.xml.module"/>
+</admst:template>
+
+<admst:apply-templates select="." match="adms.implicit.xml"/>
+
+<admst:for-each select="/module">
+  <admst:variable name="ops" select="%(expression/function[class='operator'])"/>
+  <admst:message format="====== listing operators in %(.)\n"/>
+  <admst:for-each select="$(ops)">
+    <admst:message format="%(.)\n"/>
+  </admst:for-each>
+</admst:for-each>
+
+</admst>
