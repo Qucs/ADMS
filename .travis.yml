@@ -31,7 +31,7 @@ script:
       autotools)
         ./bootstrap.sh &&
         ./configure --enable-maintainer-mode --prefix=/usr &&
-        make V=1 &&
+        find . && make V=1 &&
         sudo make install
         ;;
       cmake)
