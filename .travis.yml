@@ -12,7 +12,7 @@ env:
 
 before_install:
 
-  - sudo apt-get install automake libtool flex
+  - sudo apt-get install automake libtool flex bison
   - sudo apt-get install libxml2 libxml2-dev
 
   # configure cpan, no waiting for user input
