@@ -73,4 +73,6 @@ EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  $(incfile) $(incfilec) verilogaYacc.y.in admstpath.dtd \
  CMakeLists.txt ../config.h basicLibrary.xml
 
-CLEANFILES=.*.swp *\~ core $(generated_FILES)
+CLEANFILES=.*.swp *\~ core
+
+MAINTAINERCLEANFILES=$(generated_FILES)
