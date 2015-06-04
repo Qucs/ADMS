@@ -29,6 +29,14 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 # Maintainer mode is used to detect/run Perl (XML::LibXml) and make dist tarball
 AM_MAINTAINER_MODE
 
+AC_CHECK_PROG(GIT,git,yes)
+AC_MSG_CHECKING([for git repo])
+AS_IF([test x"$GIT" = "xyes" && test -d $srcdir/.git],
+   [have_git_repo=yes
+    AM_MAINTAINER_MODE([enable])],
+   [have_git_repo=no])
+AC_MSG_RESULT([$have_git_repo])
+
 AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
                  AC_MSG_ERROR(Please install gnu flex from http://www.gnu.org/software/flex/)])
 AX_PROG_BISON([],[AC_MSG_WARN(Program bison not found (found $YACC))
@@ -80,6 +88,7 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([floor memset putenv setenv strdup strstr strtol])
 
 # Libtool initialisation.
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 AC_SUBST([LIBTOOL_DEPS])
 
@@ -106,6 +115,7 @@ AC_MSG_RESULT([])
 AC_MSG_RESULT([ $PACKAGE version $VERSION configured successfully.])
 AC_MSG_RESULT([
 Configure Information:
+  maintainer mode : $USE_MAINTAINER_MODE
   C Compiler : $CC
   DEFS       :   $DEFS
   CFLAGS     :   $CFLAGS

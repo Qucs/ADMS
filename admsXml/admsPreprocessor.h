@@ -61,16 +61,27 @@
 
 #include "adms.h"
 
+#undef win32_interface
+#if defined(WIN32)
+#  if defined(insidePreprocessor)
+#    define win32_interface __declspec(dllexport)
+#  else
+#    define win32_interface __declspec(dllimport)
+#  endif
+#else
+#  define win32_interface extern
+#endif
+
 #define last_char(s)  s+(strlen(s)-1) 
 
 #define INT2ADMS(a) ((p_adms)(long)(a))
 
-void adms_preprocessor_get_define_from_argv(const int argc,const char** argv);
+win32_interface void adms_preprocessor_get_define_from_argv(const int argc,const char** argv);
 
-int adms_preprocessor_getint_yydebug (void);
-void adms_preprocessor_setint_yydebug (const int val);
+win32_interface int adms_preprocessor_getint_yydebug (void);
+win32_interface void adms_preprocessor_setint_yydebug (const int val);
 
-int adms_preprocessor_registration_printf (const char *filename);
+win32_interface int adms_preprocessor_registration_printf (const char *filename);
 
 typedef struct s_preprocessor t_preprocessor;
 typedef t_preprocessor*       p_preprocessor;
@@ -132,12 +143,12 @@ struct s_preprocessor_main {
   int error;
 };
 
-p_preprocessor_main pproot (void);
-void adms_preprocessor_valueto_main (p_preprocessor_main mypreprocessor_main);
+win32_interface p_preprocessor_main pproot (void);
+win32_interface void adms_preprocessor_valueto_main (p_preprocessor_main mypreprocessor_main);
 
-void preprocessorerror (const char *s);
-int preprocessorlex ();
-int preprocessorparse ();
+win32_interface void preprocessorerror (const char *s);
+win32_interface int preprocessorlex ();
+win32_interface int preprocessorparse ();
 
 typedef struct s_continuator t_continuator;
 typedef t_continuator*       p_continuator;
@@ -146,46 +157,46 @@ struct s_continuator {
   int char_position;
 };
 
-int adms_preprocessor_get_char_position (p_preprocessor cr_preprocessor);
-int adms_preprocessor_get_line_position (p_preprocessor cr_preprocessor, int char_pos);
+win32_interface int adms_preprocessor_get_char_position (p_preprocessor cr_preprocessor);
+win32_interface int adms_preprocessor_get_line_position (p_preprocessor cr_preprocessor, int char_pos);
 
-int adms_preprocessor_add_message ( char *message);
+win32_interface int adms_preprocessor_add_message ( char *message);
 
-p_preprocessor_pragma_define adms_preprocessor_define_add (char * name);
-int adms_preprocessor_define_add_default (char * name);
-int adms_preprocessor_define_add_default_with_text (char * name, char * value);
-p_preprocessor_pragma_define adms_preprocessor_undefine_add (char * name);
-p_preprocessor_pragma_define adms_preprocessor_define_add_with_text (char * name, p_slist text);
-p_preprocessor_pragma_define adms_preprocessor_define_add_with_arg (char * name, p_slist arg);
-p_preprocessor_pragma_define adms_preprocessor_define_add_with_arg_and_text (char * name, p_slist arg, p_slist text);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_define_add (char * name);
+win32_interface int adms_preprocessor_define_add_default (char * name);
+win32_interface int adms_preprocessor_define_add_default_with_text (char * name, char * value);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_undefine_add (char * name);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_define_add_with_text (char * name, p_slist text);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_define_add_with_arg (char * name, p_slist arg);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_define_add_with_arg_and_text (char * name, p_slist arg, p_slist text);
 
-p_preprocessor_pragma_define adms_preprocessor_pragma_define_exists (char * name);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_pragma_define_exists (char * name);
 
-int adms_preprocessor_identifier_is_def (char * name);
-int adms_preprocessor_identifier_is_ndef (char * name);
+win32_interface int adms_preprocessor_identifier_is_def (char * name);
+win32_interface int adms_preprocessor_identifier_is_ndef (char * name);
 
-p_preprocessor_pragma_define adms_preprocessor_identifer_set_undef (char * name);
+win32_interface p_preprocessor_pragma_define adms_preprocessor_identifer_set_undef (char * name);
 
-int adms_preprocessor_pragma_define_is_def (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_is_ndef (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_arg (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_noarg (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_nullarg (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_text (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_notext (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_noarg_and_notext (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_noarg_and_text (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_nullarg_and_notext (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_nullarg_and_text (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_arg_and_notext (p_preprocessor_pragma_define pragma);
-int adms_preprocessor_pragma_define_has_arg_and_text (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_is_def (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_is_ndef (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_arg (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_noarg (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_nullarg (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_text (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_notext (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_noarg_and_notext (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_noarg_and_text (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_nullarg_and_notext (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_nullarg_and_text (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_arg_and_notext (p_preprocessor_pragma_define pragma);
+win32_interface int adms_preprocessor_pragma_define_has_arg_and_text (p_preprocessor_pragma_define pragma);
 
-p_preprocessor_text adms_preprocessor_new_text_as_string(char *name);
-p_slist adms_preprocessor_new_text_as_substitutor (p_preprocessor_pragma_define define, p_slist newarg);
+win32_interface p_preprocessor_text adms_preprocessor_new_text_as_string(char *name);
+win32_interface p_slist adms_preprocessor_new_text_as_substitutor (p_preprocessor_pragma_define define, p_slist newarg);
 
-void adms_preprocessor_setfile_input (FILE *ifile);
-FILE *adms_preprocessor_getfile_input (void);
-void adms_preprocessor_setfile_output (FILE *ifile);
-FILE *adms_preprocessor_getfile_output (void);
+win32_interface void adms_preprocessor_setfile_input (FILE *ifile);
+win32_interface FILE *adms_preprocessor_getfile_input (void);
+win32_interface void adms_preprocessor_setfile_output (FILE *ifile);
+win32_interface FILE *adms_preprocessor_getfile_output (void);
 
 #endif /* _preprocessor_main_included */

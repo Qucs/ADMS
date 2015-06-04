@@ -60,11 +60,22 @@
 
 #include "adms.h"
 
-void adms_veriloga_setint_yydebug (const int val);
-void adms_veriloga_setfile_input (FILE *ifile);
+#undef win32_interface
+#if defined(WIN32)
+#  if defined(insideVeriloga)
+#    define win32_interface __declspec(dllexport)
+#  else
+#    define win32_interface __declspec(dllimport)
+#  endif
+#else
+#  define win32_interface extern
+#endif
 
-void verilogaerror (const char *s);
-int verilogalex ();
-int verilogaparse ();
+win32_interface void adms_veriloga_setint_yydebug (const int val);
+win32_interface void adms_veriloga_setfile_input (FILE *ifile);
+
+win32_interface void verilogaerror (const char *s);
+win32_interface int verilogalex ();
+win32_interface int verilogaparse ();
 
 #endif /* _admsveriloga_h */

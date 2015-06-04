@@ -1,143 +1,167 @@
 
-INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} )
-
-# FIXME: not in use, config.h is included directly no conditional
-ADD_DEFINITIONS(-DHAVE_CONFIG_H)
-
+INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ) # for config.h
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ) # for admsPreprocessor.h, amdsVeriloga.h
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ) # for generated source code
 
 # Maintainer mode runs the Perl scrips that generate source code
 if ( USE_MAINTAINER_MODE )
 
-    # Run mkelements.pl
-    #   Read in `adms.xml` and generete portions of adms and admst
-    # Generate outputs:
-    #    adms.h
-    #    adms.c
-    #    admstpathYacc.y
-    #    admstpathYacc.h
-    #    admstpath.dtd
-    MESSAGE(STATUS "Running mkelements.pl code generator")
+  # Run mkelements.pl
+  #   Read in `adms.xml` and generete portions of adms and admst
+  # Generate outputs:
+  #    adms.h
+  #    adms.c
+  #    admstpathYacc.y
+  #    admstpathYacc.h
+  #    admstpath.dtd
+  MESSAGE(STATUS "Running mkelements.pl code generator")
 
-    EXECUTE_PROCESS(COMMAND
-                    perl ${PROJECT_SOURCE_DIR}/admsXml/mkelements.pl ${PROJECT_SOURCE_DIR}
-                    RESULT_VARIABLE element_result )
+  EXECUTE_PROCESS(
+    COMMAND perl ${CMAKE_SOURCE_DIR}/admsXml/mkelements.pl ${CMAKE_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+          RESULT_VARIABLE element_result )
 
-    IF(element_result EQUAL 0)
-      MESSAGE(STATUS "mkelement.pl completed successfully")
-    ELSE(element_result EQUAL 0)
-      MESSAGE(FATAL_ERROR "mkelement.pl failed. Exit code: ${element_result}")
-    ENDIF(element_result EQUAL 0)
-
-
-    # Run mkctext.pl
-    #   Wrap source files as C code
-    # Generate outputs:
-    #    constants.vams.c
-    #    disciplines.vams.c
-    #    adms.implicit.xml.c
-    #    dummy.va.c
-    #    dummy.xml.c
-    SET(CTEXT
-        constants.vams
-        disciplines.vams
-        adms.implicit.xml
-        dummy.va
-        dummy.xml )
-
-    FOREACH( inc ${CTEXT} )
-      MESSAGE(STATUS "Running mkctext.pl code generator on ${inc}")
-
-      EXECUTE_PROCESS( COMMAND
-                       perl ${PROJECT_SOURCE_DIR}/admsXml/mkctext.pl ${PROJECT_SOURCE_DIR}/admsXml/${inc} ${PROJECT_SOURCE_DIR}/admsXml
-                       RESULT_VARIABLE text_result )
-
-      IF(text_result EQUAL 0)
-        MESSAGE(STATUS "mkctext.pl completed successfully")
-      ELSE(text_result EQUAL 0)
-        MESSAGE(FATAL_ERROR "mkctext.pl failed. Exit code: ${text_result}")
-      ENDIF(text_result EQUAL 0)
-    ENDFOREACH()
+  IF(element_result EQUAL 0)
+    MESSAGE(STATUS "mkelement.pl completed successfully")
+  ELSE(element_result EQUAL 0)
+    MESSAGE(FATAL_ERROR "mkelement.pl failed. Exit code: ${element_result}")
+  ENDIF(element_result EQUAL 0)
 
 
-    # Run mkgrammar.pl
-    #   Process verilogaYacc.y.in and generate the parser
-    # Generate output:
-    #    verilogaYacc.y
-    #
-    MESSAGE(STATUS "Running mkgrammar.pl code generator")
+  # Run mkctext.pl
+  #   Wrap source files as C code
+  # Generate outputs:
+  #    constants.vams.c
+  #    disciplines.vams.c
+  #    adms.implicit.xml.c
+  #    dummy.va.c
+  #    dummy.xml.c
+  SET(CTEXT
+    constants.vams
+    disciplines.vams
+    adms.implicit.xml
+    dummy.va
+    dummy.xml )
 
-    EXECUTE_PROCESS(COMMAND perl ${PROJECT_SOURCE_DIR}/admsXml/mkgrammar.pl ${PROJECT_SOURCE_DIR}/admsXml/verilogaYacc.y.in
-                    RESULT_VARIABLE grammar_result )
+  FOREACH( inc ${CTEXT} )
+    MESSAGE(STATUS "Running mkctext.pl code generator on ${inc}")
 
-    IF(grammar_result EQUAL 0)
-      MESSAGE(STATUS "mkgrammar.pl completed successfully")
-    ELSE(grammar_result EQUAL 0)
-      MESSAGE(FATAL_ERROR "mkgrammar.pl failed. Exit code: ${grammar_result}")
-    ENDIF(grammar_result EQUAL 0)
+    EXECUTE_PROCESS(
+      COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/mkctext.pl ${CMAKE_CURRENT_SOURCE_DIR}/${inc}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      RESULT_VARIABLE text_result )
+
+    IF(text_result EQUAL 0)
+      MESSAGE(STATUS "mkctext.pl completed successfully")
+    ELSE(text_result EQUAL 0)
+      MESSAGE(FATAL_ERROR "mkctext.pl failed. Exit code: ${text_result}")
+    ENDIF(text_result EQUAL 0)
+  ENDFOREACH()
+
+
+  # Run mkgrammar.pl
+  #   Process verilogaYacc.y.in and generate the parser
+  # Generate output:
+  #    verilogaYacc.y
+  #
+  MESSAGE(STATUS "Running mkgrammar.pl code generator")
+
+  EXECUTE_PROCESS(
+    COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/mkgrammar.pl ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.y.in
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+          RESULT_VARIABLE grammar_result )
+
+  IF(grammar_result EQUAL 0)
+    MESSAGE(STATUS "mkgrammar.pl completed successfully")
+  ELSE(grammar_result EQUAL 0)
+    MESSAGE(FATAL_ERROR "mkgrammar.pl failed. Exit code: ${grammar_result}")
+  ENDIF(grammar_result EQUAL 0)
 
 ENDIF ( USE_MAINTAINER_MODE )
+
+# Issue with flex:
+#   BISON_TARGET, FLEX_TARGET and ADD_FLEX_BISON_DEPENDENCY
+#   Does not seem to overide the '%option outfile' or the location with -o option.
+# Solution: use custom command and set the working directory.
 
 #
 # -= admsElement =-
 #
-ADD_LIBRARY(admsElement adms.c)
-
-# mkctext.pl -> dummy.va.c ends up on the top dir with in maintainer mode
-include_directories(${CMAKE_BINARY_DIR} )
+ADD_LIBRARY(admsElement ${CMAKE_CURRENT_BINARY_DIR}/adms.c)
+SET_TARGET_PROPERTIES(admsElement PROPERTIES COMPILE_DEFINITIONS insideElement)
 
 #
 # -= admsPreprocessor =-
 #
-BISON_TARGET(preproParse ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorYacc.y ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorYacc.c )
-FLEX_TARGET(preproScan ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorLex.l  ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorLex.c )
-ADD_FLEX_BISON_DEPENDENCY(preproScan preproParse)
+SET(BisonOutput
+  ${CMAKE_CURRENT_BINARY_DIR}/preprocessorYacc.h
+  ${CMAKE_CURRENT_BINARY_DIR}/preprocessorYacc.c )
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${BisonOutput}
+  COMMAND ${BISON_EXECUTABLE}
+  ARGS -by -opreprocessorYacc.c ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorYacc.y
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 
-#MESSAGE(STATUS "Generate ${BISON_preproParse_OUTPUTS} ${FLEX_preoproScan_OUTPUTS} ")
+SET(FlexOutput
+  ${CMAKE_CURRENT_BINARY_DIR}/preprocessorLex.h
+  ${CMAKE_CURRENT_BINARY_DIR}/preprocessorLex.c )
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${FlexOutput}
+  COMMAND ${FLEX_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/preprocessorLex.l
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 
-ADD_LIBRARY(admsPreprocessor preprocessorMain.c
-            ${BISON_preproParse_OUTPUTS} ${FLEX_preproScan_OUTPUTS} )
+
+ADD_LIBRARY(admsPreprocessor
+  preprocessorMain.c
+  ${BisonOutput}
+  ${FlexOutput} )
+
+SET_TARGET_PROPERTIES(admsPreprocessor PROPERTIES COMPILE_DEFINITIONS insidePreprocessor)
 
 #
 # -= admsVeriloga =-
 #
-# NOTE: could not get the generated `verilogaYacc.y` to end up in SOURCE_DIR/admsXml/, it ends up on BINARY_DIR
-# As a workaroud, we check for the existence of the generated file. In USE_MAINTAINER_MODE, CMake generated takes precende
-if(EXISTS "${CMAKE_BINARY_DIR}/verilogaYacc.y")
-  # generated with CMake
-  BISON_TARGET(vaParse ${CMAKE_BINARY_DIR}/verilogaYacc.y ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.c )
-else()
-  # generated with AutoTools (release tarball)
-  BISON_TARGET(vaParse ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.y ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.c )
-endif()
-FLEX_TARGET(vaScan ${CMAKE_CURRENT_SOURCE_DIR}/verilogaLex.l  ${CMAKE_CURRENT_SOURCE_DIR}/verilogaLex.c )
-ADD_FLEX_BISON_DEPENDENCY(vaScan vaParse)
+SET(BisonOutput
+  ${CMAKE_CURRENT_BINARY_DIR}/verilogaYacc.h
+  ${CMAKE_CURRENT_BINARY_DIR}/verilogaYacc.c )
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${BisonOutput}
+  COMMAND ${BISON_EXECUTABLE}
+  ARGS -by -overilogaYacc.c ${CMAKE_CURRENT_BINARY_DIR}/verilogaYacc.y
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 
-#MESSAGE(STATUS "Generate ${BISON_vaParse_OUTPUTS} ${FLEX_vaScan_OUTPUTS} ")
+SET(FlexOutput
+  ${CMAKE_CURRENT_BINARY_DIR}/verilogaLex.h
+  ${CMAKE_CURRENT_BINARY_DIR}/verilogaLex.c )
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${FlexOutput}
+  COMMAND ${FLEX_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/verilogaLex.l
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 
-ADD_LIBRARY(admsVeriloga
-            ${FLEX_vaScan_OUTPUTS} ${BISON_vaParse_OUTPUTS} )
+ADD_LIBRARY(admsVeriloga ${BisonOutput} ${FlexOutput} )
+
+SET_TARGET_PROPERTIES(admsVeriloga PROPERTIES COMPILE_DEFINITIONS insideVeriloga)
 
 #
 # -= admsAdmstpath =-
 #
-ADD_LIBRARY(admsAdmstpath admstpathYacc.c)
-SET_SOURCE_FILES_PROPERTIES(admstpathYacc.c admstpathYacc.h admstpathLex.c PROPERTIES GENERATED TRUE)
-SET_TARGET_PROPERTIES(admsAdmstpath PROPERTIES COMPILE_DEFINITIONS insideadmstpathYacc)
+SET(BisonOutput
+	${CMAKE_CURRENT_BINARY_DIR}/admstpathYacc.c )
 ADD_CUSTOM_COMMAND(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/admstpathYacc.c ${CMAKE_CURRENT_SOURCE_DIR}/admstpathYacc.h
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${BISON_EXECUTABLE}
-    #ARGS -by ${BISON_APIPREFIX}admstpath -oadmstpathYacc.c admstpathYacc.y
-    ARGS -by -oadmstpathYacc.c admstpathYacc.y
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/admstpathYacc.y
-)
+  OUTPUT ${BisonOutput}
+  COMMAND ${BISON_EXECUTABLE}
+  ARGS -by -oadmstpathYacc.c ${CMAKE_CURRENT_BINARY_DIR}/admstpathYacc.y
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+
+# admstpathYacc.h is generated by mkelement.pl
+ADD_LIBRARY(admsAdmstpath ${BisonOutput} ${CMAKE_CURRENT_BINARY_DIR}/admstpathYacc.h )
+SET_TARGET_PROPERTIES(admsAdmstpath PROPERTIES COMPILE_DEFINITIONS insideadmstpathYacc)
 
 #
 # -= admsXml =-
 #
 ADD_EXECUTABLE(admsXml admsXml.c)
-TARGET_LINK_LIBRARIES(admsXml admsElement admsVeriloga admsPreprocessor admsAdmstpath -lm)
-
+TARGET_LINK_LIBRARIES(admsXml admsElement admsVeriloga admsAdmstpath admsPreprocessor -lm)
 
 #
 # -= admsCheck =-
@@ -149,7 +173,5 @@ TARGET_LINK_LIBRARIES(admsCheck admsElement)
 # Handle installation
 #
 INSTALL(TARGETS admsXml DESTINATION bin)
-INSTALL(TARGETS admsCheck DESTINATION bin)
 
 INSTALL(FILES admsXml.1 DESTINATION share/man/man1)
-INSTALL(FILES admsCheck.1 DESTINATION share/man/man1)

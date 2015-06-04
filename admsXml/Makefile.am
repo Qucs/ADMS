@@ -12,6 +12,8 @@ SUFFIXES=.vams .vams.c .va .va.c .xml .xml.c .y.in
 
 # Perl XML::LibXml module are only required for maintainer
 # Parser created by maintainer
+# BUG: these rules are also required when building from git.
+# workaround: default to maintainer mode when building from git.
 if MAINTAINER_MODE
 
 $(incfilec):%.c:% ${srcdir}/mkctext.pl
@@ -27,37 +29,51 @@ endif
 
 dist_man_MANS = admsXml.1 admsCheck.1
 
-noinst_LIBRARIES=libadmsElement.a libadmsPreprocessor.a libadmsVeriloga.a libadmsAdmstpath.a
+lib_LTLIBRARIES=libadmsElement.la libadmsPreprocessor.la libadmsVeriloga.la libadmsAdmstpath.la
 
-libadmsElement_a_SOURCES=adms.c
+libadmsElement_la_SOURCES=adms.c
+libadmsElement_la_CPPFLAGS=-DinsideElement
+libadmsElement_la_LDFLAGS=-no-undefined
 
-preprocessorLex.l: $(incfilec) preprocessorYacc.c preprocessorYacc.h
+preprocessorLex.c: preprocessorYacc.c
 preprocessorYacc.h: preprocessorYacc.c
-libadmsPreprocessor_a_SOURCES=preprocessorLex.l preprocessorMain.c preprocessorYacc.h preprocessorYacc.y
+libadmsPreprocessor_la_SOURCES=preprocessorYacc.y preprocessorLex.l preprocessorMain.c preprocessorYacc.h 
+libadmsPreprocessor_la_CPPFLAGS=-DinsidePreprocessor
+libadmsPreprocessor_la_LDFLAGS=-no-undefined
+libadmsPreprocessor_la_LIBADD=libadmsElement.la
 
-verilogLex.l: $(incfilec) verilogaYacc.c verilogYacc.h
 verilogYacc.h: verilogYacc.c
-libadmsVeriloga_a_SOURCES=verilogaYacc.y verilogaLex.l verilogaYacc.h
+libadmsVeriloga_la_SOURCES=verilogaYacc.y verilogaLex.l verilogaYacc.h
+libadmsVeriloga_la_CPPFLAGS=-DinsideVeriloga
+libadmsVeriloga_la_LDFLAGS=-no-undefined
+libadmsVeriloga_la_LIBADD=libadmsElement.la
 
 admstpathYacc.y: admstpathYacc.h
-libadmsAdmstpath_a_SOURCES= admstpathYacc.y admstpathYacc.h
+libadmsAdmstpath_la_SOURCES= admstpathYacc.y admstpathYacc.h
+libadmsAdmstpath_la_CPPFLAGS=-DinsideadmstpathYacc
+libadmsAdmstpath_la_LDFLAGS=-no-undefined
+libadmsAdmstpath_la_LIBADD=libadmsElement.la
 
 #depends on adms.implicit.xml
 bin_PROGRAMS=admsXml admsCheck
 
 admsXml_SOURCES=admsXml.c
-admsXml_LDADD=-lm libadmsElement.a libadmsVeriloga.a libadmsPreprocessor.a libadmsAdmstpath.a
+admsXml_LDADD=-lm libadmsElement.la libadmsVeriloga.la libadmsPreprocessor.la libadmsAdmstpath.la
 
 admsXml.c: adms.implicit.xml.c
 
 # Rules to create the admsCheck test program
 admsCheck.c=$(incfilec)
 admsCheck_SOURCES=admsCheck.c
-admsCheck_LDADD=libadmsElement.a
+admsCheck_LDADD=libadmsElement.la
+
+BUILT_SOURCES=verilogaYacc.c preprocessorYacc.c adms.h adms.c $(incfilec)
 
 EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  preprocessorYacc.h admsPreprocessor.h verilogaYacc.h admsVeriloga.h \
  $(incfile) $(incfilec) verilogaYacc.y.in admstpath.dtd \
  CMakeLists.txt ../config.h basicLibrary.xml
 
-CLEANFILES=.*.swp *\~ core $(generated_FILES)
+CLEANFILES=.*.swp *\~ core
+
+MAINTAINERCLEANFILES=$(generated_FILES)
