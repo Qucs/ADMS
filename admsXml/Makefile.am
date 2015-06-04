@@ -36,7 +36,7 @@ libadmsElement_la_CPPFLAGS=-DinsideElement
 libadmsElement_la_LDFLAGS=-no-undefined
 
 preprocessorYacc.h: preprocessorYacc.c
-libadmsPreprocessor_la_SOURCES=preprocessorLex.l preprocessorMain.c preprocessorYacc.h preprocessorYacc.y
+libadmsPreprocessor_la_SOURCES=preprocessorYacc.y preprocessorLex.l preprocessorMain.c preprocessorYacc.h 
 libadmsPreprocessor_la_CPPFLAGS=-DinsidePreprocessor
 libadmsPreprocessor_la_LDFLAGS=-no-undefined
 libadmsPreprocessor_la_LIBADD=libadmsElement.la
