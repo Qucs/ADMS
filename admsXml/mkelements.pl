@@ -116,7 +116,7 @@ $adms_h.=q@
 #    define HAVE_SYS_STAT_H 1
 #    include <io.h>
 #  else
-#    include "config.h"
+#    include <config.h>
 #    define ADMS_PATH_SEPARATOR "/"
 #    include <unistd.h>
 #    define ADMS_F_OK F_OK
