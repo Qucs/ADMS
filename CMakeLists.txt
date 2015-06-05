@@ -7,12 +7,19 @@ endif()
 PROJECT(ADMS C)
 cmake_minimum_required(VERSION 2.8)
 
-
-option ( USE_MAINTAINER_MODE "Enable generation of code (parser source) from Perl scripts." OFF )
-
 SET(PACKAGE_NAME "adms")
 SET(PACKAGE_VERSION "2.3.5")
 SET(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
+
+OPTION ( USE_MAINTAINER_MODE "Enable generation of code (parser source) from Perl scripts." OFF )
+
+# Default to static libs ( shared needs work, BUG with MinGW). 
+OPTION ( BUILD_STATIC_LIBS "Build static libraries." ON )
+IF ( MINGW )
+  IF ( BUILD_STATIC_LIBS )
+    ADD_DEFINITIONS(-Dstaticlink)
+  ENDIF()
+ENDIF()
 
 INCLUDE( CheckIncludeFile )
 check_include_file( sys/stat.h HAVE_SYS_STAT_H )
