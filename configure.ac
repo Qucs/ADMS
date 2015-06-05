@@ -105,6 +105,15 @@ if test $USE_MAINTAINER_MODE = yes; then
       AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
 fi
 
+# Define preprocessor flag for static build (MinGW).
+AS_IF([test "x$enable_shared" = "xno"], [
+  case $host in 
+    *mingw*) 
+      AC_DEFINE([staticlink], [1], [Define 'staticlink' for MinGW])
+      ;; 
+  esac 
+])
+
 AC_CONFIG_FILES([Makefile
                  admsXml/Makefile
                  scripts/Makefile])
@@ -115,7 +124,10 @@ AC_MSG_RESULT([])
 AC_MSG_RESULT([ $PACKAGE version $VERSION configured successfully.])
 AC_MSG_RESULT([
 Configure Information:
-  maintainer mode : $USE_MAINTAINER_MODE
+  Host : $host
+
+  Maintainer mode : $USE_MAINTAINER_MODE
+
   C Compiler : $CC
   DEFS       :   $DEFS
   CFLAGS     :   $CFLAGS
@@ -127,5 +139,7 @@ Configure Information:
   Perl       : $PERL
   Flex       : $FLEX
   Bison      : $BISON
+
+  Build shared library : $enable_shared
 ])
 

@@ -71,6 +71,12 @@
 #  define win32_interface extern
 #endif
 
+// preprocessor flag for static link (MinGW)
+#ifdef staticlink
+#  undef win32_interface
+#  define win32_interface extern
+#endif
+
 win32_interface void adms_veriloga_setint_yydebug (const int val);
 win32_interface void adms_veriloga_setfile_input (FILE *ifile);
 
