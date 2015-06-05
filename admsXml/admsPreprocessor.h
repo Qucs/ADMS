@@ -72,6 +72,13 @@
 #  define win32_interface extern
 #endif
 
+// preprocessor flag for static link (MinGW)
+#ifdef staticlink
+#  undef win32_interface
+#  define win32_interface extern
+#endif
+
+
 #define last_char(s)  s+(strlen(s)-1) 
 
 #define INT2ADMS(a) ((p_adms)(long)(a))
