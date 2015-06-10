@@ -597,13 +597,15 @@ static void parseva (const int argc,const char** argv,char* myverilogamsfile)
     adms_preprocessor_define_add_default("insideADMS");
     adms_message_verbose(("create temporary file %s\n",mytmpverilogamsfile))
     (int) preprocessorparse();
-    /* save preprocessed Verilog-AMS file */
-    fputs("# 1 \"",ofh);
-    fputs(pproot()->cr_scanner->filename,ofh);
-    fputs("\"\n",ofh);
-    adms_slist_inreverse(&pproot()->Text);
-    for(myli=pproot()->Text;myli;myli=myli->next)
-      fputs(((p_preprocessor_text)(myli->data))->_str,ofh);
+    if(!pproot()->error) {
+      /* save preprocessed Verilog-AMS file */
+      fputs("# 1 \"",ofh);
+      fputs(pproot()->cr_scanner->filename,ofh);
+      fputs("\"\n",ofh);
+      adms_slist_inreverse(&pproot()->Text);
+      for(myli=pproot()->Text;myli;myli=myli->next)
+        fputs(((p_preprocessor_text)(myli->data))->_str,ofh);
+    }
     fclose(ofh);
     /* free preprocessor */
     free(mypreprocessor->filename);
