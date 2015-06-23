@@ -11,6 +11,21 @@ config.*
 stamp-h1
 autom4te.cache/
 auxconf/compile
+auxconf/ar-lib
+auxconf/compile
+auxconf/config.guess
+auxconf/config.sub
+auxconf/depcomp
+auxconf/install-sh
+auxconf/ltmain.sh
+auxconf/missing
+auxconf/ylwrap
+
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
 
 admsXml/.deps/
 admsXml/.libs/
