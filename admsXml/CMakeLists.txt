@@ -77,10 +77,12 @@ if ( USE_MAINTAINER_MODE )
 
 ENDIF ( USE_MAINTAINER_MODE )
 
+
 #
 # -= admsElement =-
 #
 ADD_LIBRARY(admsElement adms.c)
+SET_TARGET_PROPERTIES(admsElement PROPERTIES COMPILE_DEFINITIONS insideElement)
 
 # mkctext.pl -> dummy.va.c ends up on the top dir with in maintainer mode
 include_directories(${CMAKE_BINARY_DIR} )
@@ -96,6 +98,8 @@ ADD_FLEX_BISON_DEPENDENCY(preproScan preproParse)
 
 ADD_LIBRARY(admsPreprocessor preprocessorMain.c
             ${BISON_preproParse_OUTPUTS} ${FLEX_preproScan_OUTPUTS} )
+
+SET_TARGET_PROPERTIES(admsPreprocessor PROPERTIES COMPILE_DEFINITIONS insidePreprocessor)
 
 #
 # -= admsVeriloga =-
@@ -116,6 +120,8 @@ ADD_FLEX_BISON_DEPENDENCY(vaScan vaParse)
 
 ADD_LIBRARY(admsVeriloga
             ${FLEX_vaScan_OUTPUTS} ${BISON_vaParse_OUTPUTS} )
+
+SET_TARGET_PROPERTIES(admsVeriloga PROPERTIES COMPILE_DEFINITIONS insideVeriloga)
 
 #
 # -= admsAdmstpath =-
@@ -149,7 +155,5 @@ TARGET_LINK_LIBRARIES(admsCheck admsElement)
 # Handle installation
 #
 INSTALL(TARGETS admsXml DESTINATION bin)
-INSTALL(TARGETS admsCheck DESTINATION bin)
 
 INSTALL(FILES admsXml.1 DESTINATION share/man/man1)
-INSTALL(FILES admsCheck.1 DESTINATION share/man/man1)

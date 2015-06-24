@@ -298,6 +298,16 @@ typedef enum {
   admse__
 } admse;
 @;
+$adms_h.="#undef win32_interface\n";
+$adms_h.="#if defined(WIN32)\n";
+$adms_h.="#  if defined(insideElement)\n";
+$adms_h.="#    define win32_interface __declspec(dllexport)\n";
+$adms_h.="#  else\n";
+$adms_h.="#    define win32_interface __declspec(dllimport)\n";
+$adms_h.="#  endif\n";
+$adms_h.="#else\n";
+$adms_h.="#  define win32_interface extern\n";
+$adms_h.="#endif\n";
 $adms_h.="\n";
 foreach(@$EA)
 {
@@ -311,14 +321,14 @@ foreach(@$EA)
 $adms_h.="\n/*miscH*/\n";
 $adms_h.="typedef struct s_slist t_slist;\n";
 $adms_h.="typedef t_slist* p_slist;\n";
-$adms_h.="FILE *stdadmstdbgimpl;\n";
-$adms_h.="FILE *stdadmstdbgimpl;\n";
+$adms_h.="win32_interface FILE *stdadmstdbgimpl;\n";
+$adms_h.="win32_interface FILE *stdadmstdbgimpl;\n";
 $adms_h.="#define stdadmstdbg (stdadmstdbgimpl?stdadmstdbgimpl:stderr)\n";
-$adms_h.="int admsmain(const char*xcode,const char*xflag,const char*vacode);\n";
-$adms_h.="int adms_global_nbadmstnew(void);\n";
-$adms_h.="int adms_global_nbadmstdestroy(void);\n";
-$adms_h.="void adms_global_increment_nbadmstnew(void);\n";
-$adms_h.="void adms_global_increment_nbadmstdestroy(void);\n";
+$adms_h.="win32_interface int admsmain(const char*xcode,const char*xflag,const char*vacode);\n";
+$adms_h.="win32_interface int adms_global_nbadmstnew(void);\n";
+$adms_h.="win32_interface int adms_global_nbadmstdestroy(void);\n";
+$adms_h.="win32_interface void adms_global_increment_nbadmstnew(void);\n";
+$adms_h.="win32_interface void adms_global_increment_nbadmstdestroy(void);\n";
 $adms_h.="/*-- admst/new prototypes --*/\n";
 foreach (qw[bd be bi br bs ns ks pa pn pc pd la ln pp])
 {
@@ -338,14 +348,14 @@ my$cast=$_ eq"bd"?"const admse":
         "const p_adms";
 my$inputs0=$_ eq"ks"?"$cast item":
          "p_admst myprevious,p_admst mypreviouspath,$cast item";
-$adms_h.="p_admst adms_admst_new$_ ($inputs0);\n";
+$adms_h.="win32_interface p_admst adms_admst_new$_ ($inputs0);\n";
 }
 $adms_h.="\n/*-- Miscellaneous routines --*/\n";
 $adms_h.=q@
-const double adms_dzero;
-double adms_NAN;
-p_admst aread (p_admst myadmst);
-void deref(p_admst mystack);
+win32_interface const double adms_dzero;
+win32_interface double adms_NAN;
+win32_interface p_admst aread (p_admst myadmst);
+win32_interface void deref(p_admst mystack);
 union admsu
 {
   int i;
@@ -353,31 +363,31 @@ union admsu
   char* s;
   p_adms p;
 };
-const int minusone;
+win32_interface const int minusone;
 
-int adms_strtol (p_ktransform mytransform,const char* mynumber);
-double adms_strtod (p_ktransform mytransform,const char* myreal);
-void bp(void);
-char*adms_integertostring(int value);
-char*adms_doubletostring(double value);
-int adms_setenv(const char* myname,const char* myvalue);
-int adms_file_isregular(const char* myfilename);
-int adms_file_isdirectory(const char* myfilename);
-p_slist adms_slist_new (p_adms d);
-p_slist adms_slist_copy (p_slist l);
-void adms_slist_concat (p_slist* l1,p_slist l2);
-p_slist adms_slist_find (p_slist l,p_kadms data);
-void adms_slist_free (p_slist l);
-int adms_slist_index (p_slist l, p_kadms data);
-p_slist adms_slist_last (p_slist l);
-unsigned int adms_slist_length (p_slist l);
-p_slist adms_slist_nth (p_slist l,unsigned int  n);
-p_adms adms_slist_nth_data (p_slist l,unsigned int n);
-void adms_slist_print(const char* message,p_slist l);
-p_adms adms_slist_pull(p_slist* l);
-void adms_slist_push(p_slist* l,p_adms data);
-p_slist adms_slist_reverse (p_slist l);
-void adms_slist_inreverse (p_slist* l);
+win32_interface int adms_strtol (p_ktransform mytransform,const char* mynumber);
+win32_interface double adms_strtod (p_ktransform mytransform,const char* myreal);
+win32_interface void bp(void);
+win32_interface char*adms_integertostring(int value);
+win32_interface char*adms_doubletostring(double value);
+win32_interface int adms_setenv(const char* myname,const char* myvalue);
+win32_interface int adms_file_isregular(const char* myfilename);
+win32_interface int adms_file_isdirectory(const char* myfilename);
+win32_interface p_slist adms_slist_new (p_adms d);
+win32_interface p_slist adms_slist_copy (p_slist l);
+win32_interface void adms_slist_concat (p_slist* l1,p_slist l2);
+win32_interface p_slist adms_slist_find (p_slist l,p_kadms data);
+win32_interface void adms_slist_free (p_slist l);
+win32_interface int adms_slist_index (p_slist l, p_kadms data);
+win32_interface p_slist adms_slist_last (p_slist l);
+win32_interface unsigned int adms_slist_length (p_slist l);
+win32_interface p_slist adms_slist_nth (p_slist l,unsigned int  n);
+win32_interface p_adms adms_slist_nth_data (p_slist l,unsigned int n);
+win32_interface void adms_slist_print(const char* message,p_slist l);
+win32_interface p_adms adms_slist_pull(p_slist* l);
+win32_interface void adms_slist_push(p_slist* l,p_adms data);
+win32_interface p_slist adms_slist_reverse (p_slist l);
+win32_interface void adms_slist_inreverse (p_slist* l);
 struct s_slist
 {
   p_adms data;
@@ -386,8 +396,8 @@ struct s_slist
 @;
 $adms_h.=q[
 
-p_admsmain root(void);
-void rootnew(p_admsmain myglobaladmsmain);
+win32_interface p_admsmain root(void);
+win32_interface void rootnew(p_admsmain myglobaladmsmain);
 
 typedef p_admst (t_new) (p_ktransform mytransform,p_admst dot,p_slist arguments[],const int size);
 typedef p_admst (*p_new) (p_ktransform mytransform,p_admst dot,p_slist arguments[],const int size);
@@ -402,14 +412,14 @@ typedef void (t_message) (const char*format, ...);
 typedef void (*p_message) (const char*format, ...);
 #define _t_message(function)  void (function) (const char*format, ...)
 
-void adms_toupper(char*m);
-void adms_tolower(char*m);
-char*adms_kclone(const char* m);
-char*adms_knclone(const char* m,const int l);
-char*adms_m2nclone(const char* m,const char* n);
-void adms_strconcat(char **s1,char *s2);
-void adms_k2strconcat(char **s1,const char* s2);
-FILE *adms_file_open_read (const char* fileName);
+win32_interface void adms_toupper(char*m);
+win32_interface void adms_tolower(char*m);
+win32_interface char*adms_kclone(const char* m);
+win32_interface char*adms_knclone(const char* m,const int l);
+win32_interface char*adms_m2nclone(const char* m,const char* n);
+win32_interface void adms_strconcat(char **s1,char *s2);
+win32_interface void adms_k2strconcat(char **s1,const char* s2);
+win32_interface FILE *adms_file_open_read (const char* fileName);
 ];
 my@message=(
   ["info","stdout",0],
@@ -429,8 +439,8 @@ my@message=(
 foreach my$mess(@message)
 {
   my$name=$mess->[0];
-  $adms_h.="t_message adms_message_${name}_impl;\n";
-  $adms_h.="t_message adms_message_${name}_continue_impl;\n";
+  $adms_h.="win32_interface t_message adms_message_${name}_impl;\n";
+  $adms_h.="win32_interface t_message adms_message_${name}_continue_impl;\n";
   $adms_h.="#define adms_message_$name(VAARGS)\\\n";
   $adms_h.="{\\\n";
   $adms_h.="  if((root())\\\n";
@@ -445,7 +455,7 @@ foreach my$mess(@message)
   $adms_h.="}\n";
 }
 $adms_h.="\n";
-$adms_h.="char* aprintf (p_ktransform mytransform,p_kadmst myadmst);\n";
+$adms_h.="win32_interface char* aprintf (p_ktransform mytransform,p_kadmst myadmst);\n";
 sub vla {my$e=shift; return !(($e eq "return")||($e eq "adms")||($e eq "yaccval")||($e eq "admst")||($e eq "transform")
 ||($e eq "itransform")||($e eq "admstvariable")||($e eq "pparse")||($e eq "ptraverse")||($e eq "text")||($e eq "path"));}
 foreach(@$EA)
@@ -483,23 +493,23 @@ foreach(@$EA)
   }
   $adms_h.="};\n";
   #uid
-  $adms_h.="char*adms_${ename}_uid (p_$ename my$ename);\n";
+  $adms_h.="win32_interface char*adms_${ename}_uid (p_$ename my$ename);\n";
   if($ename ne "adms")
   {
-    $adms_h.="p_$ename adms_${ename}_new (".&hdece($_).");\n";
-    $adms_h.="void adms_${ename}_free(p_$ename my$ename);\n";
+    $adms_h.="win32_interface p_$ename adms_${ename}_new (".&hdece($_).");\n";
+    $adms_h.="win32_interface void adms_${ename}_free(p_$ename my$ename);\n";
   }
   foreach(&attr($element))
   {
     #valueto
     my$xname=&xname($_);
     my$xdatatypename=&xdatatypename($_);
-    $adms_h.="void adms_${ename}_valueto_$xname (p_$ename my$ename,".ccontainer($_)." _${xname});\n";
+    $adms_h.="win32_interface void adms_${ename}_valueto_$xname (p_$ename my$ename,".ccontainer($_)." _${xname});\n";
     next if xsize($_) eq "scalar";
     #prepend
     if(($ename eq "module")&&($xname =~ "branch|node|probe|source"))
     {
-      $adms_h.="".ctype($_)." adms_${ename}_list_${xname}_prepend_by_id_once_or_ignore (p_$ename mymy${ename},".&hdec($_).");\n";
+      $adms_h.="win32_interface ".ctype($_)." adms_${ename}_list_${xname}_prepend_by_id_once_or_ignore (p_$ename mymy${ename},".&hdec($_).");\n";
     }
     if(
       (($ename =~ "admsmain")&&($xname =~ "module|nature"))
@@ -507,7 +517,7 @@ foreach(@$EA)
       (($ename =~ "module")&&($xname =~ "branchalias|instance|node|nodealias|range"))
     )
     {
-      $adms_h.="".ctype($_)." adms_${ename}_list_${xname}_prepend_by_id_once_or_abort (p_$ename mymy${ename},".&hdec($_).");\n";
+      $adms_h.="win32_interface ".ctype($_)." adms_${ename}_list_${xname}_prepend_by_id_once_or_abort (p_$ename mymy${ename},".&hdec($_).");\n";
     }
     if(
       (($ename =~ "admsmain")&&($xname =~ "discipline"))
@@ -521,7 +531,7 @@ foreach(@$EA)
       (($ename =~ "variable")&&($xname =~ "alias"))
     )
     {
-      $adms_h.="void adms_${ename}_list_${xname}_prepend_once_or_abort (p_$ename mymy${ename},".ctype($_)." my${xname});\n";
+      $adms_h.="win32_interface void adms_${ename}_list_${xname}_prepend_once_or_abort (p_$ename mymy${ename},".ctype($_)." my${xname});\n";
     }
     next if $xdatatypename eq "adms";
     my@cmp;
@@ -563,19 +573,19 @@ foreach(@$EA)
       (($ename =~ "module")&&($xname =~ "variable"))
     )
     {
-      $adms_h.="".ctype($_)." adms_${ename}_list_${xname}_lookup_by_id (p_$ename mymy$ename,".&hdec($_).");\n";
+      $adms_h.="win32_interface ".ctype($_)." adms_${ename}_list_${xname}_lookup_by_id (p_$ename mymy$ename,".&hdec($_).");\n";
     }
   }
 }
 $adms_h.="
-admse ns_strtoe (const char* tk);
-char* ns_etostr (admse e);
-p_new adms_admsxml_new (p_ktransform mytransform,const char* ename);
-p_cmp adms_admsxml_cmp (p_kadmst myadmst);
+win32_interface admse ns_strtoe (const char* tk);
+win32_interface char* ns_etostr (admse e);
+win32_interface p_new adms_admsxml_new (p_ktransform mytransform,const char* ename);
+win32_interface p_cmp adms_admsxml_cmp (p_kadmst myadmst);
 #endif /* adms_h */\n";
 
-open FILE,">$top_srcdir/admsXml/adms.h"; print FILE $adms_h; close FILE;
-print "$top_srcdir/admsXml/adms.h: created\n";
+open FILE,">adms.h"; print FILE $adms_h; close FILE;
+print "adms.h: created\n";
 
 sub pnew
 {
@@ -1820,8 +1830,8 @@ $adms_c.="  fflush($ofh);\n";
 $adms_c.="}\n";
 }
 
-open FILE,">$top_srcdir/admsXml/adms.c"; print FILE $adms_c; close FILE;
-print "$top_srcdir/admsXml/adms.c: created\n";
+open FILE,">adms.c"; print FILE $adms_c; close FILE;
+print "adms.c: created\n";
 
 #apath language
 
@@ -1873,7 +1883,7 @@ sub LLNN
   my($type,$rhs)=(shift,shift);
   return "p_admst d=adms_admst_new$type(dot,dot,$rhs);".&ALLLASTPOS("d");
 }
-open admstpath_dtd,">$top_srcdir/admsXml/admstpath.dtd";
+open admstpath_dtd,">admstpath.dtd";
 my$dtd=q[
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Spec interne d'un chemin 'admstpath'. Validation: xmllint dbgp.xml -noout -postvalid -noblanks -->
@@ -1892,38 +1902,54 @@ Fichier dbgp.xml
 
 print admstpath_dtd $dtd;
 close admstpath_dtd;
-print "$top_srcdir/admsXml/admstpath.dtd: created\n";
+print "admstpath.dtd: created\n";
 
-open admstpathYacc_h,">$top_srcdir/admsXml/admstpathYacc.h";
+open admstpathYacc_h,">admstpathYacc.h";
 print admstpathYacc_h "$BUILDER
 #include \"adms.h\"
 
-p_slist globalfileoutputlist;
-int break_found;
+#undef win32_interface
+#if defined(WIN32)
+#  if defined(insideadmstpathYacc)
+#    define win32_interface __declspec(dllexport)
+#  else
+#    define win32_interface __declspec(dllimport)
+#  endif
+#else
+#  define win32_interface extern
+#endif
 
-FILE *OUT(void);
-int is_admst (const char* name);
-int apath_main (int argc,char **argv);
-void dbxx (p_transform mytransform);
-void postxx (p_transform mytransform);
-void sanityxx (p_transform mytransform);
-p_transform lookfortemplates(p_transform mytransform,const char*match);
-p_path pparse (p_transform mytransform,const char* aname,const char* avalue);
-p_text tparse (p_ktransform mytransform,const char* aname,const char* avalue);
-p_admst adms_pull_admst (p_transform mytransform);
-p_admstvariable lookup_dollar (const char* myid);
-void tprintf (p_kadmst myadmst, p_ktext mytext);
-char* tsprintf (p_kadmst myadmst, p_ktext mytext);
-void free_ptraverse (p_ptraverse p);
-p_ptraverse bar (p_admst dot,p_path mypath0);
-void Xassert (p_transform mytransform,p_admst dot,p_admst dotdot);
-void xtraverse (p_slist mytransforms,p_admst dot,p_admst dotdot);
+#ifdef staticlink
+#  undef win32_interface
+#  define win32_interface extern
+#endif
+
+win32_interface p_slist globalfileoutputlist;
+win32_interface int break_found;
+
+win32_interface FILE *OUT(void);
+win32_interface int is_admst (const char* name);
+win32_interface int apath_main (int argc,char **argv);
+win32_interface void dbxx (p_transform mytransform);
+win32_interface void postxx (p_transform mytransform);
+win32_interface void sanityxx (p_transform mytransform);
+win32_interface p_transform lookfortemplates(p_transform mytransform,const char*match);
+win32_interface p_path pparse (p_transform mytransform,const char* aname,const char* avalue);
+win32_interface p_text tparse (p_ktransform mytransform,const char* aname,const char* avalue);
+win32_interface p_admst adms_pull_admst (p_transform mytransform);
+win32_interface p_admstvariable lookup_dollar (const char* myid);
+win32_interface void tprintf (p_kadmst myadmst, p_ktext mytext);
+win32_interface char* tsprintf (p_kadmst myadmst, p_ktext mytext);
+win32_interface void free_ptraverse (p_ptraverse p);
+win32_interface p_ptraverse bar (p_admst dot,p_path mypath0);
+win32_interface void Xassert (p_transform mytransform,p_admst dot,p_admst dotdot);
+win32_interface void xtraverse (p_slist mytransforms,p_admst dot,p_admst dotdot);
 ";
 close admstpathYacc_h;
-print "$top_srcdir/admsXml/admstpathYacc.h: created\n";
+print "admstpathYacc.h: created\n";
 
 
-open admstpathYacc_y,">$top_srcdir/admsXml/admstpathYacc.y";
+open admstpathYacc_y,">admstpathYacc.y";
 print admstpathYacc_y "$BUILDER
 %name-prefix \"admstpath\"
 %lex-param {p_pparse mypparse}
@@ -4851,5 +4877,5 @@ int apath_main (int argc,char **argv)
 }
 ";
 close admstpathYacc_y;
-print "$top_srcdir/admsXml/admstpathYacc.y: created\n";
+print "admstpathYacc.y: created\n";
 

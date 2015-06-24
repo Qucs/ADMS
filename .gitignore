@@ -31,6 +31,13 @@ admsXml/verilogaYacc.[chy]
 
 admsXml/*.a
 
+images/adms-alias.png
+images/adms-element.png
+images/adms-enumeration.png
+images/adms-list.png
+images/adms-scalar.png
+images/adms-uid.png
+
 *.tar.gz
 
 .DS_Store
