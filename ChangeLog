@@ -1,5 +1,12 @@
 adms-2.3.x:
 
+ * Autotools, add back support for static and shared libraries build.
+   * Build shared libraries by default. Tested on Linux, Mac OSX, and MSYS2. 
+     See the configure --disable-shared flag to change that.
+   * CMake contiues to builds static libraries only.
+
+ * Fix out-of-tree build for Autotools and CMake.
+
  * Check scaling factors againd LRM 2.0.4
    * Add missing K scaling (uppercase kilo)
    * standard scale_factor T|G|M|K|k|m|u|n|p|f|a
