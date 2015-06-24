@@ -49,7 +49,7 @@ script:
   # run against downstream projects.
   - cd $topDir
   - cd testcases
-  - ./testQucs.sh    `which admsXml`
-  - ./testNgspice.sh `which admsXml`
+  - bash testQucs.sh    `which admsXml`
+  - bash testNgspice.sh `which admsXml`
 
 
