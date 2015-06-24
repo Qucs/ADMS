@@ -27,6 +27,7 @@ script:
   # workaround clang not system wide, fail on sudo make install
   - export CC=`which $CC`
 
+  - topDir=`pwd`
   - case $BUILD_SYSTEM in
       autotools)
         ./bootstrap.sh &&
@@ -44,4 +45,11 @@ script:
 
   # test
   - admsXml -h
+
+  # run against downstream projects.
+  - cd $topDir
+  - cd testcases
+  - sh testQucs.sh    `which admsXml`
+  - sh testNgspice.sh `which admsXml`
+
 
