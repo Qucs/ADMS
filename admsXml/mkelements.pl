@@ -309,6 +309,12 @@ $adms_h.="#else\n";
 $adms_h.="#  define win32_interface extern\n";
 $adms_h.="#endif\n";
 $adms_h.="\n";
+$adms_h.="// preprocessor flag for static link (MinGW)\n";
+$adms_h.="#ifdef staticlink\n";
+$adms_h.="#  undef win32_interface\n";
+$adms_h.="#  define win32_interface extern\n";
+$adms_h.="#endif\n";
+$adms_h.="\n";
 foreach(@$EA)
 {
   my$ename=xname($_);
@@ -1919,6 +1925,7 @@ print admstpathYacc_h "$BUILDER
 #  define win32_interface extern
 #endif
 
+// preprocessor flag for static link (MinGW)
 #ifdef staticlink
 #  undef win32_interface
 #  define win32_interface extern
