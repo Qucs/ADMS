@@ -1,0 +1,32 @@
+
+# Operating system (build VM template)
+os: MinGW
+
+# scripts that run after cloning repository
+install:
+  # Install Strawberry Perl from Chocolatey
+  # It comes with XML::LibXML installed
+  - cinst -y strawberryperl
+  - path
+  - path C:\Strawberry\perl\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\c\bin;%PATH%
+  - perl -V
+
+  # CMake refuses to generate MinGW Makefiles if Git's sh.exe is in the PATH
+  - del "%ProgramFiles(x86)%\Git\bin\sh.exe"
+
+  # Add MinGW to path
+  - path  C:\MinGW\bin;%PATH%
+  - gcc --version
+  - flex --version
+  - bison --version
+
+build_script:
+  - mkdir cmake_build
+  - cd cmake_build
+  - cmake .. -DUSE_MAINTAINER_MODE=ON -DCMAKE_VERBOSE_MAKEFILE=ON -G "MinGW Makefiles"
+  - mingw32-make install
+  - path C:\Program Files (x86)\ADMS\bin;%PATH%
+  
+  # check if it works
+  - admsXml.exe -h
+
