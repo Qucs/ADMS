@@ -1,6 +1,6 @@
 
 [![Build Status](https://travis-ci.org/Qucs/ADMS.svg?branch=master)](https://travis-ci.org/Qucs/ADMS)
-[![Build status](https://ci.appveyor.com/api/projects/status/b2kc6mbyamgf7t2o/branch/master?svg=true)](https://ci.appveyor.com/project/guitorri/adms/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/r6k7oh37fuwujt32/branch/master?svg=true)](https://ci.appveyor.com/project/qucs/adms/branch/master)
 
 
 # ADMS - An automatic device model synthesizer
