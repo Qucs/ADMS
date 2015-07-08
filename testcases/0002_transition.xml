@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE admst SYSTEM "admst.dtd">
+
+
+<admst version="2.3.5">
+
+  <!-- handle default mapply_binary  -->
+  <admst:template match=":mapply_binary">
+    <admst:value-of select="../arg1" />
+    <admst:text format="      arg1: %s\n" />
+    <admst:value-of select="../arg2" />
+    <admst:text format="      arg2: %s\n" />
+  </admst:template>
+
+  <!-- handle default variable  -->
+  <admst:template match=":variable">
+  </admst:template>
+
+  <!-- handle default function  -->
+  <admst:template match=":function">
+    <!-- get type of data -->
+    <admst:text format="  handle function\n"/>
+    <admst:value-of select="./name" />
+    <admst:text format="  name : %s  \n" />
+
+    <admst:for-each select="arguments">
+      <admst:value-of select="./name" />
+      <admst:text format="    arguments : %s\n" />
+
+      <admst:value-of select="adms/datatypename"/>
+      <admst:variable name="type" select="%s"/> <!-- store -->
+      <admst:apply-templates select="adms" match=":$(type)" required="yes"/>
+
+    </admst:for-each>
+
+  </admst:template>
+
+  <!-- handle default element  -->
+  <admst:template match=":expression">
+    <!-- get type of data -->
+    <admst:text format="handle rhs expression\n"/>
+    <admst:value-of select="tree/adms/datatypename"/>
+    <admst:variable name="type" select="%s"/> <!-- store -->
+    <admst:apply-templates select="tree" match=":$(type)" required="yes"/>
+  </admst:template>
+
+
+ <!-- loop over modules -->
+  <admst:for-each select="/module">
+
+    <!-- print module name -->
+    <admst:value-of select="name" />
+    <admst:text format="module : %s\n"/>
+
+    <!-- print name of variables, type and its default value
+    <admst:for-each select="variable">
+      <admst:value-of select="./name" />
+      <admst:text format="variable : %s  " />
+      <admst:text format="\n" />
+    </admst:for-each> -->
+
+    <admst:for-each select="assignment">
+      <admst:text format="\nfound assignment\n" />
+      <admst:value-of select="lhs" />
+      <admst:text format="lhs : %s\n" />
+
+      <admst:apply-templates select="rhs" match=":expression"/>
+    </admst:for-each>
+
+  </admst:for-each>  <!-- module -->
+
+</admst>
+
