@@ -159,8 +159,21 @@
       <admst:value-to test="[name='flicker_noise']" select="$globalcontribution/#fixmeflickernoise" path="1"/>
       <admst:value-to test="[name='\$temperature']" select="$globalassignment/lhs/TemperatureDependent" string="yes"/>
       <admst:choose>
-        <admst:when test="[name='\$realtime' or name='\$temperature' or name='\$vt' or name='idt' or name='ddt' or name='transition' or
-                           name='\$param_given' or name='\$given' or name='ddx' or name='flicker_noise' or name='white_noise']">
+        <admst:when
+          test="[
+          name='\$abstime' or
+          name='\$realtime' or
+          name='\$temperature' or
+          name='\$vt' or
+          name='idt' or
+          name='ddt' or
+          name='transition' or
+          name='\$param_given' or
+          name='\$given' or
+          name='ddx' or
+          name='flicker_noise' or
+          name='white_noise'
+          ]">
           <admst:push into="$globalexpression/function" select="."/>
         </admst:when>
 
