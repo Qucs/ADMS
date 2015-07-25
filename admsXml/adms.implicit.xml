@@ -167,14 +167,12 @@
           name='\$vt' or
           name='idt' or
           name='ddt' or
-          name='transition' or
           name='\$param_given' or
           name='\$given' or
           name='ddx' or
           name='flicker_noise' or
           name='white_noise'
           ]">
-          <admst:push into="$globalexpression/function" select="."/>
         </admst:when>
 
         <!-- Table 4-14 - Standard Functions -->
@@ -209,6 +207,9 @@
           ]">
           <admst:push into="$globalexpression/function" select="."/>
           <admst:value-to select="class" string="builtin"/>
+        </admst:when>
+        <admst:when test="[name='transition']">
+          <admst:push into="$globalexpression/function" select="."/>
         </admst:when>
         <admst:otherwise>
           <admst:assert test="[exists(definition)]" format="%(lexval/(f|':'|l|':'|c)): analog function '%(name)' is undefined\n"/>
