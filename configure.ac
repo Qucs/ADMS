@@ -47,6 +47,11 @@ AC_ARG_VAR([FLEX], [Path to Flex lexical analyser generator])
 AC_PATH_PROG([BISON], [bison])
 AC_PATH_PROG([FLEX], [flex])
 
+bison_req=2.5
+AX_PROG_BISON_VERSION([${bison_req}], [], [
+  AC_MSG_ERROR([need $BISON >= $bison_req, found $bison_version])
+])
+
 #advice use of gcc
 AX_COMPILER_VENDOR
 if test "x$ax_cv_c_compiler_vendor" != "xgnu"; then
