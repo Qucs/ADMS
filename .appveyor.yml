@@ -14,11 +14,18 @@ install:
   # CMake refuses to generate MinGW Makefiles if Git's sh.exe is in the PATH
   - del "%ProgramFiles(x86)%\Git\bin\sh.exe"
 
+  # Need bison-2.5+, 
+  # Get if form chocolatey\bin, already in front of Git\bin (which has bison-2.4.1)
+  - choco install -y winflexbison 
+  - mv C:\ProgramData\chocolatey\bin\win_bison.exe C:\ProgramData\chocolatey\bin\bison.exe
+  - mv C:\ProgramData\chocolatey\bin\win_flex.exe C:\ProgramData\chocolatey\bin\flex.exe
+
   # Add MinGW to path
   - path  C:\MinGW\bin;%PATH%
   - gcc --version
   - flex --version
   - bison --version
+  - where bison
 
 build_script:
   - mkdir cmake_build
