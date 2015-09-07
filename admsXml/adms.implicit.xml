@@ -552,10 +552,12 @@
   </admst:for-each>
   <admst:for-each select="instance">
     <admst:push into="module/instantiator" select=".." onduplicate="ignore"/>
-    <admst:assert select="terminal" test="nodefrommodule[location='external']"
+    <admst:assert select="terminal" test="terminal[nodefrommodule/location='external']"
                   format="%(../instantiator).%(nodefrommodule/name): is not terminal\n"/>
-    <admst:assert select="parameterset" test="parameter[input='yes']"
-                  format="%(../instantiator).%(parameter/name): is not input parameter\n"/>
+    <admst:if test="[count(parameterset)!=0]">
+      <admst:assert select="parameterset" test="parameterset[parameter/input='yes']"
+                    format="%(../instantiator).%(parameter/name): is not input parameter\n"/>
+    </admst:if>
   </admst:for-each>
   <admst:apply-templates select="(analogfunction/tree)|(analog/code)" match="dependency"/>
   <admst:for-each select="variable">

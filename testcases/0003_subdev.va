@@ -1,0 +1,38 @@
+// testing subdevice instanciation
+`include "discipline.h"
+
+module net(p, n);
+	inout p, n;
+	electrical p, n;
+
+// BUG: cannot instanciate subdevices without params.
+	parameter real dummy=1 from [0:inf);
+
+	analog begin
+		begin
+			V(p, n) <+ 0;
+		end
+	end
+endmodule
+
+module RESISTOR(p, n);
+	inout p, n;
+	electrical p, n;
+
+	parameter real r=1 from [0:inf);
+	analog begin
+		begin
+			I(p, n) <+ V(p, n) / r;
+		end
+	end
+endmodule
+
+module schematic(pp, nn);
+	inout pp, nn;
+	electrical pp, nn;
+	electrical p_int, n_int;
+
+	net #(.dummy(0)) n1(p, p_int);
+	net #(.dummy(0)) n2(n, n_int);
+	RESISTOR #(.r(1)) r1(pp, nn);
+endmodule
