@@ -50,10 +50,9 @@ if ( USE_MAINTAINER_MODE )
 endif ( USE_MAINTAINER_MODE )
 
 
-find_package(BISON)
+find_package(BISON 2.5)
 
 # handle api.prefix, unused for the moment
-MESSAGE("BISON_VERSION ${BISON_VERSION}")
 IF (${BISON_VERSION} VERSION_LESS "2.6")
   SET (BISON_APIPREFIX "-p")
 ELSE (${BISON_VERSION} VERSION_LESS "2.6")
