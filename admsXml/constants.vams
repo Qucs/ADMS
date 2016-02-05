@@ -19,3 +19,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+`define M_PI 3.14
+`define M_SQRT2 1.41
+`define P_EPS0 8.85e-12
+`define P_K 1.0
+`define P_Q 1.0
+`define P_CELSIUS0 273
