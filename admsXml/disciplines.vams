@@ -27,18 +27,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 nature current
   access = I;
   units = "A";
+  abstol = 0.001234;
 endnature
 
 // Electrical potential
 nature voltage
   access = V;
   units = "V";
+  abstol = 0.0004321;
 endnature
 
 // Power
 nature power
   access = Pwr;
   units = "W";
+  abstol = 0.00101010;
 endnature
 
 // Magnetic flux
@@ -51,6 +54,7 @@ endnature
 nature temperature
   access = Temp;
   units = "K";
+  abstol = 3.14;
 endnature
 
 // required for heat energy exchange.
