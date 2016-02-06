@@ -47,6 +47,18 @@ nature flux
   units = "We";
 endnature
 
+// how hot it is.
+nature temperature
+  access = Temp;
+  units = "K";
+endnature
+
+// required for heat energy exchange.
+discipline thermal
+  potential temperature;
+  flow power;
+enddiscipline
+
 // Electrical discipline
 discipline electrical
   potential voltage;
