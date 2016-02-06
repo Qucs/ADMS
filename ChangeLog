@@ -1,4 +1,5 @@
 adms-2.3.x:
+ * Change license to GPLv3.
 
  * Add new simplified constants.vams and discplines.vams.
    Tested to work with models currently in use by Qucs, Ngspice, Xyce and Gnucap.
