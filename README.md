@@ -106,7 +106,7 @@ See AUTHORS file.
 
 ## License
 
-ADMS is under LGPL-GNU Lesser General Public License, version 2.1. See COPYING file.
+ADMS is under GPLv3. See COPYING file.
 
 
 
