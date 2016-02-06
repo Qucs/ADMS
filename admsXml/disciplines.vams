@@ -19,19 +19,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Electrical current
 nature current
   access = I;
+  units = "A";
 endnature
 
+// Electrical potential
 nature voltage
   access = V;
+  units = "V";
 endnature
 
+// Power
 nature power
   access = Pwr;
+  units = "W";
 endnature
 
+// Magnetic flux
 nature flux
   access = Phi;
+  units = "We";
 endnature
 
