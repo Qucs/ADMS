@@ -65,4 +65,14 @@ discipline electrical
   flow current;
 enddiscipline
 
+discipline magnetic
+  potential voltage; // FIXME
+  flow current; // FIXME
+enddiscipline
+
+discipline rotational_omega
+  potential voltage; // FIXME
+  flow current; // FIXME
+enddiscipline
+
 `endif // DISCIPLINES_VAMS
