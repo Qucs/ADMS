@@ -1,13 +1,24 @@
 adms-2.3.x:
 
+ * Add new simplified constants.vams and discplines.vams.
+   Tested to work with models currently in use by Qucs, Ngspice, Xyce and Gnucap.
+   Whenever these headers are used, adms informs the user about the
+   availability of the standard headers at:
+   http://accellera.org/downloads/standards/v-ams
+
+ * Remove non-GPL constants.vams and disciplines.vams headers.
+   These files are copyright of Accellera. With the LRM v2.4.0 updated versions
+   of these files are freely accessible. However modification is not allowed.
+   Hence, these files are not GPL and should not be included in adms.
+
  * Autotools, add back support for static and shared libraries build.
-   * Build shared libraries by default. Tested on Linux, Mac OSX, and MSYS2. 
+   * Build shared libraries by default. Tested on Linux, Mac OSX, and MSYS2.
      See the configure --disable-shared flag to change that.
    * CMake contiues to builds static libraries only.
 
  * Fix out-of-tree build for Autotools and CMake.
 
- * Check scaling factors againd LRM 2.0.4
+ * Check scaling factors againd LRM v2.4.0
    * Add missing K scaling (uppercase kilo)
    * standard scale_factor T|G|M|K|k|m|u|n|p|f|a
    * Add testset (va and xml files) to test the scaling factors
