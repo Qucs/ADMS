@@ -37,7 +37,7 @@ script:
       autotools)
         ./bootstrap.sh &&
         ./configure --enable-maintainer-mode --prefix=/usr &&
-        make &&
+        make distcheck &&
         sudo make install
         ;;
       cmake)
