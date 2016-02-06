@@ -4,6 +4,7 @@ This file is part of adms - http://sourceforge.net/projects/mot-adms.
 adms is a code generator for the Verilog-AMS language.
 
 Copyright (C) 2016 Guilherme Brondani Torri <guitorri@gmail.com>
+              2016 Felix Salfelder <felix@salfelder.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
