@@ -1,5 +1,8 @@
 language: c
 
+sudo: required
+dist: trusty
+
 compiler:
   - gcc
   - clang
@@ -16,8 +19,10 @@ before_install:
   - sudo apt-get install libxml2 libxml2-dev
 
   # configure cpan, no waiting for user input
+  # libxml-libxml-perl package does not work?
   - (echo y;echo o conf prerequisites_policy follow;echo o conf commit)| sudo cpan
   - sudo cpan -i XML::LibXML
+
 
 script:
   - bison --version
