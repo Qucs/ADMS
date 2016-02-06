@@ -119,8 +119,10 @@ static void adms_preprocessor_lex_include_file (char* fileName)
   {
     if(!strcmp(fileName,"discipline.h")||!strcmp(fileName,"disciplines.h")||!strcmp(fileName,"discipline.vams")||!strcmp(fileName,"disciplines.vams"))
     {
-      adms_message_warning(("[%s]: simplified vams header file created (not found in -I path) ... '%s'\n",message,fileName))
-      adms_message_info(("standard '%s' header is available at 'http://accellera.org/downloads/standards/v-ams'\n",fileName))
+      adms_message_warning(("[%s]: simplified vams header file created\n",message))
+      adms_message_warning(("  (not found in -I path) ... '%s'\n",fileName))
+      adms_message_info(("standard '%s' header is available at\n"))
+      adms_message_info(("  'http://accellera.org/downloads/standards/v-ams'\n",fileName))
       //printf("%s",disciplines_vams);
       adms_file_fprintf(fileName,disciplines_vams);
       myfh=adms_file_open_read(fileName);
