@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  This file is part of adms - http://sourceforge.net/projects/mot-adms.
+
+  adms is a code generator for the Verilog-AMS language.
+
+  Copyright (C) 2002-2012 Laurent Lemaitre <r29173@users.sourceforge.net>
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <!DOCTYPE admst PUBLIC "-//adms//DTD admst 2.0//-" "http://mot-adms.sourceforge.net/xml-files/adms/admst.dtd">
 <admst version="2.3.0" xmlns:admst="http://mot-adms.svn.sourceforge.net/viewvc/*checkout*/mot-adms/trunk/adms/admst.dtd">
 
