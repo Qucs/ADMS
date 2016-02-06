@@ -1,3 +1,27 @@
+/*
+This file is part of adms - http://sourceforge.net/projects/mot-adms.
+
+adms is a code generator for the Verilog-AMS language.
+
+Copyright (C) 2002-2012 Laurent Lemaitre <r29173@users.sourceforge.net>
+              2014 Francesco Lannutti <nicolati@fastwebnet.it>
+              2014 Guilherme Brondani Torri <guitorri@gmail.com>
+              2013 Ryan Fox <ryan@rcfox.ca>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 %name-prefix "preprocessor"
 %defines
 
