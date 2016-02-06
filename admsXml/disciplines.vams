@@ -47,4 +47,10 @@ nature flux
   units = "We";
 endnature
 
+// Electrical discipline
+discipline electrical
+  potential voltage;
+  flow current;
+enddiscipline
+
 `endif // DISCIPLINES_VAMS
