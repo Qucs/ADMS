@@ -15,7 +15,7 @@ This version is forked from the code previously available at:
 
 The original SVN repo is no longer available.
 
-This version is based on ADMS 2.3.0, the last version released by the original author.
+This version is based on ADMS 2.3.0, the last version released by the original author in 2012.
 
 Currently only a subset of the Verilog-AMS language is supported.
 
@@ -42,12 +42,15 @@ ADMS is known to work on these platforms.
 - Perl with XML::LibXml (only for maintainers)
   - GD modules to manually update documentation images
 
+Installing dependencies on Linux Debian/Ubuntu:
 
-## Installation
-
-Autotools is the original build system and is more complete. Prefered for maintainance and packaging.
-CMake was recently introduced and is not as well tested.
-
+```
+sudo apt-get install build-essential
+sudo apt-get install automake libtool gperf flex bison
+sudo apt-get install libxml2 libxml2-dev
+sudo apt-get install libxml-libxml-perl
+sudo apt-get install libgd-perl
+```
 
 ### Maintainers Install and Packaging from Git
 
@@ -76,7 +79,7 @@ The `-DUSE_MAINTAINER_MODE=ON` makes sure the required files are generated (usin
     cmake .. -DUSE_MAINTAINER_MODE=ON -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
     make install
 
-Packaging is not yet supported with CMake.
+Packaging is not yet supported with CMake. At the moment, only static libraries can be build with CMake.
 
 
 ### Users Install from Tarball
