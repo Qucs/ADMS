@@ -44,12 +44,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 `define M_LOG10E .43429448190325182765
 `define M_LN2 .69314718055994530941
 `define M_LN10 2.30258509299404568401
-`define P_Q 1.60217646e-19 // electron charke in coulomb.
 `define P_C 299792458 // m / s
-`define P_K 1.3806503e-23 // boltzmann constant in m2 kg s-2 K-1
 `define P_H 6.62607004081e-34 //planck constant. in \text{ J⋅s}
-`define P_ESP0 8.854187817e-12 // vacuum permittivity in F·m−1
 `define P_MU0 1.2566370614e-6 // v. perm.  H / m or T·m / A or Wb / (A·m) or V·s / (A·m)
-`define P_CELSIUS0 273.15 // 0°C in °kelvin
 
 `endif // CONSTANTS_VAMS
