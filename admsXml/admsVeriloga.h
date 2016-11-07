@@ -106,4 +106,10 @@ win32_interface void verilogaerror (const char *s);
 win32_interface int verilogalex ();
 win32_interface int verilogaparse ();
 
+typedef enum {
+	ctx_any,
+	ctx_moduletop
+} e_verilogactx;
+e_verilogactx verilogactx ();
+
 #endif /* _admsveriloga_h */

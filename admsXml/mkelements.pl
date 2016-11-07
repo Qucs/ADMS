@@ -1160,6 +1160,8 @@ foreach(@$EA)
       $adms_c.="}\n";
     }
     #lookup
+	 # BUG. linear search has linear runtime.
+	 # use proper containers!!1
     if(
       (($ename =~ "admsmain")&&($xname =~ "discipline"))
       ||

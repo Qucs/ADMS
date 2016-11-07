@@ -5,6 +5,10 @@
 #define YYDEBUG 1
 #include "admsVeriloga.h"
 
+static e_verilogactx ctx;
+e_verilogactx verilogactx (){return ctx;}
+void set_context(e_verilogactx x){ctx=x;}
+
 #define NEWVARIABLE(l) p_variableprototype myvariableprototype=adms_variableprototype_new(gModule,l,(p_adms)gBlockList->data);
 
 inline static void   Y (p_yaccval myyaccval,p_adms myusrdata) {myyaccval->_usrdata=myusrdata;}
@@ -14,6 +18,7 @@ static p_number gNatureAbsTol=NULL;
 static char* gNatureUnits=NULL;
 static char* gNatureidt=NULL;
 static char* gNatureddt=NULL;
+static char* gDisc=NULL;
 static p_discipline gDiscipline=NULL;
 static p_module gModule=NULL;
 static p_analogfunction gAnalogfunction=NULL;
@@ -304,7 +309,9 @@ R_d.module
           _ for(l=gAttributeList;l;l=l->next)
           _   adms_slist_push(&gModule->_attribute,l->data);
           _ adms_slist_free(gAttributeList); gAttributeList=NULL;
-        R_d.terminal R_modulebody tk_endmodule
+        R_d.terminal
+          _ set_context(ctx_moduletop);
+        R_modulebody tk_endmodule
           _ adms_slist_pull(&gBlockList);
           _ adms_slist_inreverse(&gModule->_assignment);
         ;
@@ -353,8 +360,10 @@ R_l.declaration
         ;
 R_s.declaration.withattribute
         | R_s.declaration
+          _ set_context(ctx_moduletop);
         | R_d.attribute.global R_s.declaration
           _ adms_slist_free(gGlobalAttributeList); gGlobalAttributeList=NULL;
+          _ set_context(ctx_moduletop);
         ;
 R_d.attribute.global
         | R_d.attribute
@@ -364,26 +373,39 @@ R_d.attribute.global
 R_s.declaration
         | R_d.node
         | R_d.branch
-        | tk_parameter R_variable.type R_l.parameter R_d.variable.end
-        | tk_parameter R_l.parameter R_d.variable.end
-        | R_variable.type R_l.variable R_d.variable.end
+        | tk_parameter
+          _ set_context(ctx_any);
+        R_variable.type R_l.parameter R_d.variable.end
+        | tk_parameter
+          _ set_context(ctx_any);
+        R_l.parameter R_d.variable.end
+        | R_variable.type
+          _ set_context(ctx_any);
+        R_l.variable R_d.variable.end
         | R_d.aliasparameter
         | R_d.analogfunction
         | ';'
         ;
 R_d.node
-        | R_node.type R_l.terminalnode  ';'
+        | R_node.type
+          _ set_context(ctx_any);
+        R_l.terminalnode  ';'
           _ p_slist l;
           _ for(l=gTerminalList;l;l=l->next)
           _   ((p_node)l->data)->_direction=gNodeDirection;
           _ adms_slist_free(gTerminalList); gTerminalList=NULL;
-        | tk_ground R_l.node  ';'
+        | tk_ground
+          _ set_context(ctx_any);
+        R_l.node  ';'
           _ p_slist l;
           _ for(l=gNodeList;l;l=l->next)
           _   ((p_node)l->data)->_location=admse_ground;
           _ adms_slist_free(gNodeList); gNodeList=NULL;
-        | tk_ident R_l.node ';'
-          _ char* mydisciplinename=mylexval1;
+        | tk_disc_id
+          _ set_context(ctx_any);
+          _ gDisc=mylexval1;
+        R_l.node ';'
+          _ char* mydisciplinename=gDisc;
           _ p_discipline mydiscipline=adms_admsmain_list_discipline_lookup_by_id(root(),mydisciplinename);
           _ p_slist l;
           _ for(l=gNodeList;l;l=l->next)
@@ -608,17 +630,18 @@ R_l.analogfunction.real.variable
           _   myvariableprototype->_type=admse_real;
           _ }
         ;
-R_variable.type
-        | tk_integer R_d.attribute.0
+R_variable.type.set
+        | tk_integer
           _ gVariableType=admse_integer;
-          _ adms_slist_concat(&gGlobalAttributeList,gAttributeList);
-          _ gAttributeList=NULL;
-        | tk_real R_d.attribute.0
+        | tk_real
           _ gVariableType=admse_real;
-          _ adms_slist_concat(&gGlobalAttributeList,gAttributeList);
-          _ gAttributeList=NULL;
-        | tk_string R_d.attribute.0
+        | tk_string
           _ gVariableType=admse_string;
+        ;
+R_variable.type
+        | R_variable.type.set
+          _ set_context(ctx_any);
+        R_d.attribute.0
           _ adms_slist_concat(&gGlobalAttributeList,gAttributeList);
           _ gAttributeList=NULL;
         ;
@@ -794,8 +817,11 @@ R_interval.sup
           _ Y($$,(p_adms)myexpression);
         ;
 R_analog
-        | tk_analog R_analogcode
-          _ gModule->_analog=adms_analog_new(YY($2));
+        | tk_analog
+          _ set_context(ctx_any); // from here, don't recognize node declarations.
+          _                       // they are not permitted anyway.
+          R_analogcode
+          _ gModule->_analog=adms_analog_new(YY($R_analogcode));
         ;
 R_analogcode
         | R_analogcode.atomic
@@ -1093,12 +1119,16 @@ R_s.case.item
           _ mycaseitem->_defaultcase=admse_yes;
           _ Y($$,(p_adms)mycaseitem);
         ;
+R_s.paramlist.0
+        |
+        | '#' '(' R_l.instance.parameter ')'
+       ;
 R_s.instance
-        | R_instance.module.name '#' '(' R_l.instance.parameter ')' tk_ident '(' R_l.node ')' ';'
+        | R_instance.module.name R_s.paramlist.0 tk_ident '(' R_l.node ')' ';'
           _ p_instance myinstance;
           _ p_slist l1;
           _ p_slist l2;
-          _ myinstance=adms_module_list_instance_prepend_by_id_once_or_abort(gModule,gModule,gInstanceModule,mylexval6);
+          _ myinstance=adms_module_list_instance_prepend_by_id_once_or_abort(gModule,gModule,gInstanceModule,mylexval3);
           _ adms_slist_inreverse(&gInstanceModule->_node);
           _ l2=gInstanceModule->_node;
           _ l2=l2->next; /*GND ignored*/
@@ -1115,6 +1145,8 @@ R_s.instance
         ;
 R_instance.module.name
         | tk_ident
+          _ set_context(ctx_any); // from here, don't recognize node declarations.
+          _                       // they are not permitted anyway.
           _ gInstanceModule=adms_admsmain_list_module_lookup_by_id(root(),mylexval1);
           _ if(!gInstanceModule)
           _   adms_message_fatal(("module '%s' not found\n",mylexval1));
@@ -1522,25 +1554,16 @@ R_e.atomic
           _ Y($$,(p_adms)adms_string_new(mylexval1));
         | tk_ident
           _ $$=adms_yaccval_new("unknown source file");
-          _ if(gAnalogfunction)
+          _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
+          _ if(myvariable)
+          _   Y($$,(p_adms)myvariable);
+          _ else if (!gAnalogfunction)
           _ {
-          _   p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
-          _   if(myvariable)
-          _     Y($$,(p_adms)myvariable);
-          _ }
-          _ else
-          _ {
-          _   p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$1);
-          _   if(myvariable)
-          _     Y($$,(p_adms)myvariable);
-          _   else
-          _   {
           _     p_branchalias mybranchalias=adms_module_list_branchalias_lookup_by_id(gModule,gModule,mylexval1);
           _     p_node mynode=adms_module_list_node_lookup_by_id(gModule,gModule,mylexval1);
           _     if(mynode) Y($$,(p_adms)mynode);
           _     if(mybranchalias)
           _       Y($$,(p_adms)mybranchalias->_branch);
-          _   }
           _ }
           _ if(!YY($$))
           _   adms_veriloga_message_fatal("identifier never declared\n",$1);
