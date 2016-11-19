@@ -28,7 +28,7 @@ PROJECT(ADMS C)
 cmake_minimum_required(VERSION 2.8)
 
 SET(PACKAGE_NAME "adms")
-SET(PACKAGE_VERSION "2.3.5")
+SET(PACKAGE_VERSION "2.3.6")
 SET(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
 
 OPTION ( USE_MAINTAINER_MODE "Enable generation of code (parser source) from Perl scripts." OFF )
