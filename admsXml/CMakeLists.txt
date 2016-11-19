@@ -190,9 +190,12 @@ TARGET_LINK_LIBRARIES(admsCheck admsElement)
 
 #
 # Handle installation
-#                                     
+#
 INSTALL(TARGETS admsXml DESTINATION bin)
 INSTALL(FILES admsXml.1 DESTINATION share/man/man1)
 
 INSTALL(TARGETS admsCheck DESTINATION bin)
 INSTALL(FILES admsCheck.1 DESTINATION share/man/man1)
+
+INSTALL(FILES constants.vams disciplines.vams DESTINATION include/adms)
+
