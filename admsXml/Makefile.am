@@ -74,3 +74,5 @@ EXTRA_DIST=mkctext.pl mkelements.pl mkgrammar.pl adms.h adms.c \
  CMakeLists.txt ../config.h basicLibrary.xml
 
 CLEANFILES=.*.swp *\~ core $(generated_FILES)
+
+pkginclude_HEADERS  = constants.vams disciplines.vams
