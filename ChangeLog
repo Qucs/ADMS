@@ -1,3 +1,8 @@
+adms-2.3.6:
+ * Fix parser for parameter lists in subdevice instanciation.
+ * Remove duplicated constants on provided headers.
+ * Fix crash on x64 when printing the message about standard headers.
+
 adms-2.3.5:
  * Change license to GPLv3.
 
