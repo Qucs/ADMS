@@ -1,3 +1,11 @@
+environment:
+  matrix:
+    - MSYSTEM : MINGW64
+      MBITS: 64
+      MARCH: x86_64
+    - MSYSTEM : MINGW32
+      MBITS: 32
+      MARCH: i686
 
 platform:
   - x64
@@ -5,21 +13,34 @@ platform:
 install:
 
   # Take a look at the environment
-  - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%PATH%"
+  - set "PATH=C:\msys64\usr\bin;C:\msys64\mingw%MBITS%\bin;%PATH%"
 
-  - C:\msys64\usr\bin\bash -lc ""
-  - C:\msys64\usr\bin\bash -lc "pacman --version"
+  - bash -lc ""
+  - bash -lc "pacman --version"
   # Switch from SF to msys2.org (default, much faster)
-  - C:\msys64\usr\bin\bash -lc "pacman --noconfirm --sync pacman-mirrors"
-  - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S autoconf automake bison flex perl perl-XML-LibXML"
+  - bash -lc "pacman --noconfirm --sync pacman-mirrors"
+  - bash -lc "pacman --noconfirm -S autoconf automake bison flex perl perl-XML-LibXML"
 
 build_script:
   ## Notes
   #  * The "exec 0</dev/null" opens a dummy file descriptor to fix error: ./configure: line 560: 0: Bad file descriptor
+  - set ADMSDIR=c:\adms-win%MBITS%\
 
   ## Build
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./bootstrap.sh"
-  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./configure --enable-maintainer-mode"
+  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./configure --enable-maintainer-mode --prefix=/c/adms-win%MBITS% --disable-shared"
+  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make distcheck"
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make install"
 
-  - bash -lc "exec 0</dev/null && admsXml -v"
+  - bash -lc "exec 0</dev/null && /c/adms-win%MBITS%/bin/admsXml -v"
+
+after_build:
+  #  artifacts path is always relative to build folder, so put the zip there
+  - 7z a %APPVEYOR_BUILD_FOLDER%\adms-win%MBITS%.zip %ADMSDIR%
+
+artifacts:
+  # variables here must use the PowerShell syntax
+  - path: adms-win$(MBITS).zip
+    name: adms-win$(MBITS).zip
+  - path: adms-*.tar.gz
+
