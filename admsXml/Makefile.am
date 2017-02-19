@@ -63,11 +63,20 @@ instex=$(shell echo admsXml | \
 install-exec-hook:
 	@if [ -n "$(DESTDIR)" ]; then \
 		echo DESTDIR, nothing to do; \
+	elif [ $(libdir) = /lib ]; then \
+		echo guessing that this is not necessary.; \
+	elif [ $(libdir) = /usr/lib ]; then \
+		echo guessing that this is not necessary.; \
 	elif ( chrpath $(bindir)/$(instex) | grep -q PATH= ); then \
 		echo theres an rpath set, no need to act.; \
+	elif [ `id -u` = 0 ]; then \
+		echo =======================================================; \
+		echo we are root, could in principle run ldconfig for you; \
+		echo "(goodbye)"; \
+		echo =======================================================; \
 	else \
 		echo =======================================================; \
-		echo consider running \'ldconfig\' with appropriate privileges; \
+		echo maybe run \'ldconfig\' with appropriate privileges; \
 		echo "(now)";\
 		echo =======================================================; \
 	fi
