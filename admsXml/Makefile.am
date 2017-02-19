@@ -56,6 +56,22 @@ libadmsAdmstpath_la_LIBADD=libadmsElement.la
 #depends on adms.implicit.xml
 bin_PROGRAMS=admsXml admsCheck
 
+# probably all of
+# linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu*
+instex=$(shell echo admsXml | \
+			  sed -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/')
+install-exec-hook:
+	@if [ -n "$(DESTDIR)" ]; then \
+		echo DESTDIR, nothing to do; \
+	elif ( chrpath $(bindir)/$(instex) | grep -q PATH= ); then \
+		echo theres an rpath set, no need to act.; \
+	else \
+		echo =======================================================; \
+		echo consider running \'ldconfig\' with appropriate privileges; \
+		echo "(now)";\
+		echo =======================================================; \
+	fi
+
 admsXml_SOURCES=admsXml.c
 admsXml_LDADD=-lm libadmsElement.la libadmsVeriloga.la libadmsPreprocessor.la libadmsAdmstpath.la
 
