@@ -213,7 +213,8 @@ static int adms_preprocessor_pragma_substitute_text (p_preprocessor_substitutor 
             else
               adms_slist_push(&(substitutor->_newtext),(p_adms)substitutor->_cr_text);
           }
-          substitutor->_cr_newarg = substitutor->_cr_newarg->next;
+          if(substitutor->_cr_newarg)
+            substitutor->_cr_newarg = substitutor->_cr_newarg->next;
         }
       }
       else

@@ -154,18 +154,18 @@ char       \'[^\']*[\'\n]
 "*)" {BEGIN(INITIAL);TKRETURN(yytext,yyleng);return tk_endattribute;}
 {attribute}{attributevalue} {BEGIN(insideAttributeBegin);yyless(0);}
 . {
-    char myyytext[1000];
+    char myyytext[BUFSIZ];
     register int i=0;
     myyytext[i]=yytext[0];
     for(;;)
     {
-      while((myyytext[i]!='*')&&(myyytext[i]!=EOF))
+      while((i<BUFSIZ)&&(myyytext[i]!='*')&&(myyytext[i]!=EOF))
       {
         myyytext[++i]=input();
       }
       if(myyytext[i]=='*')
       {
-        while((myyytext[++i]=input())=='*')
+        while((i<BUFSIZ)&&(myyytext[++i]=input())=='*')
         ;
         if(myyytext[i]==')')
         {
@@ -188,7 +188,12 @@ char       \'[^\']*[\'\n]
       {
         adms_message_fatal(("[%s:%i]: inside Verilog-ams EOF found in attribute declaration [%s]\n",root()->_curfilename,root()->_curline,yytext))
       }
-    }
+      if(i>=(BUFSIZ-1)) {
+        char *truncated = strndup(yytext, 32);
+        adms_message_fatal(("[%s:%i]: inside Verilog-ams Line Too Long (>%i) in attribute declaration [%s] (truncated)\n",root()->_curfilename,root()->_curline,BUFSIZ,truncated))
+	free(truncated);
+      }
+    } printf("i %d\n",i);
 }
 }
 <insideAttributeBegin>{
