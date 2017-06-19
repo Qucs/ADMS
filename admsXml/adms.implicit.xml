@@ -144,6 +144,9 @@
     </admst:when>
     <admst:when test="[datatypename='function']">
       <admst:if test="[definition/datatypename='analogfunction']">
+        <!-- probably not intended (crashes)
+             how to get hold of analogfunctions in assignment/rhs? -->
+        <admst:push into="$globalexpression/function" select="." onduplicate="ignore"/>
         <admst:variable name="function" select="%(.)"/>
         <admst:for-each select="definition/variable[(output='yes') and name!=$function/name]">
           <admst:variable name="p" select="%(position(.))"/>
