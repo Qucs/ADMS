@@ -28,13 +28,13 @@ script:
   - case $BUILD_SYSTEM in
       autotools)
         ./bootstrap.sh &&
-        ./configure --enable-maintainer-mode --prefix=/usr &&
+        ./configure --prefix=/usr &&
         make distcheck &&
         sudo make install
         ;;
       cmake)
         mkdir build && cd build &&
-        cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_MAINTAINER_MODE=ON &&
+        cmake .. -DCMAKE_INSTALL_PREFIX=/usr &&
         make &&
         sudo make install
         ;;
