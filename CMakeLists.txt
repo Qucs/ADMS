@@ -31,8 +31,6 @@ SET(PACKAGE_NAME "adms")
 SET(PACKAGE_VERSION "2.3.6")
 SET(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
 
-OPTION ( USE_MAINTAINER_MODE "Enable generation of code (parser source) from Perl scripts." OFF )
-
 # Default to static libs ( shared needs work, BUG with MinGW). 
 OPTION ( BUILD_STATIC_LIBS "Build static libraries." ON )
 IF ( MINGW )
@@ -54,20 +52,18 @@ CHECK_FUNCTION_EXISTS (putenv HAVE_PUTENV)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-# Only care about Perl in case maintainer needs to recreate sources
+# Perl is used to recreate sources
 # * mkelements.pl
 # * mktext.pl
 # * mkgrammar.pl
-if ( USE_MAINTAINER_MODE )
-  # Checking for perl modules requires FindPerlModules.cmake
-  # Check all required modules at once
-  SET(CMAKE_MODULE_PATH "${ADMS_SOURCE_DIR}/cmake/modules")
-  include(FindPerlModules)
-  find_package(PerlModules COMPONENTS XML::LibXML)
-  if(NOT PERLMODULES_FOUND)
-    message(FATAL_ERROR "Not all required perl modules were found on your system")
-  endif(NOT PERLMODULES_FOUND)
-endif ( USE_MAINTAINER_MODE )
+# Checking for perl modules requires FindPerlModules.cmake
+# Check all required modules at once
+SET(CMAKE_MODULE_PATH "${ADMS_SOURCE_DIR}/cmake/modules")
+include(FindPerlModules)
+find_package(PerlModules COMPONENTS XML::LibXML)
+if(NOT PERLMODULES_FOUND)
+  message(FATAL_ERROR "Not all required perl modules were found on your system")
+endif(NOT PERLMODULES_FOUND)
 
 
 find_package(BISON 2.5)

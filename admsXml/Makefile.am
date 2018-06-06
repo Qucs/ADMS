@@ -10,12 +10,6 @@ SUFFIXES=.vams .vams.c .va .va.c .xml .xml.c .y.in
 # use mkctext.pl to create C files containing the contents of each input file
 # in a C character array. The output is used by make check only
 
-# Perl XML::LibXml module are only required for maintainer
-# Parser created by maintainer
-# BUG: these rules are also required when building from git.
-# workaround: default to maintainer mode when building from git.
-if MAINTAINER_MODE
-
 $(incfilec):%.c:% ${srcdir}/mkctext.pl
 	$(PERL) ${srcdir}/mkctext.pl $< $(top_srcdir)
 
@@ -24,8 +18,6 @@ admstpathYacc.y admstpathYacc.h adms.h adms.c: ${top_srcdir}/adms.xml ${top_srcd
 
 verilogaYacc.y: ${srcdir}/verilogaYacc.y.in ${srcdir}/mkgrammar.pl
 	$(PERL) ${srcdir}/mkgrammar.pl ${srcdir}/verilogaYacc.y.in
-
-endif
 
 dist_man_MANS = admsXml.1 admsCheck.1
 

@@ -22,81 +22,77 @@ INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ) # for config.h
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ) # for admsPreprocessor.h, amdsVeriloga.h
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ) # for generated source code
 
-# Maintainer mode runs the Perl scrips that generate source code
-if ( USE_MAINTAINER_MODE )
+# Run the Perl scrips to generate source code
+# Run mkelements.pl
+#   Read in `adms.xml` and generete portions of adms and admst
+# Generate outputs:
+#    adms.h
+#    adms.c
+#    admstpathYacc.y
+#    admstpathYacc.h
+#    admstpath.dtd
+MESSAGE(STATUS "Running mkelements.pl code generator")
 
-  # Run mkelements.pl
-  #   Read in `adms.xml` and generete portions of adms and admst
-  # Generate outputs:
-  #    adms.h
-  #    adms.c
-  #    admstpathYacc.y
-  #    admstpathYacc.h
-  #    admstpath.dtd
-  MESSAGE(STATUS "Running mkelements.pl code generator")
+EXECUTE_PROCESS(
+  COMMAND perl ${CMAKE_SOURCE_DIR}/admsXml/mkelements.pl ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        RESULT_VARIABLE element_result )
 
-  EXECUTE_PROCESS(
-    COMMAND perl ${CMAKE_SOURCE_DIR}/admsXml/mkelements.pl ${CMAKE_SOURCE_DIR}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-          RESULT_VARIABLE element_result )
-
-  IF(element_result EQUAL 0)
-    MESSAGE(STATUS "mkelement.pl completed successfully")
-  ELSE(element_result EQUAL 0)
-    MESSAGE(FATAL_ERROR "mkelement.pl failed. Exit code: ${element_result}")
-  ENDIF(element_result EQUAL 0)
+IF(element_result EQUAL 0)
+  MESSAGE(STATUS "mkelement.pl completed successfully")
+ELSE(element_result EQUAL 0)
+  MESSAGE(FATAL_ERROR "mkelement.pl failed. Exit code: ${element_result}")
+ENDIF(element_result EQUAL 0)
 
 
-  # Run mkctext.pl
-  #   Wrap source files as C code
-  # Generate outputs:
-  #    constants.vams.c
-  #    disciplines.vams.c
-  #    adms.implicit.xml.c
-  #    dummy.va.c
-  #    dummy.xml.c
-  SET(CTEXT
-    constants.vams
-    disciplines.vams
-    adms.implicit.xml
-    dummy.va
-    dummy.xml )
+# Run mkctext.pl
+#   Wrap source files as C code
+# Generate outputs:
+#    constants.vams.c
+#    disciplines.vams.c
+#    adms.implicit.xml.c
+#    dummy.va.c
+#    dummy.xml.c
+SET(CTEXT
+  constants.vams
+  disciplines.vams
+  adms.implicit.xml
+  dummy.va
+  dummy.xml )
 
-  FOREACH( inc ${CTEXT} )
-    MESSAGE(STATUS "Running mkctext.pl code generator on ${inc}")
-
-    EXECUTE_PROCESS(
-      COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/mkctext.pl ${CMAKE_CURRENT_SOURCE_DIR}/${inc}
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      RESULT_VARIABLE text_result )
-
-    IF(text_result EQUAL 0)
-      MESSAGE(STATUS "mkctext.pl completed successfully")
-    ELSE(text_result EQUAL 0)
-      MESSAGE(FATAL_ERROR "mkctext.pl failed. Exit code: ${text_result}")
-    ENDIF(text_result EQUAL 0)
-  ENDFOREACH()
-
-
-  # Run mkgrammar.pl
-  #   Process verilogaYacc.y.in and generate the parser
-  # Generate output:
-  #    verilogaYacc.y
-  #
-  MESSAGE(STATUS "Running mkgrammar.pl code generator")
+FOREACH( inc ${CTEXT} )
+  MESSAGE(STATUS "Running mkctext.pl code generator on ${inc}")
 
   EXECUTE_PROCESS(
-    COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/mkgrammar.pl ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.y.in
+    COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/mkctext.pl ${CMAKE_CURRENT_SOURCE_DIR}/${inc}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-          RESULT_VARIABLE grammar_result )
+    RESULT_VARIABLE text_result )
 
-  IF(grammar_result EQUAL 0)
-    MESSAGE(STATUS "mkgrammar.pl completed successfully")
-  ELSE(grammar_result EQUAL 0)
-    MESSAGE(FATAL_ERROR "mkgrammar.pl failed. Exit code: ${grammar_result}")
-  ENDIF(grammar_result EQUAL 0)
+  IF(text_result EQUAL 0)
+    MESSAGE(STATUS "mkctext.pl completed successfully")
+  ELSE(text_result EQUAL 0)
+    MESSAGE(FATAL_ERROR "mkctext.pl failed. Exit code: ${text_result}")
+  ENDIF(text_result EQUAL 0)
+ENDFOREACH()
 
-ENDIF ( USE_MAINTAINER_MODE )
+
+# Run mkgrammar.pl
+#   Process verilogaYacc.y.in and generate the parser
+# Generate output:
+#    verilogaYacc.y
+#
+MESSAGE(STATUS "Running mkgrammar.pl code generator")
+
+EXECUTE_PROCESS(
+  COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/mkgrammar.pl ${CMAKE_CURRENT_SOURCE_DIR}/verilogaYacc.y.in
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        RESULT_VARIABLE grammar_result )
+
+IF(grammar_result EQUAL 0)
+  MESSAGE(STATUS "mkgrammar.pl completed successfully")
+ELSE(grammar_result EQUAL 0)
+  MESSAGE(FATAL_ERROR "mkgrammar.pl failed. Exit code: ${grammar_result}")
+ENDIF(grammar_result EQUAL 0)
 
 # Issue with flex:
 #   BISON_TARGET, FLEX_TARGET and ADD_FLEX_BISON_DEPENDENCY

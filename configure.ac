@@ -26,16 +26,8 @@ LT_INIT
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-# Maintainer mode is used to detect/run Perl (XML::LibXml) and make dist tarball
-AM_MAINTAINER_MODE
-
 AC_CHECK_PROG(GIT,git,yes)
 AC_MSG_CHECKING([for git repo])
-AS_IF([test x"$GIT" = "xyes" && test -d $srcdir/.git],
-   [have_git_repo=yes
-    AM_MAINTAINER_MODE([enable])],
-   [have_git_repo=no])
-AC_MSG_RESULT([$have_git_repo])
 
 AX_PROG_FLEX([],[AC_MSG_WARN(Program flex not found (found $LEX))
                  AC_MSG_ERROR(Please install gnu flex from http://www.gnu.org/software/flex/)])
@@ -97,18 +89,15 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 AC_SUBST([LIBTOOL_DEPS])
 
-dnl Perl, XML::LibXML module required for maintainer
-if test $USE_MAINTAINER_MODE = yes; then
+dnl Perl, XML::LibXML module required
+AC_PATH_PROG(PERL, perl, :)
+if test "$PERL" = ":"; then
+    AC_MSG_ERROR([The $PACKAGE package requires an installed perl.])
+fi;
 
-  AC_PATH_PROG(PERL, perl, :)
-  if test "$PERL" = ":"; then
-      AC_MSG_ERROR([The $PACKAGE package requires an installed perl.])
-  fi;
-
-  AX_PERL_MODULE_VERSION([XML::LibXML 2],[],[
-      AC_MSG_RESULT(failed)
-      AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
-fi
+AX_PERL_MODULE_VERSION([XML::LibXML 2],[],[
+    AC_MSG_RESULT(failed)
+    AC_MSG_ERROR([Perl package XML::LibXML may be downloaded from http://search.cpan.org/dist/libXML])])
 
 # Define preprocessor flag for static build (MinGW).
 AS_IF([test "x$enable_shared" = "xno"], [
@@ -130,8 +119,6 @@ AC_MSG_RESULT([ $PACKAGE version $VERSION configured successfully.])
 AC_MSG_RESULT([
 Configure Information:
   Host : $host
-
-  Maintainer mode : $USE_MAINTAINER_MODE
 
   C Compiler : $CC
   DEFS       :   $DEFS
