@@ -79,7 +79,16 @@ The `-DUSE_MAINTAINER_MODE=ON` makes sure the required files are generated (usin
     cmake .. -DUSE_MAINTAINER_MODE=ON -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
     make install
 
-Packaging is not yet supported with CMake. At the moment, only static libraries can be build with CMake.
+Packaging is only supported for debian with CMake. For the rest, only static libraries can be build with CMake.
+
+#### Generating debian package
+
+    mkdir cmake; cd cmake
+    cmake .. -DUSE_MAINTAINER_MODE=ON -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
+    make -j4
+    cpack ..
+    
+Following the above command will generate a debian package at `cmake/adms-${version}-Linux.deb`.
 
 
 ### Users Install from Tarball
