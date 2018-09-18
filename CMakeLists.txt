@@ -83,3 +83,15 @@ find_package(FLEX)
 
 ADD_SUBDIRECTORY(admsXml)
 
+#--------------------------------------------------------------------
+# Create debian package
+#--------------------------------------------------------------------
+if (UNIX AND NOT APPLE)
+    SET(CPACK_GENERATOR "DEB")
+    SET(CPACK_PACKAGE_NAME  "${PACKAGE_NAME}")
+    SET(CPACK_PACKAGE_VERSION  "${PACKAGE_VERSION}")
+    SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY  "An automatic device model synthesizer\n ADMS is a code generator that converts electrical compact device models specified in high-level description language into ready-to-compile C code for the API of spice simulators. Based on transformations specified in XML language, ADMS transforms Verilog-AMS code into other target languages.")
+    SET(CPACK_PACKAGE_CONTACT "Qucs")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "flex, bison" )
+    INCLUDE(CPack)
+endif()
