@@ -50,6 +50,7 @@ bin_PROGRAMS=admsXml admsCheck
 
 admsXml_SOURCES=admsXml.c
 admsXml_LDADD=-lm libadmsElement.la libadmsVeriloga.la libadmsPreprocessor.la libadmsAdmstpath.la
+admsXml_CPPFLAGS=${AM_CPPFLAGS} -DADMS_INCLUDEDIR=\"${pkgincludedir}\"
 
 admsXml.c: adms.implicit.xml.c
 
