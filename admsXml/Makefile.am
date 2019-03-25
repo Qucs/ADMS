@@ -33,7 +33,7 @@ libadmsPreprocessor_la_CPPFLAGS=-DinsidePreprocessor
 libadmsPreprocessor_la_LDFLAGS=-no-undefined
 libadmsPreprocessor_la_LIBADD=libadmsElement.la
 
-verilogYacc.h: verilogYacc.c
+verilogaYacc.h: verilogaYacc.c
 libadmsVeriloga_la_SOURCES=verilogaYacc.y verilogaLex.l verilogaYacc.h
 libadmsVeriloga_la_CPPFLAGS=-DinsideVeriloga
 libadmsVeriloga_la_LDFLAGS=-no-undefined
