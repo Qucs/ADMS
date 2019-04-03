@@ -71,7 +71,7 @@ while(<>)
     die "bisonrule should terminate with ';' - see $_" if(not m/^\s+;$/);
   }
 }
-map {print OFH "\%token <_lexval> $_\n";} keys %Token;
+map {print OFH "\%token <_lexval> $_\n";} sort keys %Token;
 print OFH "\n";
 map {print OFH "\%type <_yaccval> $_->{name}\n";} @allbisonrule;
 print OFH "\n";
