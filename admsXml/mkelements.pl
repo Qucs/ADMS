@@ -1884,7 +1884,7 @@ foreach(@$EA)
   }
   push @Location03,"  ENDIFIDENT\n";
 }
-foreach(keys(%A))
+foreach(sort keys(%A))
 {
   my($aname,$ee)=($_,$A{$_});
   push @Location03,"  IFIDENT($aname)\n";
