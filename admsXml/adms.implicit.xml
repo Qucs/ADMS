@@ -192,6 +192,26 @@
                              format="%(function/name) output arg $position is %(.), must be a variable\n"/>
                 <admst:push into="$function/arguments[position(.)=$position]/probe" select="$function/@probe" onduplicate="ignore"/>
                 <admst:push into="$function/arguments[position(.)=$position]/variable" select="$function/@variable" onduplicate="ignore"/>
+                <admst:choose>
+                  <admst:when test="[$globalpartitionning='initial_model']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinmodel" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='initial_instance']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setininstance" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='initial_step']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setininitial_step" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='noise']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinnoise" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='final_step']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinfinal" string="yes"/>
+                  </admst:when>
+                  <admst:otherwise>
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinevaluate" string="yes"/>
+                  </admst:otherwise>
+                </admst:choose>
               </admst:if>
             </admst:for-each>
             <admst:value-to select="$function/@probe"/>
