@@ -103,6 +103,19 @@ Users should be able to build without Perl (and the maintainer required modules 
     make install
 
 
+#### Building an RPM
+
+Go through all the aclocal/automake/configure process to ensure you have all the dependencies installed. 
+
+Chances are you will need to install these packages: gcc-c++ flex bison libtool libtool-ltdl-devel
+
+Then rename the ADSM directory to ADSM-2.3.0 and tar it to make ~/rpmbuild/SOURCES/ADMS-2.3.0.tar.gz
+
+Then copy the spec file into your rpmbuild/SPECS directory
+
+Then build with rpmbuild -ba SPECS/adms.spec
+
+
 ## Credits
 
 See AUTHORS file.
