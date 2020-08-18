@@ -39,7 +39,7 @@ ADMS is known to work on these platforms.
 - GNU Flex
 - GNU Bison (tested with 2.5+)
 - GNU Libtool
-- Perl with XML::LibXml (only for maintainers)
+- Perl with XML::LibXml
   - GD modules to manually update documentation images
 
 Installing dependencies on Linux Debian/Ubuntu:
@@ -58,34 +58,30 @@ This section is relevant in case ADMS is compiled from the Git repository.
 
 #### Compilation Using Autotools
 
-The `--enable-maintainer-mode` makes sure the required files are generated (using Perl and LibXml).
+Use the default commands to compile, generate files and install.
 
     sh bootstrap.sh
-    ./configure --enable-maintainer-mode
+    ./configure
     make install
 
 Autotools it currently used for creating release packages, the `adms-x.x.x.tar.gz` source code archive.
 
     sh bootstrap.sh
-    ./configure --enable-maintainer-mode
+    ./configure
     make clean
     make dist
 
 #### Compilation Using CMake
 
-The `-DUSE_MAINTAINER_MODE=ON` makes sure the required files are generated (using Perl and LibXml).
-
     mkdir cmake; cd cmake
-    cmake .. -DUSE_MAINTAINER_MODE=ON -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
+    cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/install/location/
     make install
 
 Packaging is not yet supported with CMake. At the moment, only static libraries can be build with CMake.
 
-
 ### Users Install from Tarball
 
 This section is relevant in case ADMS is compiled from a source code archive (`adms-x.x.x.tar.gz`).
-Users should be able to build without Perl (and the maintainer required modules XML::LibXml and GD).
 
 #### Compilation Using Autotools
 
@@ -101,6 +97,19 @@ Users should be able to build without Perl (and the maintainer required modules 
     mkdir build; cd build
     cmake .. -DCMAKE_INSTALL_PREFIX=[/install/location/]
     make install
+
+
+#### Building an RPM
+
+Go through all the aclocal/automake/configure process to ensure you have all the dependencies installed. 
+
+Chances are you will need to install these packages: gcc-c++ flex bison libtool libtool-ltdl-devel
+
+Then rename the ADSM directory to ADSM-2.3.0 and tar it to make ~/rpmbuild/SOURCES/ADMS-2.3.0.tar.gz
+
+Then copy the spec file into your rpmbuild/SPECS directory
+
+Then build with rpmbuild -ba SPECS/adms.spec
 
 
 ## Credits
@@ -189,9 +198,9 @@ Original author's build instructions: (for posterity)
   3- run: libtoolize --force --ltdl -c (create libltdl and config.guess, config.sub, ltmain.sh in auxconf)
   4- run: automake -a -c (create missing, mkinstalldirs, install-sh in auxconf and all Makefile.in)
   5- run: autoconf (create configure)
-  6- run: ./configure --enable-maintainer-mode
+  6- run: ./configure
   In three shots:
     rm -rf auxconf && autoheader && mkdir auxconf && aclocal && libtoolize --force --ltdl -c
     touch ChangeLog && automake -a -c && autoconf
-    ./configure --enable-maintainer-mode
+    ./configure
 ```

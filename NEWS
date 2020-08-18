@@ -94,6 +94,8 @@
             mica: same c code as 1.1.8
 03-05-2005: removed admsNS directory
             release adms-2.0.1
-
-
-
+===== gap ====
+21-11-2016: 2.3.6
+**-08-2020: 2.3.7. minor release.
+            reproducible build, typo fixes,
+            include path, instructions

@@ -1,5 +1,5 @@
 adms-2.3.6:
- * Fix parser for parameter lists in subdevice instanciation.
+ * Fix parser for parameter lists in subdevice instantiation.
  * Remove duplicated constants on provided headers.
  * Fix crash on x64 when printing the message about standard headers.
 
@@ -20,11 +20,11 @@ adms-2.3.5:
  * Autotools, add back support for static and shared libraries build.
    * Build shared libraries by default. Tested on Linux, Mac OSX, and MSYS2.
      See the configure --disable-shared flag to change that.
-   * CMake contiues to builds static libraries only.
+   * CMake continues to builds static libraries only.
 
  * Fix out-of-tree build for Autotools and CMake.
 
- * Check scaling factors againd LRM v2.4.0
+ * Check scaling factors against LRM v2.4.0
    * Add missing K scaling (uppercase kilo)
    * standard scale_factor T|G|M|K|k|m|u|n|p|f|a
    * Add testset (va and xml files) to test the scaling factors
@@ -49,7 +49,7 @@ adms-2.3.4:
 	 * avoid spurious fatal error from an included file which last line contains
 	 onlywhite space.
  * preprocessorYacc.y:
-   * fix BSIM6 parse problem, string macro arg broken by continuator
+   * fix BSIM6 parse problem, string macro arg broken by line continuation
      caused 'unexpected end-of-line' error.
  * verilogLex.l:
 	 * Change string recognition to allow embedded \" as literal quote

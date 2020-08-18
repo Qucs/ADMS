@@ -46,6 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 `define M_LN10 2.30258509299404568401
 `define P_C 299792458 // m / s
 `define P_H 6.62607004081e-34 //planck constant. in \text{ J⋅s}
-`define P_MU0 1.2566370614e-6 // v. perm.  H / m or T·m / A or Wb / (A·m) or V·s / (A·m)
+`define P_U0 1.2566370614e-6 // v. perm.  H / m or T·m / A or Wb / (A·m) or V·s / (A·m)
 
 `endif // CONSTANTS_VAMS

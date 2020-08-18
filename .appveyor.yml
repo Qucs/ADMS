@@ -28,7 +28,7 @@ build_script:
 
   ## Build
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./bootstrap.sh"
-  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./configure --enable-maintainer-mode --prefix=/c/adms-win%MBITS% --disable-shared"
+  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./configure --prefix=/c/adms-win%MBITS% --disable-shared"
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make distcheck"
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make install"
 
