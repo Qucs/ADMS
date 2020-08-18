@@ -191,8 +191,6 @@
           name='\$realtime' or
           name='\$temperature' or
           name='\$vt' or
-          name='idt' or
-          name='ddt' or
           name='\$param_given' or
           name='\$port_connected' or
           name='\$given' or
@@ -200,6 +198,10 @@
           name='flicker_noise' or
           name='white_noise'
           ]">
+        </admst:when>
+        <admst:when test="[name='idt' or name='ddt']">
+          <admst:push into="$globalexpression/function" select="."/>
+          <admst:value-to select="class" string="operator"/>
         </admst:when>
 
         <!-- Table 4-14 - Standard Functions -->
