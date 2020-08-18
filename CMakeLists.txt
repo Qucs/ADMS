@@ -27,8 +27,11 @@ endif()
 PROJECT(ADMS C)
 cmake_minimum_required(VERSION 2.8)
 
+# TODO: store version in a sensible place
+# e.g. qucs: file(STRINGS "${qucs-project_SOURCE_DIR}/VERSION" QUCS_VERSION)
+
 SET(PACKAGE_NAME "adms")
-SET(PACKAGE_VERSION "2.3.6")
+SET(PACKAGE_VERSION "2.3.7")
 SET(PACKAGE_BUGREPORT "qucs-bugs@lists.sourceforge.net")
 
 # Default to static libs ( shared needs work, BUG with MinGW). 
