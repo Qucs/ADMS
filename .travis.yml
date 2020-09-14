@@ -6,7 +6,7 @@ dist: trusty
 compiler:
   - gcc
   - clang
-
+arch: ppc64le
 # Settings to try
 env:
   matrix:
