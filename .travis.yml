@@ -2,11 +2,12 @@ language: c
 
 sudo: required
 dist: trusty
+arch: ppc64le
 
 compiler:
   - gcc
   - clang
-arch: ppc64le
+
 # Settings to try
 env:
   matrix:
