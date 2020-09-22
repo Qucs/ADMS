@@ -2,7 +2,9 @@ language: c
 
 sudo: required
 dist: trusty
-arch: ppc64le
+arch: 
+  - ppc64le
+  - AMD64
 
 compiler:
   - gcc
