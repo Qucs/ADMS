@@ -48,6 +48,31 @@ libadmsAdmstpath_la_LIBADD=libadmsElement.la
 #depends on adms.implicit.xml
 bin_PROGRAMS=admsXml admsCheck
 
+# probably all of
+# linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu*
+instex=$(shell echo admsXml | \
+			  sed -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/')
+install-exec-hook:
+	@if [ -n "$(DESTDIR)" ]; then \
+		echo DESTDIR, nothing to do; \
+	elif [ $(libdir) = /lib ]; then \
+		echo guessing that this is not necessary.; \
+	elif [ $(libdir) = /usr/lib ]; then \
+		echo guessing that this is not necessary.; \
+	elif ( chrpath $(bindir)/$(instex) | grep -q PATH= ); then \
+		echo theres an rpath set, no need to act.; \
+	elif [ `id -u` = 0 ]; then \
+		echo =======================================================; \
+		echo we are root, could in principle run ldconfig for you; \
+		echo "(goodbye)"; \
+		echo =======================================================; \
+	else \
+		echo =======================================================; \
+		echo maybe run \'ldconfig\' with appropriate privileges; \
+		echo "(now)";\
+		echo =======================================================; \
+	fi
+
 admsXml_SOURCES=admsXml.c
 admsXml_LDADD=-lm libadmsElement.la libadmsVeriloga.la libadmsPreprocessor.la libadmsAdmstpath.la
 admsXml_CPPFLAGS=${AM_CPPFLAGS} -DADMS_INCLUDEDIR=\"${pkgincludedir}\"
