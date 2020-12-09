@@ -31,6 +31,7 @@ install:
   - bash -lc ""
   - bash -lc "pacman --version"
   # Switch from SF to msys2.org (default, much faster)
+  # only install missing package (--needed option)
   - bash -lc "pacman --noconfirm --sync --needed pacman-mirrors"
   - bash -lc "pacman --noconfirm --sync --needed autoconf automake bison flex perl perl-XML-LibXML"
 
@@ -42,8 +43,8 @@ build_script:
   ## Build
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./bootstrap.sh"
   - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && ./configure --prefix=/c/adms-win%MBITS% --disable-shared --quiet"
-  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make distcheck"
-  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make install"
+  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make --quiet distcheck"
+  - bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER && make --quiet install"
 
   - bash -lc "exec 0</dev/null && /c/adms-win%MBITS%/bin/admsXml -v"
 
