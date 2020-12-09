@@ -10,8 +10,10 @@ EXTRA_DIST= \
   getargv.xml             \
   getenv.xml              \
   getinstance.xml         \
+  html_params.xml \
   gettransform.xml        \
   sort.xml                \
   strutils.xml            \
   vlatommlMODULE.htm.xml  \
-  vlatovla.xml
+  vlatovla.xml \
+  xyceBasicTemplates.xml
