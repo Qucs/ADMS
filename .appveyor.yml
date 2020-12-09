@@ -11,6 +11,18 @@ environment:
 platform:
   - x64
 
+
+skip_commits:
+  files:
+    - .travis.yml
+    - '*.md'
+
+cache:
+  # cache pacman packages
+  # max cache size is 1 GB, which should be enough
+  # but in case we could cache only mingw-w64-*-qt4-*
+  - C:\msys64\var\cache\pacman\pkg\ -> .appveyor.yml
+  
 install:
 
   # Take a look at the environment
