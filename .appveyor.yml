@@ -31,8 +31,8 @@ install:
   - bash -lc ""
   - bash -lc "pacman --version"
   # Switch from SF to msys2.org (default, much faster)
-  - bash -lc "pacman --noconfirm --sync pacman-mirrors"
-  - bash -lc "pacman --noconfirm -S autoconf automake bison flex perl perl-XML-LibXML"
+  - bash -lc "pacman --noconfirm --sync --needed pacman-mirrors"
+  - bash -lc "pacman --noconfirm --sync --needed autoconf automake bison flex perl perl-XML-LibXML"
 
 build_script:
   ## Notes
