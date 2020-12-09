@@ -33,7 +33,7 @@ install:
   # Switch from SF to msys2.org (default, much faster)
   # only install missing package (--needed option)
   - bash -lc "pacman --noconfirm --sync --needed pacman-mirrors"
-  - bash -lc "pacman --noconfirm --sync --needed autoconf automake bison flex perl perl-XML-LibXML"
+  - bash -lc "pacman --noconfirm --sync --needed gcc base-devel autoconf automake bison flex perl perl-XML-LibXML"
 
 build_script:
   ## Notes
