@@ -1,0 +1,114 @@
+# 1 "./0001_operator.va"
+
+
+# 1 "discipline.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 25 "discipline.h"
+
+
+
+nature current
+  access = I;
+  units = "A";
+  abstol = 0.001234;
+endnature
+
+
+nature voltage
+  access = V;
+  units = "V";
+  abstol = 0.0004321;
+endnature
+
+
+nature power
+  access = Pwr;
+  units = "W";
+  abstol = 0.00101010;
+endnature
+
+
+nature flux
+  access = Phi;
+  units = "We";
+endnature
+
+
+nature temperature
+  access = Temp;
+  units = "K";
+  abstol = 3.14;
+endnature
+
+
+discipline thermal
+  potential temperature;
+  flow power;
+enddiscipline
+
+
+discipline electrical
+  potential voltage;
+  flow current;
+enddiscipline
+
+discipline magnetic
+  potential voltage; 
+  flow current; 
+enddiscipline
+
+discipline rotational_omega
+  potential voltage; 
+  flow current; 
+enddiscipline
+
+
+
+# 4 "./0001_operator.va"
+
+module sometest(p,n);
+	inout p,n;
+	electrical p,n;
+
+	parameter real c=1e-6 from [0:inf);
+	analog begin
+		begin
+			I(p,n) <+ c*ddt(V(n,p)*9);
+			I(p,n) <+ exp(ddt(V(p,n)));
+		end
+	end
+endmodule
+
+module anothertest(p,n);
+	inout p,n;
+	electrical p,n;
+
+	parameter real c=1e-6 from [0:inf);
+	analog begin
+		begin
+			real foo; foo = c*idt(exp(V(p,n)));
+			I(p,n) <+ pow(ddt(foo*V(p,n)),2);
+		end
+	end
+endmodule
