@@ -1,0 +1,15 @@
+# 1 "./0002_transition.va"
+
+module trans();
+
+real out1, expr1, td, rt, ft, ttol;
+
+real out2, expr2;
+
+analog begin
+ out1 = transition(expr1, td, rt, ft, ttol);
+
+ out2 = transition(expr2 - 1.5, td);
+end
+
+endmodule
