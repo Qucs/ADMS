@@ -35,6 +35,9 @@ build_script:
 
   - bash -lc "exec 0</dev/null && /c/adms-win%MBITS%/bin/admsXml -v"
 
+test_script:
+  - bash -lc "cd $APPVEYOR_BUILD_FOLDER/testcases && ./testADMS.sh /c/adms-win%MBITS%/bin/admsXml.exe"
+
 after_build:
   #  artifacts path is always relative to build folder, so put the zip there
   - 7z a %APPVEYOR_BUILD_FOLDER%\adms-win%MBITS%.zip %ADMSDIR%
