@@ -21,13 +21,13 @@ arrayTest=(
            0002_transition
            0003_subdev)
 
+# todo
+srcdir=.
 #
 # run admsXml and check output against reference
 #
 for test in "${arrayTest[@]}"
 do
-  $ADMSXML $test.va -e $test.xml > /dev/null
-  cmp $test.ref .$test.va.adms
+  $ADMSXML ${srcdir}/$test.va -e ${srcdir}/$test.xml
+  cmp ${srcdir}/out/.$test.va.adms .$test.va.adms
 done
-
-rm discipline.h .*.va.adms .adms.implicit.xml .interface.xml
