@@ -7,6 +7,7 @@
   Copyright (C) 2002-2012 Laurent Lemaitre <r29173@users.sourceforge.net>
   Copyright (C) 2015-2016 Guilherme Brondani Torri <guitorri@gmail.com>
                 2012 Ryan Fox <ryan.fox@upverter.com>
+                2017 Felix Salfelder <felix@salfelder.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -142,6 +143,20 @@
       </admst:choose>
     </admst:when>
     <admst:when test="[datatypename='function']">
+      <admst:if test="[definition/datatypename='analogfunction']">
+        <admst:variable name="function" select="%(.)"/>
+        <admst:for-each select="definition/variable[(output='yes') and name!=$function/name]">
+          <admst:variable name="p" select="%(position(.))"/>
+
+          <admst:fatal test="[$function/arguments[position(.)=$p]/datatypename!='variable']"
+                       format="%($function/name) output arg $p, %(.) must be variable\n"/>
+
+          <admst:for-each select="$function/arguments">
+            <admst:push into="$function/arguments[position(.)=$p]/probe"
+                        select="probe" onduplicate="ignore"/>
+          </admst:for-each>
+        </admst:for-each>
+      </admst:if>
       <admst:choose>
         <admst:when test="[name='ddx' or name='\$ddx' or name='\$derivate']">
           <admst:value-to select="$globalassignment/lhs/derivate" string="yes"/>
