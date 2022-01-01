@@ -617,7 +617,7 @@ static void parseva (const int argc,const char** argv,char* myverilogamsfile)
     pproot()->includePath=getlist_from_argv(argc,argv,"-I","directory");
     adms_slist_push(&pproot()->includePath,(p_adms)".");
 #ifdef ADMS_INCLUDEDIR
-    adms_slist_push(&pproot()->includePath,(p_adms)ADMS_INCLUDEDIR);
+    adms_slist_concat(&pproot()->includePath,adms_slist_new((p_adms)ADMS_INCLUDEDIR));
 #endif
     adms_preprocessor_get_define_from_argv(argc,argv);
     adms_preprocessor_define_add_default("insideADMS");
