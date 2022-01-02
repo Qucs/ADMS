@@ -1,0 +1,68 @@
+/*
+This file is part of adms - http://sourceforge.net/projects/mot-adms.
+
+adms is a code generator for the Verilog-AMS language.
+
+Copyright (C) 2016 Guilherme Brondani Torri <guitorri@gmail.com>
+              2016 Felix Salfelder <felix@salfelder.org>
+              2022 Neal Graham Wood <neal.wood@protonmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+`ifdef CONSTANTS_VAMS
+`else
+`define CONSTANTS_VAMS 1
+
+/* Mathematical constants */
+
+`define M_1_PI          0.31830988618379068
+`define M_2_PI          0.63661977236758135
+`define M_2_SQRTPI      1.1283791670955126
+`define M_E             2.7182818284590452
+`define M_LN10          2.3025850929940457
+`define M_LN2           0.69314718055994531
+`define M_LOG10E        0.43429448190325182
+`define M_LOG2E         1.4426950408889634
+`define M_PI            3.1415926535897932
+`define M_PI_2          1.5707963267948966
+`define M_PI_4          0.78539816339744830
+`define M_SQRT1_2       0.70710678118654755
+`define M_SQRT2         1.4142135623730950
+`define M_TWO_PI        6.2831853071795864
+
+/* Physical constants */
+
+// speed of light in vacuum -- m s^-1
+`define P_C             299792458
+
+// zero degrees Celsius -- K
+`define P_CELSIUS0      273.15
+
+// vacuum electric permittivity -- F m^-1
+`define P_EPS0          8.8541878128e-12
+
+// Planck constant -- J Hz^-1
+`define P_H             6.62607015e-34
+
+// Boltzmann constant -- J K^-1
+`define P_K             1.380649e-23
+
+// elementary charge -- C
+`define P_Q             1.602176634e-19
+
+// vacuum mag. permeability -- N A^-2
+`define P_U0            1.25663706212e-6
+
+`endif // CONSTANTS_VAMS
