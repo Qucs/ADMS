@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use bignum (a => 17, qw/PI e/); # 'a' sets number of significant figures
+use bignum (accuracy => 17, qw/PI e/); # adjusts number of significant figures
 use English qw/-no_match_vars/;
 
 # Calculate mathematical constants using Perl's arbitrary-precision arithmetic
