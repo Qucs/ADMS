@@ -56,7 +56,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 `define M_PI_4 0.78539816339744830
 `define M_TWO_PI 6.28318530717958
 `define M_1_SQRT2 .70710678118654752440
-`define P_ESP0 8.854187817 // 10−12 F·m−1
-`define P_MU0 1.2566370614 // 10−6 H / m or T·m / A or Wb / (A·m) or V·s / (A·m)
 
 `endif // CONSTANTS_VAMS
