@@ -103,4 +103,5 @@
             add more numerical constants
             provide constants script for more flexibility
             fix -I, take precedence over ADMS_INCLUDEDIR
-            allow semicolon after discipline identifier
+            allow semicolon after identifier in disciple/nature declaration
+            add basic support for escaped identifiers
