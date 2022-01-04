@@ -274,7 +274,7 @@ INF {TKRETURN(yytext,yyleng); return tk_inf;}
 \|\| {TKRETURN(yytext,yyleng); return tk_or;}
 \^\~ {TKRETURN(yytext,yyleng); return tk_bitwise_equr;}
 
-\\{ident}" " {TKRETURN(yytext,yyleng); return tk_ident;}
+\\{ident}" " {TKSTRIPPEDRETURN(yytext,yyleng); return tk_ident;}
 \${ident} {TKRETURN(yytext,yyleng); return tk_dollar_ident;}
 {char} {TKSTRIPPEDRETURN(yytext,yyleng); return tk_char;}
 {b8_int} {TKRETURN(yytext,yyleng); return tk_integer;}
