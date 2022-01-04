@@ -96,6 +96,10 @@
             release adms-2.0.1
 ===== gap ====
 21-11-2016: 2.3.6
-**-08-2020: 2.3.7. minor release.
+18-08-2020: 2.3.7. minor release.
             reproducible build, typo fixes,
             include path, instructions
+*****-2022: 2.3.8.
+            add more numerical constants
+            provide constants script for more flexibility
+            fix -I, take precedence over ADMS_INCLUDEDIR
