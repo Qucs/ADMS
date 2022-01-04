@@ -140,6 +140,7 @@ R_s.admsParse
         ;
 R_discipline_member
         | tk_discipline R_discipline_name R_l.discipline_assignment tk_enddiscipline
+        | tk_discipline R_discipline_name ';' R_l.discipline_assignment tk_enddiscipline
           _ adms_admsmain_list_discipline_prepend_once_or_abort(root(),gDiscipline);
           _ gDiscipline=NULL;
         ;
@@ -175,6 +176,7 @@ R_discipline.naturename
 
 R_nature_member
         | tk_nature tk_ident R_l.nature_assignment tk_endnature
+        | tk_nature tk_ident ';' R_l.nature_assignment tk_endnature
           _ p_nature mynature=NULL;
           _ if(gNatureAccess) 
           _   mynature=adms_admsmain_list_nature_prepend_by_id_once_or_abort(root(),gNatureAccess);
