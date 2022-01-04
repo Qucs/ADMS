@@ -4,7 +4,7 @@ This file is part of adms - http://sourceforge.net/projects/mot-adms.
 adms is a code generator for the Verilog-AMS language.
 
 Copyright (C) 2016 Guilherme Brondani Torri <guitorri@gmail.com>
-              2016 Felix Salfelder <felix@salfelder.org>
+              2016, 2022 Felix Salfelder <felix@salfelder.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,5 +47,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 `define P_C 299792458 // m / s
 `define P_H 6.62607004081e-34 //planck constant. in \text{ J⋅s}
 `define P_U0 1.2566370614e-6 // v. perm.  H / m or T·m / A or Wb / (A·m) or V·s / (A·m)
+
+// (also) from https://github.com/Qucs/ADMS/wiki/Header-license-issue#clean-room-implementation
+`define M_1_PI 0.31830988618379068
+`define M_2_PI 0.63661977236758135
+`define M_2_SQRTPI 1.1283791670955126
+`define M_PI_2 1.5707963267948966
+`define M_PI_4 0.78539816339744830
+`define M_TWO_PI 6.28318530717958
+`define M_1_SQRT2 .70710678118654752440
+`define P_ESP0 8.854187817 // 10−12 F·m−1
+`define P_MU0 1.2566370614 // 10−6 H / m or T·m / A or Wb / (A·m) or V·s / (A·m)
 
 `endif // CONSTANTS_VAMS
