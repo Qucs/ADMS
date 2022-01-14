@@ -278,7 +278,11 @@ R_s.nature_assignment
         ;
 R_d.attribute.0
         |
+        | R_d.attribute.1
+        ;
+R_d.attribute.1
         | R_d.attribute
+        | R_d.attribute.1 R_d.attribute
         ;
 R_d.attribute
         | tk_beginattribute R_l.attribute tk_endattribute
@@ -370,7 +374,7 @@ R_s.declaration.withattribute
           _ set_context(ctx_moduletop);
         ;
 R_d.attribute.global
-        | R_d.attribute
+        | R_d.attribute.1
           _ gGlobalAttributeList=gAttributeList;
           _ gAttributeList=NULL;
         ;
@@ -1190,7 +1194,7 @@ R_s.assignment
           _ Y($$,(p_adms)myassignment);
           _ myvariableprototype->_vcount++;
           _ myvariableprototype->_vlast=myassignment;
-        | R_d.attribute tk_ident '=' R_s.expression
+        | R_d.attribute.1 tk_ident '=' R_s.expression
           _ p_assignment myassignment;
           _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$2);
           _ p_variableprototype myvariableprototype;
@@ -1224,7 +1228,7 @@ R_s.assignment
           _ Y($$,(p_adms)myassignment);
           _ myvariableprototype->_vcount++;
           _ myvariableprototype->_vlast=myassignment;
-        | R_d.attribute tk_ident '[' R_expression ']' '=' R_s.expression
+        | R_d.attribute.1 tk_ident '[' R_expression ']' '=' R_s.expression
           _ p_assignment myassignment;
           _ p_array myarray;
           _ p_variable myvariable=variable_recursive_lookup_by_id(gBlockList->data,$2);
