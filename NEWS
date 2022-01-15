@@ -102,6 +102,7 @@
 *****-2022: 2.3.8.
             add more numerical constants
             provide constants script for more flexibility
-            fix -I, take precedence over ADMS_INCLUDEDIR
+            move ADMS_INCLUDEDIR to back of include directory search path list
             allow semicolon after identifier in disciple/nature declaration
             add basic support for escaped identifiers
+            allow for multiple attribute instances
