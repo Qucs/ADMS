@@ -133,12 +133,20 @@ static void adms_preprocessor_lex_include_file (char* fileName)
   FILE*myfh;
   p_preprocessor scanner;
   char*message=NULL;
+  char*mydir=NULL;
+  p_slist l; for(l=pproot()->Scanner;l;l=l->next)
+  {
+    adms_k2strconcat(&mydir,dirname(((p_preprocessor)l->data)->filename));
+    adms_k2strconcat(&mydir,ADMS_PATH_SEPARATOR);
+  }
+  adms_k2strconcat(&mydir,dirname(pproot()->cr_scanner->filename));
   adms_k2strconcat(&message,pproot()->cr_scanner->filename);
   adms_k2strconcat(&message,":");
   adms_strconcat(&message,adms_integertostring(adms_preprocessor_get_line_position (pproot()->cr_scanner, 0)));
   if(pproot()->cr_filename)
     free(pproot()->cr_filename);
   pproot()->cr_filename=strdup(fileName);
+  adms_slist_push(&pproot()->includePath,(p_adms)mydir);
   if(!(myfh=adms_file_open_read_with_path(fileName,(p_slist)(pproot()->includePath))))
   {
     if(!strcmp(fileName,"discipline.h")||!strcmp(fileName,"disciplines.h")||!strcmp(fileName,"discipline.vams")||!strcmp(fileName,"disciplines.vams"))
@@ -161,6 +169,7 @@ static void adms_preprocessor_lex_include_file (char* fileName)
     else
       adms_message_fatal(("[%s]: failed to open file ... '%s'\n",message,fileName))
   }
+  adms_slist_pull(&pproot()->includePath);
   scanner=(p_preprocessor)malloc(sizeof(t_preprocessor));
   adms_message_verbose(("include file '%s'\n",fileName))
   scanner->buffer=NULL;
