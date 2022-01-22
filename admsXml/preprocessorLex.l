@@ -191,6 +191,7 @@ static void adms_preprocessor_lex_include_file (char* fileName)
   adms_k2strconcat(&preprocessorlval.mystr,"\"\n");
   BEGIN( INITIAL );
   free(message);
+  free(mydir);
 }
 
 static char *adms_preprocessor_lex_skipp_text ()
