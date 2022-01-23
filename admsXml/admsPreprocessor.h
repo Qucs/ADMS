@@ -105,8 +105,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define INT2ADMS(a) ((p_adms)(long)(a))
 
-win32_interface char* dirname(const char* myname);
-
 win32_interface void adms_preprocessor_get_define_from_argv(const int argc,const char** argv);
 
 win32_interface int adms_preprocessor_getint_yydebug (void);

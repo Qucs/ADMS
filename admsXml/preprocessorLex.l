@@ -33,6 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "admsPreprocessor.h"
 #include "preprocessorYacc.h"
 
+char* dirname(const char* myname);
+
 #ifndef INITIAL
 #  define INITIAL 0
 #endif
