@@ -33,8 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "admsPreprocessor.h"
 #include "preprocessorYacc.h"
 
-char* dirname(const char* myname);
-
 #ifndef INITIAL
 #  define INITIAL 0
 #endif
@@ -138,10 +136,10 @@ static void adms_preprocessor_lex_include_file (char* fileName)
   char*mydir=NULL;
   p_slist l; for(l=pproot()->Scanner;l;l=l->next)
   {
-    adms_k2strconcat(&mydir,dirname(((p_preprocessor)l->data)->filename));
+    adms_k2strconcat(&mydir,adms_dirname(((p_preprocessor)l->data)->filename));
     adms_k2strconcat(&mydir,ADMS_PATH_SEPARATOR);
   }
-  adms_k2strconcat(&mydir,dirname(pproot()->cr_scanner->filename));
+  adms_k2strconcat(&mydir,adms_dirname(pproot()->cr_scanner->filename));
   adms_k2strconcat(&message,pproot()->cr_scanner->filename);
   adms_k2strconcat(&message,":");
   adms_strconcat(&message,adms_integertostring(adms_preprocessor_get_line_position (pproot()->cr_scanner, 0)));
