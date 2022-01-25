@@ -277,6 +277,102 @@ typedef void (*p_valuetobasicenumeration) (p_adms myadms,admse myinteger);
 typedef void (*p_valuetobasicinteger) (p_adms myadms,int myinteger);
 typedef void (*p_valuetobasicreal) (p_adms myadms,double myreal);
 typedef void (*p_valuetobasicstring) (p_adms myadms,char *mystring);
+/* examples: /a/b => \0,a,b and a/b/ => a,b,\0*/
+static p_slist adms_split_new (const char* myname)
+{
+  p_slist mypath=NULL;
+  const char* sj=myname;
+  const char* si=myname;
+  while(*sj!='\0')
+  {
+    if((*sj=='/')||(*sj=='\\'))
+    {
+      if(si==sj)
+        adms_slist_push(&mypath,NULL);
+      else
+        adms_slist_push(&mypath,(p_adms)adms_m2nclone(si,sj));
+      si=sj+1;
+    }
+    sj++;
+  }
+  adms_slist_push(&mypath,(p_adms)adms_m2nclone(si,sj));
+  return adms_slist_reverse(mypath);
+}
+static void free_strlist (p_slist myli0)
+{
+  p_slist myli;
+  for(myli=myli0;myli;myli=myli->next)
+    free(myli->data);
+  adms_slist_free(myli0);
+}
+static char* dirname (const char* myname)
+{
+  p_slist myli0=adms_split_new(myname);
+  char* mydirname=NULL;
+  p_slist myli=myli0;
+  int first=1;
+#if defined(ADMS_OS_MS)
+  if((myli->data==NULL)&&myli->next&&(!strcmp((char*)(myli->next->data),"cygdrive")))
+  {
+    myli=myli->next->next;
+    if(myli)
+    {
+      adms_k2strconcat(&mydirname,(char*)(myli->data));
+      adms_k2strconcat(&mydirname,":/");
+      myli=myli->next;
+    }
+    else
+      adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+  }
+#endif
+  for(;myli;myli=myli->next,first=0)
+  {
+    if(myli->data==NULL)
+      adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+    else if(myli->next==NULL)
+    {
+      if(!strcmp((char*)(myli->data),".")||!strcmp((char*)(myli->data),".."))
+      {
+        if(!first)
+          adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+        adms_k2strconcat(&mydirname,(char*)(myli->data));
+      }
+    }
+    else
+    {
+      adms_k2strconcat(&mydirname,(char*)(myli->data));
+      if(myli->next->next)
+        adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+    }
+  }
+  free_strlist(myli0);
+  if(mydirname)
+    return mydirname;
+  else
+    return adms_kclone(".");
+}
+static char* basename (const char* myname)
+{
+  p_slist myli0=adms_split_new(myname);
+  char* mybasename=NULL;
+  p_slist myli=adms_slist_last(myli0);
+  if(!(!strcmp((char*)(myli->data),".")||!strcmp((char*)(myli->data),"..")))
+    adms_k2strconcat(&mybasename,(char*)(myli->data));
+  free_strlist(myli0);
+  return mybasename;
+}
+static char* filename (const char* myname)
+{
+  char* myfilename=NULL;
+  char* mybasename=basename(myname);
+  adms_strconcat(&myfilename,dirname(myname));
+  if(mybasename)
+  {
+    adms_k2strconcat(&myfilename,ADMS_PATH_SEPARATOR);
+    adms_strconcat(&myfilename,mybasename);
+  }
+  return myfilename;
+}
 /*',,' becomes '' '' ''*/
 /*'' becomes ''*/
 /*'a\' 'b\' 'c' becomes 'a,b,c' - note: 'a\\' becomes 'a\' - strlen(delimiter) should be 1 */
@@ -462,7 +558,7 @@ static p_slist getlist_from_argv (const int argc,const char* *argv,const char* o
         myargvalue=adms_knclone(value+2,strlen(value)-2);
       if(myargvalue)
       {
-        char* myunixpath=adms_filename(myargvalue);
+        char* myunixpath=filename(myargvalue);
         free(myargvalue);
         if(!strcmp(argtype,"file"))
         {
@@ -489,9 +585,9 @@ static void parseva (const int argc,const char** argv,char* myverilogamsfile)
   p_slist myli;
   char* mytmpverilogamsfile=NULL;
   adms_k2strconcat(&mytmpverilogamsfile,".");
-  adms_strconcat(&mytmpverilogamsfile,adms_basename(myverilogamsfile));
+  adms_strconcat(&mytmpverilogamsfile,basename(myverilogamsfile));
   adms_k2strconcat(&mytmpverilogamsfile,".adms");
-  root()->_filename=adms_basename(myverilogamsfile);
+  root()->_filename=basename(myverilogamsfile);
   root()->_fullfilename=adms_kclone(myverilogamsfile);
   root()->_curfilename=adms_kclone(myverilogamsfile);
   adms_message_info(("%sXml-%s (%s) %s %s\n",PACKAGE_NAME,PACKAGE_VERSION,GIT,__DATE__,__TIME__))
@@ -636,8 +732,8 @@ static void Xadmst (p_transform mytransform,p_admst dot,p_admst dotdot)
       adms_message_warning(("see %s\n",adms_transform_uid(mytransform)))
     }
     free(requested);
-    adms_free_strlist(Installed);
-    adms_free_strlist(Requested);
+    free_strlist(Installed);
+    free_strlist(Requested);
   }
   xtraverse(mytransform->_children,dot,dotdot);
 }
@@ -1592,10 +1688,10 @@ static void Xcopy (p_transform mytransform,p_admst dot,p_admst dotdot)
   char buf[1024];
   char* tfrom=tsprintf(dot,mytransform->_textfrom);
   char* tto=tsprintf(dot,mytransform->_textto);
-  char* myfromfile=adms_filename(tfrom);
-  char* myfrombasename=adms_basename(myfromfile);
-  char* myfromdirname=adms_dirname(myfromfile);
-  char* mytopath=adms_filename(tto);
+  char* myfromfile=filename(tfrom);
+  char* myfrombasename=basename(myfromfile);
+  char* myfromdirname=dirname(myfromfile);
+  char* mytopath=filename(tto);
   char* mytofilename=NULL;
   char* mytodirname=NULL;
   free(tfrom);
@@ -1611,7 +1707,7 @@ static void Xcopy (p_transform mytransform,p_admst dot,p_admst dotdot)
   }
   else
   {
-    mytodirname=adms_dirname(mytopath);
+    mytodirname=dirname(mytopath);
     if(adms_file_isdirectory(mytodirname))
       adms_k2strconcat(&mytofilename,mytopath);
     else
@@ -2227,7 +2323,7 @@ static void xmlhook_start (const px xp)
 {
   int l=xp->l;
   const char* admstfile=xp->f;
-  char* mybasename=adms_basename(admstfile);
+  char* mybasename=basename(admstfile);
   p_slist Transform=root()->_transform;
   p_transform mytransform;
   struct sb* bp=xp->bp;
@@ -2260,7 +2356,7 @@ static void xmlhook_start (const px xp)
         for(;myli;myli=myli->next)
           adms_slist_push(&mytransform->_textarguments,(p_adms)tparse(mytransform,aname,(char*)(myli->data)));
         adms_slist_inreverse(&mytransform->_textarguments);
-        adms_free_strlist(myli0);
+        free_strlist(myli0);
       }
       else if(!strcmp(aname,"inputs"))
       {
@@ -2269,7 +2365,7 @@ static void xmlhook_start (const px xp)
         for(;myli;myli=myli->next)
           adms_slist_push(&mytransform->_pathinputs,(p_adms)pparse(mytransform,aname,(char*)(myli->data)));
         adms_slist_inreverse(&mytransform->_pathinputs);
-        adms_free_strlist(myli0);
+        free_strlist(myli0);
       }
       else if(!strcmp(aname,"oncompare"))
         mytransform->_pathoncompare=pparse(mytransform,aname,avalue);
@@ -2400,7 +2496,7 @@ static void xmlhook_text (const px xp)
   if(root()->_transform&&newtext)
   {
     p_transform parent=(p_transform)root()->_transform->data;
-    char* mybasename=adms_basename(xp->f);
+    char* mybasename=basename(xp->f);
     p_transform mytransform=adms_transform_new(xp->f,mybasename,parent->_l,"admst:text",parent);
     free(mybasename);
     mytransform->_textformat=tparse(mytransform,"text()",newtext);
@@ -2421,7 +2517,7 @@ static void creearbrex(const char*myadmstfile)
     char* xdata=adms_kclone(xcode);
 #else
 /*read xfile*/
-    char* xfile=adms_filename(myadmstfile);
+    char* xfile=filename(myadmstfile);
     FILE*xxfh=fopen(xfile,"rb");
     char buf[1024];
     char *xdata=NULL;
@@ -2650,7 +2746,7 @@ int main (const int argc,const char**argv)
   {
     if(mygetenv)
     {
-      myadmsimplicitxmlfile=adms_filename(mygetenv);
+      myadmsimplicitxmlfile=filename(mygetenv);
       adms_message_info(("loading implicit xml script %s\n",mygetenv))
       adms_message_info(("(shell variable 'adms_implicit_transforms' has been set)\n"))
     }
@@ -2732,7 +2828,7 @@ int main (const int argc,const char**argv)
     if(!myskipxmli || myli!=myxargs)
     {
       const char* myadmstfile=(char*)(myli->data);
-      char* xfile=adms_filename(myadmstfile);
+      char* xfile=filename(myadmstfile);
       char* xlocalheader=NULL;
       adms_k2strconcat(&xlocalheader,"\n");
       adms_k2strconcat(&xlocalheader,"<?escript name=\"");
@@ -2793,7 +2889,7 @@ int main (const int argc,const char**argv)
       if(root()->_dbg_xml==admse_yes)
       {
         char*mydbgfile=NULL;
-        char* mybasename=adms_basename((char*)myli->data);
+        char* mybasename=basename((char*)myli->data);
         adms_k2strconcat(&mydbgfile,".");
         adms_k2strconcat(&mydbgfile,mybasename);
         if(!(stdadmstdbgimpl=fopen(mydbgfile,"wb")))

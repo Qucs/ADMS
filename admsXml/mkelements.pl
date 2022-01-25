@@ -381,7 +381,7 @@ my$inputs0=$_ eq"ks"?"$cast item":
 $adms_h.="win32_interface p_admst adms_admst_new$_ ($inputs0);\n";
 }
 $adms_h.="\n/*-- Miscellaneous routines --*/\n";
-$adms_h.=q[
+$adms_h.=q@
 win32_interface const double adms_dzero;
 win32_interface double adms_NAN;
 win32_interface p_admst aread (p_admst myadmst);
@@ -423,12 +423,8 @@ struct s_slist
   p_adms data;
   p_slist next;
 };
-
-win32_interface p_slist adms_split_new (const char* myname);
-win32_interface void adms_free_strlist (p_slist myli0);
-win32_interface char* adms_dirname (const char* myname);
-win32_interface char* adms_basename (const char* myname);
-win32_interface char* adms_filename (const char* myname);
+@;
+$adms_h.=q[
 
 win32_interface p_admsmain root(void);
 win32_interface void rootnew(p_admsmain myglobaladmsmain);
@@ -1641,104 +1637,6 @@ void adms_slist_free (p_slist l)
     free(freed);
   }
 }
-
-/* examples: /a/b => \0,a,b and a/b/ => a,b,\0*/
-p_slist adms_split_new (const char* myname)
-{
-  p_slist mypath=NULL;
-  const char* sj=myname;
-  const char* si=myname;
-  while(*sj!='\0')
-  {
-    if((*sj=='/')||(*sj=='\\\\'))
-    {
-      if(si==sj)
-        adms_slist_push(&mypath,NULL);
-      else
-        adms_slist_push(&mypath,(p_adms)adms_m2nclone(si,sj));
-      si=sj+1;
-    }
-    sj++;
-  }
-  adms_slist_push(&mypath,(p_adms)adms_m2nclone(si,sj));
-  return adms_slist_reverse(mypath);
-}
-void adms_free_strlist (p_slist myli0)
-{
-  p_slist myli;
-  for(myli=myli0;myli;myli=myli->next)
-    free(myli->data);
-  adms_slist_free(myli0);
-}
-char* adms_dirname (const char* myname)
-{
-  p_slist myli0=adms_split_new(myname);
-  char* mydirname=NULL;
-  p_slist myli=myli0;
-  int first=1;
-#if defined(ADMS_OS_MS)
-  if((myli->data==NULL)&&myli->next&&(!strcmp((char*)(myli->next->data),"cygdrive")))
-  {
-    myli=myli->next->next;
-    if(myli)
-    {
-      adms_k2strconcat(&mydirname,(char*)(myli->data));
-      adms_k2strconcat(&mydirname,":/");
-      myli=myli->next;
-    }
-    else
-      adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
-  }
-#endif
-  for(;myli;myli=myli->next,first=0)
-  {
-    if(myli->data==NULL)
-      adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
-    else if(myli->next==NULL)
-    {
-      if(!strcmp((char*)(myli->data),".")||!strcmp((char*)(myli->data),".."))
-      {
-        if(!first)
-          adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
-        adms_k2strconcat(&mydirname,(char*)(myli->data));
-      }
-    }
-    else
-    {
-      adms_k2strconcat(&mydirname,(char*)(myli->data));
-      if(myli->next->next)
-        adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
-    }
-  }
-  adms_free_strlist(myli0);
-  if(mydirname)
-    return mydirname;
-  else
-    return adms_kclone(".");
-}
-char* adms_basename (const char* myname)
-{
-  p_slist myli0=adms_split_new(myname);
-  char* mybasename=NULL;
-  p_slist myli=adms_slist_last(myli0);
-  if(!(!strcmp((char*)(myli->data),".")||!strcmp((char*)(myli->data),"..")))
-    adms_k2strconcat(&mybasename,(char*)(myli->data));
-  adms_free_strlist(myli0);
-  return mybasename;
-}
-char* adms_filename (const char* myname)
-{
-  char* myfilename=NULL;
-  char* mybasename=adms_basename(myname);
-  adms_strconcat(&myfilename,adms_dirname(myname));
-  if(mybasename)
-  {
-    adms_k2strconcat(&myfilename,ADMS_PATH_SEPARATOR);
-    adms_strconcat(&myfilename,mybasename);
-  }
-  return myfilename;
-}
-
 int globalnbadmstnew=0, globalnbadmstdestroy=0;
 int adms_global_nbadmstnew (void) {return globalnbadmstnew;}
 int adms_global_nbadmstdestroy (void) {return globalnbadmstdestroy;}
