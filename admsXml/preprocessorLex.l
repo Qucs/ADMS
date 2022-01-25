@@ -73,6 +73,81 @@ FILE *adms_preprocessor_getfile_output (void)
 
 #define tkreturn(token) {pproot()->cr_scanner->cur_char_position+=yyleng; return token;}
 
+/* examples: /a/b => \0,a,b and a/b/ => a,b,\0*/
+static p_slist adms_split_new (const char* myname)
+{
+  p_slist mypath=NULL;
+  const char* sj=myname;
+  const char* si=myname;
+  while(*sj!='\0')
+  {
+    if((*sj=='/')||(*sj=='\\'))
+    {
+      if(si==sj)
+        adms_slist_push(&mypath,NULL);
+      else
+        adms_slist_push(&mypath,(p_adms)adms_m2nclone(si,sj));
+      si=sj+1;
+    }
+    sj++;
+  }
+  adms_slist_push(&mypath,(p_adms)adms_m2nclone(si,sj));
+  return adms_slist_reverse(mypath);
+}
+static void free_strlist (p_slist myli0)
+{
+  p_slist myli;
+  for(myli=myli0;myli;myli=myli->next)
+    free(myli->data);
+  adms_slist_free(myli0);
+}
+static char* dirname (const char* myname)
+{
+  p_slist myli0=adms_split_new(myname);
+  char* mydirname=NULL;
+  p_slist myli=myli0;
+  int first=1;
+#if defined(ADMS_OS_MS)
+  if((myli->data==NULL)&&myli->next&&(!strcmp((char*)(myli->next->data),"cygdrive")))
+  {
+    myli=myli->next->next;
+    if(myli)
+    {
+      adms_k2strconcat(&mydirname,(char*)(myli->data));
+      adms_k2strconcat(&mydirname,":/");
+      myli=myli->next;
+    }
+    else
+      adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+  }
+#endif
+  for(;myli;myli=myli->next,first=0)
+  {
+    if(myli->data==NULL)
+      adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+    else if(myli->next==NULL)
+    {
+      if(!strcmp((char*)(myli->data),".")||!strcmp((char*)(myli->data),".."))
+      {
+        if(!first)
+          adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+        adms_k2strconcat(&mydirname,(char*)(myli->data));
+      }
+    }
+    else
+    {
+      adms_k2strconcat(&mydirname,(char*)(myli->data));
+      if(myli->next->next)
+        adms_k2strconcat(&mydirname,ADMS_PATH_SEPARATOR);
+    }
+  }
+  free_strlist(myli0);
+  if(mydirname)
+    return mydirname;
+  else
+    return adms_kclone(".");
+}
+
 static char* adms_preprocessor_lex_remove_leading_quote (char* name)
 {
   char* unquoted_name;
