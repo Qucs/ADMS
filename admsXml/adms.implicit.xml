@@ -36,6 +36,8 @@
 <admst:variable name="globalopdependent" string="no"/>
 <admst:variable name="globalpartitionning"/>
 <admst:variable name="globaltreenode"/>
+<admst:variable name="globalhandleafoutputs" string="no"/>
+<admst:variable name="globalaf"/>
 
 <admst:template match="e:dependency">
   <admst:choose>
@@ -71,6 +73,9 @@
     <admst:when test="[datatypename='probe']">
       <admst:value-to select="dependency" string="linear"/>
       <admst:push into="$globalexpression/probe" select="." onduplicate="ignore"/>
+      <admst:if test="[$globalhandleafoutputs='yes']">
+        <admst:push into="$globalaf/@probe" select="." onduplicate="ignore"/>
+      </admst:if>
     </admst:when>
     <admst:when test="[datatypename='array']">
       <admst:apply-templates select="variable" match="e:dependency"/>
@@ -81,6 +86,12 @@
       <admst:push into="$globalexpression/variable" select="." onduplicate="ignore"/>
       <admst:push into="$globaltreenode/@variable" select="." onduplicate="ignore"/>
       <admst:value-to select="dependency" path="prototype/dependency"/>
+
+      <admst:if test="[$globalhandleafoutputs='yes']">
+        <admst:push into="$globalaf/@probe" select="probe" onduplicate="ignore"/>
+        <admst:push into="$globalaf/@variable" select="." onduplicate="ignore"/>
+      </admst:if>
+
     </admst:when>
     <admst:when test="[datatypename='mapply_unary']">
       <admst:apply-templates select="arg1" match="e:dependency"/>
@@ -160,7 +171,66 @@
           <admst:value-to select="dependency" string="constant"/>
         </admst:when>
         <admst:otherwise>
+          <!-- track dependencies of analog function output arguments -->
+          <admst:if test="[definition/datatypename='analogfunction']">
+            <admst:variable name="function" select="%(.)"/>
+            <admst:if test="[exists(definition/variable[(output='yes') and (name!=$function/name)])]">
+              <admst:variable name="globalhandleafoutputs" string="yes"/>
+              <admst:variable name="globalaf" path="."/>
+            </admst:if>
+          </admst:if>
+          <!-- process arguments normally -->
           <admst:apply-templates select="arguments" match="e:dependency"/>
+          <!-- propagate dependencies into output arguments -->
+          <admst:if test="[$globalhandleafoutputs='yes']">
+            <admst:variable name="globalhandleafoutputs" string="no"/>
+            <admst:variable name="globalaf"/>
+            <admst:for-each select="definition/variable">
+              <admst:if test="[(output='yes') and (name!=$function/name)]">
+                <admst:variable name="position" select="%(position(.)-1)"/>
+                <admst:fatal test="[$function/arguments[position(.)=$position]/datatypename!='variable']"
+                             format="%(function/name) output arg $position is %(.), must be a variable\n"/>
+                <admst:push into="$function/arguments[position(.)=$position]/probe" select="$function/@probe" onduplicate="ignore"/>
+                <admst:push into="$function/arguments[position(.)=$position]/variable" select="$function/@variable" onduplicate="ignore"/>
+                <admst:choose>
+                  <admst:when test="$function/arguments/dependency[.='linear' or .='nonlinear']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/dependency" string="nonlinear"/>
+                    <admst:value-to select="$function/arguments[position(.)=$position]/prototype/dependency" string="nonlinear"/>
+                  </admst:when>
+                  <admst:when test="$function/arguments/dependency[.='noprobe']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/dependency" string="noprobe"/>
+                    <admst:value-to select="$function/arguments[position(.)=$position]/prototype/dependency" string="noprobe"/>
+                  </admst:when>
+                  <admst:otherwise>
+                    <admst:value-to select="$function/arguments[position(.)=$position]/dependency" string="constant"/>
+                    <admst:value-to select="$function/arguments[position(.)=$position]/prototype/dependency" string="constant"/>
+                  </admst:otherwise>
+                </admst:choose>
+                <admst:choose>
+                  <admst:when test="[$globalpartitionning='initial_model']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinmodel" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='initial_instance']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setininstance" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='initial_step']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setininitial_step" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='noise']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinnoise" string="yes"/>
+                  </admst:when>
+                  <admst:when test="[$globalpartitionning='final_step']">
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinfinal" string="yes"/>
+                  </admst:when>
+                  <admst:otherwise>
+                    <admst:value-to select="$function/arguments[position(.)=$position]/setinevaluate" string="yes"/>
+                  </admst:otherwise>
+                </admst:choose>
+              </admst:if>
+            </admst:for-each>
+            <admst:value-to select="$function/@probe"/>
+            <admst:value-to select="$function/@variable"/>
+          </admst:if>
           <admst:choose>
             <admst:when test="[(name='ddt' or name='\$ddt')or(name='idt' or name='\$idt')]">
               <admst:value-to select="dependency" string="nonlinear"/>
